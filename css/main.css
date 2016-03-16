@@ -5,6 +5,11 @@ body {
 #graphic {
     max-width: 750px;
 }
+
+#rankplot {
+    max-width: 400px;
+}
+
 .axis,
 .axis-show {
     font-size: 12px;
@@ -37,6 +42,12 @@ body {
     stroke-width: 1px;
     stroke: #333333;
     shape-rendering: crispEdges;
+}
+
+.rankline {
+    fill: none;
+    stroke-width: 1px;
+    stroke: #1696d2;
 }
 
 .point-label {

@@ -1,17 +1,18 @@
 var main_data_url = "data/main.csv";
-var COLORS = ["#1696d2", "#000"];
 var $graphic = $("#graphic");
+var $rankplot = $("#rankplot");
 var data;
+var CIRCLERADIUS = 5;
+var STATEVAR = "FIPS"
 
 function dotplot() {
 
     var LABELS = ["Unadjusted", "Adjusted"];
     var VALUES = ["score_m1", "score_m128"];
-    var STATEVAR = "FIPS"
 
     //from buttons eventually
     data = data_main.filter(function (d) {
-        return d.year == 2013 & d.subject == "math" & d.grade == 8;
+        return d.year == 2013 & d.subject == "reading" & d.grade == 4;
     })
 
     data.forEach(function (d) {
@@ -50,7 +51,12 @@ function dotplot() {
     //do extent domain eventually
     var x = d3.scale.linear()
         .range([0, width])
-        .domain([260, 300]);
+        .domain(d3.extent(
+    [].concat(data.map(function (d) {
+                return (d[VALUES[0]]);
+            }), data.map(function (d) {
+                return (d[VALUES[1]]);
+            }))));
 
     var xAxis = d3.svg.axis()
         .scale(x)
@@ -71,7 +77,7 @@ function dotplot() {
         .call(yAxis);
 
     gy.selectAll("text")
-        .attr("dx", -4);
+        .attr("dx", -15);
 
     var lines = svg.selectAll(".line")
         .data(data)
@@ -82,8 +88,6 @@ function dotplot() {
         .data(data)
         .enter()
         .append("g")
-
-    var circleradius = 5;
 
     var legend = svg.selectAll(".legend")
         .data(VALUES)
@@ -96,7 +100,7 @@ function dotplot() {
         .attr("class", function (d) {
             return d;
         })
-        .attr("r", circleradius)
+        .attr("r", CIRCLERADIUS)
         .attr("cx", function (d, i) {
             return i * legspacing + 10;
         })
@@ -131,7 +135,7 @@ function dotplot() {
     for (i = 0; i < VALUES.length; i++) {
         circles.append("circle")
             .attr("class", VALUES[i])
-            .attr("r", circleradius)
+            .attr("r", CIRCLERADIUS)
             .attr("cx", function (d) {
                 return x(d[VALUES[i]]);
             })
@@ -141,12 +145,120 @@ function dotplot() {
     }
 }
 
+function rankplot() {
+
+    var VALUES = "rank";
+
+    //from buttons eventually
+    data = data_main.filter(function (d) {
+        return d.subject == "reading" & d.grade == 4 & d.FIPS == "Texas";
+    })
+
+    data.forEach(function (d) {
+        d[VALUES] = +d[VALUES];
+        d.year = +d.year;
+    });
+
+    var chart_aspect_height = 1.2;
+    var margin = {
+        top: 55,
+        right: 15,
+        bottom: 25,
+        left: 105
+    };
+    var width = $rankplot.width() - margin.left - margin.right,
+        height = Math.ceil(width * chart_aspect_height) - margin.top - margin.bottom;
+
+    $rankplot.empty();
+
+    var svg = d3.select("#rankplot").append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    var y = d3.scale.linear()
+        .range([height, 0])
+        .domain([50, 1]);
+
+    //do extent domain eventually
+    var x = d3.scale.linear()
+        .range([0, width])
+        .domain(d3.extent(data.map(function (d) {
+            return d.year;
+        })));
+
+    var xAxis = d3.svg.axis()
+        .scale(x)
+        .tickValues([1998, 2005, 2013])
+        .tickFormat(d3.format("d"))
+        .orient("bottom");
+
+    var gx = svg.append("g")
+        .attr("transform", "translate(0," + height + ")")
+        .attr("class", "x axis-show")
+        .call(xAxis);
+
+    var yAxis = d3.svg.axis()
+        .scale(y)
+        .tickValues([50, 25, 1])
+        .orient("left");
+
+    var gy = svg.append("g")
+        .attr("class", "y axis")
+        .call(yAxis);
+
+    gy.selectAll("text")
+        .attr("dx", -4);
+
+    data_nest = d3.nest().key(function (d) {
+        return d.abbrev;
+    }).entries(data.map(function (d) {
+        return {
+            abbrev: d.FIPS,
+            year: +d.year,
+            val: +d[VALUES]
+        };
+    }));
+
+    var line = d3.svg.line()
+        .interpolate("step-after")
+        .x(function (d) {
+            return x(d.year);
+        })
+        .y(function (d) {
+            return y(d.val);
+        });
+
+    var states = svg.selectAll(".state")
+        .data(data_nest, function (d) {
+            return d.key;
+        })
+        .enter().append("g")
+        .attr("class", "state");
+
+    states.append("path")
+        .attr("class", "rankline")
+        .attr("d", function (d) {
+            return line(d.values);
+        })
+        .attr("id", function (d) {
+            return d.key;
+        });
+
+}
+
+function drawgraphs() {
+    dotplot();
+    rankplot();
+}
+
 $(window).load(function () {
     if (Modernizr.svg) { // if svg is supported, draw dynamic chart
         d3.csv(main_data_url, function (rates) {
             data_main = rates;
-            dotplot();
-            window.onresize = dotplot;
+            drawgraphs();
+            window.onresize = drawgraphs;
         });
     }
 });
