@@ -15,24 +15,17 @@ math8 <- math8 %>% mutate(grade = 8, subject = "math")
 read4 <- read4 %>% mutate(grade = 4, subject = "reading")
 read8 <- read8 %>% mutate(grade = 8, subject = "reading")
 
-naep <- rbind(math4, read4, math8, read8)
-naep <- naep %>% select(year, FIPS, grade, subject, everything())
-
-# Plot adjusted vs unadjusted
-plot(naep$score_m1, naep$score_m128)
-abline(a=0, b=1, col="red")
-plot(adj2013$score_m1, adj2013$score_m128)
-abline(a=0, b=1, col="red")
+naepfull <- rbind(math4, read4, math8, read8)
+naepfull <- naepfull %>% select(year, FIPS, grade, subject, everything())
 
 # 2013 long subset
-adj2013 <- naep[,c(1:27, 29, 283)]
-adj2013 <- adj2013 %>% filter(year==2013)
-long2013 <- adj2013 %>% mutate(temp = score_m128) %>% 
+naep <- naepfull[,c(1:27, 29, 283)]
+long2013 <- naep %>% filter(year==2013) %>% 
+	mutate(temp = score_m128) %>% 
 	gather(type, score, score_m1:score_m128) %>%
 	mutate(type = ifelse(type=="score_m1", "unadjusted", "adjusted"))
-read4_13 <- long2013 %>% filter(grade==4 & subject=="reading")
-read8_13 <- long2013 %>% filter(grade==8 & subject=="reading")
 
+# Dot plots
 dotplot <- function(gr, subj, title) {
 	dat <- long2013 %>% filter(grade==gr & subject==subj)
 	dat$FIPS <- factor(dat$FIPS , levels = dat$FIPS[order(dat$temp)])
@@ -57,3 +50,18 @@ dev.off()
 png(filename = "charts/math8_2013.png", width=800, height=1000, res=100)
 dotplot(8, "math", "Eighth grade math, 2013")
 dev.off()
+
+# Look at rank over time
+naep <- naep %>% mutate(scorediff = score_m128 - score_m1) %>%
+	filter(year > 1994)
+naep <- naep %>% 
+	arrange(year, grade, subject, -score_m128) %>%
+	group_by(year, grade, subject) %>%
+	mutate(rank=row_number())
+
+# rank over time SMALL MULTIPLESSS
+temp <- naep %>% filter(grade==8 & subject=="math")
+ggplot() + geom_step(data=temp, aes(x=year, y=-rank, group=FIPS)) + facet_wrap( ~ FIPS)
+
+# Export data
+write.csv(naep, "data/main.csv", row.names=F, na="")

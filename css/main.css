@@ -1,0 +1,80 @@
+body {
+    font-family: Lato, sans-serif !important;
+}
+
+#graphic {
+    max-width: 750px;
+}
+.axis,
+.axis-show {
+    font-size: 12px;
+    color: #333;
+}
+
+.axis path {
+    display: none;
+}
+
+.axis line {
+    stroke: #000;
+    shape-rendering: crispEdges;
+}
+
+.axis .minor line {
+    stroke: #efefef;
+}
+
+.axis-show path,
+.axis-show line {
+    fill: none;
+    stroke-width: 1px;
+    stroke: #000;
+    shape-rendering: crispEdges;
+}
+
+.chartline {
+    fill: none;
+    stroke-width: 1px;
+    stroke: #333333;
+    shape-rendering: crispEdges;
+}
+
+.point-label {
+    font-size: 12px;
+}
+
+.legend {
+    font-size: 13px;
+}
+
+.bar {
+    fill: #1696d2;
+}
+
+.annotate-shape {
+    fill: #ebebeb;
+}
+
+.annotation {
+    font-size: 13px;
+}
+
+.annotate-line {
+    fill: none;
+    stroke-width: 1.5px;
+    stroke: #ccc;
+    shape-rendering: crispEdges;
+}
+
+.axistitle {
+    font-size: 13px;
+    font-style: italic;
+}
+
+.score_m1 {
+    fill: #fdbf11;
+}
+
+.score_m128 {
+    fill: #1696d2;
+}
