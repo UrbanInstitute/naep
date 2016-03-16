@@ -31,10 +31,29 @@ long2013 <- adj2013 %>% mutate(temp = score_m128) %>%
 	gather(type, score, score_m1:score_m128) %>%
 	mutate(type = ifelse(type=="score_m1", "unadjusted", "adjusted"))
 read4_13 <- long2013 %>% filter(grade==4 & subject=="reading")
+read8_13 <- long2013 %>% filter(grade==8 & subject=="reading")
 
-read4_13$FIPS <- factor(read4_13$FIPS , levels = read4_13$FIPS[order(read4_13$temp)])
-dotplot <- ggplot(read4_13, aes(x=score, y=FIPS, color=type, group=FIPS)) + geom_line(color="black") + geom_point(size=2)
-dotplot
+dotplot <- function(gr, subj, title) {
+	dat <- long2013 %>% filter(grade==gr & subject==subj)
+	dat$FIPS <- factor(dat$FIPS , levels = dat$FIPS[order(dat$temp)])
+	ggplot(dat, aes(x=score, y=FIPS, color=type, group=FIPS)) + 
+		geom_line(color="black") + 
+		geom_point(size=2) + 
+		ggtitle(title)
+} 
+
 png(filename = "charts/reading4_2013.png", width=800, height=1000, res=100)
-dotplot
+dotplot(4, "reading", "Fourth grade reading, 2013")
+dev.off()
+
+png(filename = "charts/reading8_2013.png", width=800, height=1000, res=100)
+dotplot(8, "reading", "Eighth grade reading, 2013")
+dev.off()
+
+png(filename = "charts/math4_2013.png", width=800, height=1000, res=100)
+dotplot(4, "math", "Fourth grade math, 2013")
+dev.off()
+
+png(filename = "charts/math8_2013.png", width=800, height=1000, res=100)
+dotplot(8, "math", "Eighth grade math, 2013")
 dev.off()
