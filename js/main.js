@@ -161,10 +161,10 @@ function rankplot() {
 
     var chart_aspect_height = 1.2;
     var margin = {
-        top: 55,
+        top: 15,
         right: 15,
         bottom: 25,
-        left: 105
+        left: 35
     };
     var width = $rankplot.width() - margin.left - margin.right,
         height = Math.ceil(width * chart_aspect_height) - margin.top - margin.bottom;
