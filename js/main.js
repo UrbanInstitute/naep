@@ -190,7 +190,7 @@ function rankplot() {
 
     var xAxis = d3.svg.axis()
         .scale(x)
-        .tickValues([1998, 2005, 2013])
+        .tickValues([1998, 2013])
         .tickFormat(d3.format("d"))
         .orient("bottom");
 
@@ -201,7 +201,7 @@ function rankplot() {
 
     var yAxis = d3.svg.axis()
         .scale(y)
-        .tickValues([51, 25, 1])
+        .tickValues([51, 1])
         .orient("left");
 
     var gy = svg.append("g")
