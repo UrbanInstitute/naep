@@ -24,7 +24,7 @@ function dotplot() {
         return a[VALUES[1]] - b[VALUES[1]];
     });
 
-    var chart_aspect_height = 1.3;
+    var chart_aspect_height = 2.1;
     var margin = {
         top: 55,
         right: 15,
@@ -179,7 +179,7 @@ function rankplot() {
 
     var y = d3.scale.linear()
         .range([height, 0])
-        .domain([50, 1]);
+        .domain([51, 1]);
 
     //do extent domain eventually
     var x = d3.scale.linear()
@@ -201,7 +201,7 @@ function rankplot() {
 
     var yAxis = d3.svg.axis()
         .scale(y)
-        .tickValues([50, 25, 1])
+        .tickValues([51, 25, 1])
         .orient("left");
 
     var gy = svg.append("g")

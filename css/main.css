@@ -3,11 +3,11 @@ body {
 }
 
 #graphic {
-    max-width: 750px;
+    max-width: 500px;
 }
 
 #rankplot {
-    max-width: 400px;
+    max-width: 300px;
 }
 
 .axis,
