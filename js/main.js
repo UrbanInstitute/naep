@@ -151,7 +151,7 @@ function rankplot() {
 
     //from buttons eventually
     data = data_main.filter(function (d) {
-        return d.subject == "reading" & d.grade == 4 & d.FIPS == "Texas";
+        return d.subject == "reading" & d.grade == 4 & d.FIPS != "";
     })
 
     data.forEach(function (d) {
@@ -161,17 +161,27 @@ function rankplot() {
 
     var chart_aspect_height = 1.2;
     var margin = {
-        top: 15,
+        top: 35,
         right: 15,
-        bottom: 25,
+        bottom: 20,
         left: 35
     };
-    var width = $rankplot.width() - margin.left - margin.right,
+    var width = 150 - margin.left - margin.right,
         height = Math.ceil(width * chart_aspect_height) - margin.top - margin.bottom;
 
     $rankplot.empty();
 
-    var svg = d3.select("#rankplot").append("svg")
+    var data_nest = d3.nest()
+        .key(function (d) {
+            return d.FIPS;
+        })
+        .sortKeys(d3.ascending)
+        .entries(data);
+
+    var svg = d3.select("#rankplot").selectAll("svg")
+        .data(data_nest)
+        .enter()
+        .append("svg:svg")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
         .append("g")
@@ -188,7 +198,17 @@ function rankplot() {
             return d.year;
         })));
 
-    var xAxis = d3.svg.axis()
+    //Title for each chart
+    var charttitle = svg.append("g")
+        .append("text")
+        .attr("class", "charttitle")
+        .attr("x", 5)
+        .attr("y", -15)
+        .text(function (d) {
+            return d.key;
+        });
+
+    /*var xAxis = d3.svg.axis()
         .scale(x)
         .tickValues([1998, 2013])
         .tickFormat(d3.format("d"))
@@ -197,9 +217,9 @@ function rankplot() {
     var gx = svg.append("g")
         .attr("transform", "translate(0," + height + ")")
         .attr("class", "x axis-show")
-        .call(xAxis);
+        .call(xAxis);*/
 
-    var yAxis = d3.svg.axis()
+    /*var yAxis = d3.svg.axis()
         .scale(y)
         .tickValues([51, 1])
         .orient("left");
@@ -209,17 +229,7 @@ function rankplot() {
         .call(yAxis);
 
     gy.selectAll("text")
-        .attr("dx", -4);
-
-    data_nest = d3.nest().key(function (d) {
-        return d.abbrev;
-    }).entries(data.map(function (d) {
-        return {
-            abbrev: d.FIPS,
-            year: +d.year,
-            val: +d[VALUES]
-        };
-    }));
+        .attr("dx", -4);*/
 
     var line = d3.svg.line()
         .interpolate("step-after")
@@ -227,24 +237,15 @@ function rankplot() {
             return x(d.year);
         })
         .y(function (d) {
-            return y(d.val);
+            return y(d.rank);
         });
 
-    var states = svg.selectAll(".state")
-        .data(data_nest, function (d) {
-            return d.key;
-        })
-        .enter().append("g")
-        .attr("class", "state");
-
-    states.append("path")
+    svg.append("path")
         .attr("class", "rankline")
         .attr("d", function (d) {
             return line(d.values);
-        })
-        .attr("id", function (d) {
-            return d.key;
         });
+
 
 }
 

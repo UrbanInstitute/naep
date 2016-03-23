@@ -7,7 +7,7 @@ body {
 }
 
 #rankplot {
-    max-width: 150px;
+    max-width: 1200px;
 }
 
 .axis,
@@ -37,6 +37,9 @@ body {
     shape-rendering: crispEdges;
 }
 
+.charttitle {
+    font-size: 13px;
+}
 .chartline {
     fill: none;
     stroke-width: 1px;
