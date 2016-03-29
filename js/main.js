@@ -80,6 +80,7 @@ function dotplot() {
 
     var xAxis = d3.svg.axis()
         .scale(x)
+        .ticks(6)
         .orient("bottom");
 
     var gx = svg.append("g")
