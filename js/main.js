@@ -4,26 +4,31 @@ var $rankplot = $("#rankplot");
 var $tooltipgraph = $("#tooltipgraph");
 var data;
 var CIRCLERADIUS = 5;
-var STATEVAR = "FIPS"
+//the column name might change, so paramaterize it
+var STATEVAR = "FIPS";
+
+//select the metric to display using dropdowns
+var gradeSelect = d3.select("#grade-select");
+var subjectSelect = d3.select("#subject-select");
+
+GRADEVAL = gradeSelect.property("value");
+SUBJECTVAL = subjectSelect.property("value");
+
+gradeSelect.on("change", function () {
+    GRADEVAL = gradeSelect.property("value");
+    dotplot();
+    tooltip();
+});
+subjectSelect.on("change", function () {
+    SUBJECTVAL = subjectSelect.property("value");
+    dotplot();
+    tooltip();
+});
 
 function dotplot() {
 
     var LABELS = ["Unadjusted", "Adjusted"];
     var VALUES = ["score_m1", "score_m128"];
-
-    //from buttons eventually
-    data = data_main.filter(function (d) {
-        return d.year == 2013 & d.subject == "reading" & d.grade == 4;
-    })
-
-    data.forEach(function (d) {
-        d[VALUES[0]] = +d[VALUES[0]];
-        d[VALUES[1]] = +d[VALUES[1]];
-    });
-
-    data.sort(function (a, b) {
-        return a[VALUES[1]] - b[VALUES[1]];
-    });
 
     var chart_aspect_height = 1.75;
     var margin = {
@@ -44,20 +49,34 @@ function dotplot() {
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
     var y = d3.scale.ordinal()
-        .rangeRoundBands([height, 0], .1)
-        .domain(data.map(function (d) {
-            return d[STATEVAR];
-        }));
+        .rangeRoundBands([height, 0], .1);
 
-    //do extent domain eventually
     var x = d3.scale.linear()
-        .range([0, width])
-        .domain(d3.extent(
+        .range([0, width]);
+
+    data = data_main.filter(function (d) {
+        return d.year == 2013 & d.subject == SUBJECTVAL & d.grade == GRADEVAL;
+    })
+
+    data.forEach(function (d) {
+        d[VALUES[0]] = +d[VALUES[0]];
+        d[VALUES[1]] = +d[VALUES[1]];
+    });
+
+    data.sort(function (a, b) {
+        return a[VALUES[1]] - b[VALUES[1]];
+    });
+
+    y.domain(data.map(function (d) {
+        return d[STATEVAR];
+    }));
+
+    x.domain(d3.extent(
     [].concat(data.map(function (d) {
-                return (d[VALUES[0]]);
-            }), data.map(function (d) {
-                return (d[VALUES[1]]);
-            }))));
+            return (d[VALUES[0]]);
+        }), data.map(function (d) {
+            return (d[VALUES[1]]);
+        }))));
 
     var xAxis = d3.svg.axis()
         .scale(x)
@@ -89,34 +108,6 @@ function dotplot() {
         .data(data)
         .enter()
         .append("g")
-
-    /*var legend = svg.selectAll(".legend")
-        .data(VALUES)
-        .enter()
-        .append("g")
-
-    var legspacing = 130;
-
-    legend.append("circle")
-        .attr("class", function (d) {
-            return d;
-        })
-        .attr("r", CIRCLERADIUS)
-        .attr("cx", function (d, i) {
-            return i * legspacing + 10;
-        })
-        .attr("cy", -20);
-
-    legend.append("text")
-        .attr("class", "legend")
-        .attr("x", function (d, i) {
-            return i * legspacing + 20;
-        })
-        .attr("y", -15)
-        .attr("text-anchor", "start")
-        .text(function (d, i) {
-            return LABELS[i];
-        });*/
 
     lines.append("line")
         .attr("class", "chartline")
@@ -256,7 +247,7 @@ function tooltip() {
 
     //from buttons eventually
     data = data_main.filter(function (d) {
-        return d.subject == "reading" & d.grade == 4 & d.FIPS == "Texas";
+        return d.subject == SUBJECTVAL & d.grade == GRADEVAL & d.FIPS == "Iowa";
     })
 
     data.forEach(function (d) {
@@ -266,7 +257,7 @@ function tooltip() {
 
     var chart_aspect_height = 0.7;
     var margin = {
-        top: 15,
+        top: 45,
         right: 15,
         bottom: 25,
         left: 35
@@ -286,14 +277,28 @@ function tooltip() {
         .range([height, 0])
         .domain([51, 1]);
 
-    //do extent domain eventually
+    var years = d3.extent(data.map(function (d) {
+        return d.year;
+    }));
+
     var x = d3.scale.linear()
         .range([0, width])
-        .domain(d3.extent(data.map(function (d) {
-            return d.year;
-        })));
+        .domain(years);
 
-    var yAxis = d3.svg.axis()
+    /*var xAxis = d3.svg.axis()
+        .scale(x)
+        .tickValues(years)
+        .tickFormat(function(d) {
+            return d;
+        })
+        .orient("bottom");
+
+    var gx = svg.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(xAxis);*/
+
+    /*var yAxis = d3.svg.axis()
         .scale(y)
         .tickValues([51, 1])
         .orient("left");
@@ -303,7 +308,7 @@ function tooltip() {
         .call(yAxis);
 
     gy.selectAll("text")
-        .attr("dx", -4);
+        .attr("dx", -4);*/
 
     data_nest = d3.nest().key(function (d) {
         return d.abbrev;
@@ -314,6 +319,25 @@ function tooltip() {
             val: +d[VALUES]
         };
     }));
+
+    //title for the little chart (state name)
+    var charttitle = svg.append("g")
+        .data(data_nest)
+        .append("text")
+        .attr("class", "charttitle")
+        .attr("x", 5)
+        .attr("y", -23)
+        .text(function (d) {
+            return d.key;
+        });
+
+    //years in chart
+    var yearstitle = svg.append("g")
+        .append("text")
+        .attr("class", "yearstitle")
+        .attr("x", 5)
+        .attr("y", -5)
+        .text(years[0] + "—" + years[1]);
 
     var line = d3.svg.line()
         .interpolate("step-after")

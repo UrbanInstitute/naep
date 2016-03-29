@@ -185,7 +185,7 @@ hr {
 }
 
 #tooltipgraph {
-    width: 100%;
+    width: 90%;
 }
 
 .axis,
@@ -216,8 +216,14 @@ hr {
 }
 
 .charttitle {
+    font-size: 18px;
+    fill: #1696d2;
+}
+
+.yearstitle {
     font-size: 13px;
 }
+
 
 .chartline {
     fill: none;
