@@ -5,29 +5,103 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-    <!--link rel="shortcut icon" href="favicon.ico"-->
+    <link rel="shortcut icon" href="favicon.ico">
     <title>NAEP</title>
 
     <link href="http://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/urban-header.css">
     <link rel="stylesheet" type="text/css" href="css/main.css">
 
 </head>
 
 <body>
 
-    <h1>NAEP</h1>
+    <!--    header-->
+    <div id="header-pinned" class="no-touch">
+        <div class="content">
+            <a target="_blank" href="http://www.urban.org" title="Home" rel="home" class="site-logo"></a>
+            <!--div class="title"><span class="feature-link"><a href="http://www.urban.org/features" class="title-linkback">Features</a> <span>: :</span> </span><a href="index.html" class="title-linkback">National Assessment of Education Progress</a>
+            </div-->
+            <div class="share-icons">
+                <div class="shareThisP">
+                    <span onclick="toggle_visibility('shareBox');">
+                            <div class="shareThisB"></div>
+                        </span>
+                    <div class="shareThisW" id="shareBox">
 
-    <h4>Unadjusted vs adjusted scores (4th grade reading, 2013)</h4>
-    <div id="graphic"></div>
+                        <div class="addthis_toolbox addthis_default_style  " addthis:title="" addthis:url="">
+                            <a href="https://www.facebook.com/sharer/sharer.php?u= http://urbn.is/immigrants" target="_blank" class="addthis_button_facebook at300b" title="Facebook" onclick="toggle_visibility('shareBox');"><span class="at4-icon aticon-facebook" style="background-color: rgb(48, 88, 145);"><span class="at_a11y">Share on facebook</span></span></a>
 
-    <h4>Rank over time (4th grade reading)</h4>
+                            <a href="http://twitter.com/intent/tweet?text=Visualizing%20trends%20for%20children%20of%20immigrants%3A%20http%3A%2F%2Furbn.is%2Fimmigrants%20(via%20%40urbaninstitute)" target="_blank" class="addthis_button_twitter at300b" title="Tweet" onclick="toggle_visibility('shareBox');"><span class="at4-icon aticon-twitter" style="background-color: rgb(44, 168, 210);"><span class="at_a11y">Share on twitter</span></span></a>
 
-    <div id="rankplot"></div>
+                            <a href="mailto:%20?Subject=New interactive from the Urban Institute &amp;Body=Hi! I thought you'd be interested in this new interactive from the Urban Institute: “Visualizing Trends for Children of Immigrants” http://urbn.is/immigrants" target="_blank" class="addthis_button_email at300b" target="_blank" title="Email" onclick="toggle_visibility('shareBox');"><span class="at4-icon aticon-email" style="background-color: rgb(115, 138, 141);"><span class="at_a11y">Share on email</span></span></a>
+                            <div class="atclear"></div>
+                        </div>
 
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="maincontent">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div id="intro">
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                    </div>
+
+                    <div id="controlbar">
+                        <div class="row">
+                            <div class="col-lg-7">
+                                <div id="main-title">National Assessment of Education Progress</div>
+                            </div>
+                            <div class="col-lg-5">
+                                <div id="mainbtns">
+                                    <div class="styled-select">
+                                        <div class="select-title">Grade</div>
+                                        <select id="grade-select" class="stateselect">
+                                            <option value="4">4th</option>
+                                            <option value="8">8th</option>
+                                        </select>
+                                    </div>
+                                    <div class="styled-select">
+                                        <div class="select-title">Test</div>
+                                        <select id="test-select" class="stateselect">
+                                            <option value="reading">Reading</option>
+                                            <option value="math">Math</option>
+                                        </select>
+                                    </div>
+                                    <div class="styled-select">
+                                        <div class="select-title">Controls</div>
+                                        <select id="grade-select" class="stateselect">
+                                            <option value="allon">All on</option>
+                                            <option value="alloff">All off</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h4>Unadjusted v. adjusted scores (2013)</h4>
+                    <div id="graphic"></div>
+
+                    <h4>Rank over time (4th grade reading)</h4>
+
+                    <div id="rankplot"></div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script src="lib/jquery-2.2.1.min.js"></script>
+    <script src="lib/bootstrap.min.js"></script>
     <script src="lib/d3.v3.min.js"></script>
     <script src="lib/modernizr.svg.min.js"></script>
+    <script src="lib/header.js"></script>
 
     <script src="js/main.js"></script>
 
