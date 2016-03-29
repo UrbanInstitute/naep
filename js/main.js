@@ -1,6 +1,7 @@
 var main_data_url = "data/main.csv";
 var $graphic = $("#graphic");
 var $rankplot = $("#rankplot");
+var $tooltipgraph = $("#tooltipgraph");
 var data;
 var CIRCLERADIUS = 5;
 var STATEVAR = "FIPS"
@@ -26,7 +27,7 @@ function dotplot() {
 
     var chart_aspect_height = 1.75;
     var margin = {
-        top: 55,
+        top: 10,
         right: 15,
         bottom: 25,
         left: 105
@@ -89,7 +90,7 @@ function dotplot() {
         .enter()
         .append("g")
 
-    var legend = svg.selectAll(".legend")
+    /*var legend = svg.selectAll(".legend")
         .data(VALUES)
         .enter()
         .append("g")
@@ -115,7 +116,7 @@ function dotplot() {
         .attr("text-anchor", "start")
         .text(function (d, i) {
             return LABELS[i];
-        });
+        });*/
 
     lines.append("line")
         .attr("class", "chartline")
@@ -249,9 +250,100 @@ function rankplot() {
 
 }
 
+function tooltip() {
+
+    var VALUES = "rank";
+
+    //from buttons eventually
+    data = data_main.filter(function (d) {
+        return d.subject == "reading" & d.grade == 4 & d.FIPS == "Texas";
+    })
+
+    data.forEach(function (d) {
+        d[VALUES] = +d[VALUES];
+        d.year = +d.year;
+    });
+
+    var chart_aspect_height = 0.7;
+    var margin = {
+        top: 15,
+        right: 15,
+        bottom: 25,
+        left: 35
+    };
+    var width = $tooltipgraph.width() - margin.left - margin.right,
+        height = Math.ceil(width * chart_aspect_height) - margin.top - margin.bottom;
+
+    $tooltipgraph.empty();
+
+    var svg = d3.select("#tooltipgraph").append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    var y = d3.scale.linear()
+        .range([height, 0])
+        .domain([51, 1]);
+
+    //do extent domain eventually
+    var x = d3.scale.linear()
+        .range([0, width])
+        .domain(d3.extent(data.map(function (d) {
+            return d.year;
+        })));
+
+    var yAxis = d3.svg.axis()
+        .scale(y)
+        .tickValues([51, 1])
+        .orient("left");
+
+    var gy = svg.append("g")
+        .attr("class", "y axis")
+        .call(yAxis);
+
+    gy.selectAll("text")
+        .attr("dx", -4);
+
+    data_nest = d3.nest().key(function (d) {
+        return d.abbrev;
+    }).entries(data.map(function (d) {
+        return {
+            abbrev: d.FIPS,
+            year: +d.year,
+            val: +d[VALUES]
+        };
+    }));
+
+    var line = d3.svg.line()
+        .interpolate("step-after")
+        .x(function (d) {
+            return x(d.year);
+        })
+        .y(function (d) {
+            return y(d.val);
+        });
+
+    var states = svg.selectAll(".state")
+        .data(data_nest, function (d) {
+            return d.key;
+        })
+        .enter().append("g")
+        .attr("class", "state");
+
+    states.append("path")
+        .attr("class", "rankline")
+        .attr("d", function (d) {
+            return line(d.values);
+        })
+        .attr("id", function (d) {
+            return d.key;
+        });
+}
+
 function drawgraphs() {
     dotplot();
-    rankplot();
+    tooltip();
 }
 
 $(window).load(function () {

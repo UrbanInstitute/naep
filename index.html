@@ -62,6 +62,7 @@
                                 <div id="mainbtns">
                                     <div class="styled-select">
                                         <div class="select-title">Grade</div>
+                                        <div class="triangle"></div>
                                         <select id="grade-select" class="stateselect">
                                             <option value="4">4th</option>
                                             <option value="8">8th</option>
@@ -69,6 +70,7 @@
                                     </div>
                                     <div class="styled-select">
                                         <div class="select-title">Test</div>
+                                        <div class="triangle"></div>
                                         <select id="test-select" class="stateselect">
                                             <option value="reading">Reading</option>
                                             <option value="math">Math</option>
@@ -76,6 +78,7 @@
                                     </div>
                                     <div class="styled-select">
                                         <div class="select-title">Controls</div>
+                                        <div class="triangle"></div>
                                         <select id="grade-select" class="stateselect">
                                             <option value="allon">All on</option>
                                             <option value="alloff">All off</option>
@@ -95,12 +98,25 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-7">
-                <h4>Unadjusted v. adjusted scores (2013)</h4>
+                <div class="legend-item">
+                    <h4>Unadjusted v. adjusted scores <span style="color:#a3a3a3">(2013)</span></h4></div>
+                <div class="legend-item">
+                    <div class="circle score_m1"></div>
+                    <div class="legend">Unadjusted</div>
+                </div>
+
+                <div class="legend-item">
+                    <div class="circle score_m128"></div>
+                    <div class="legend">Adjusted</div>
+                </div>
+
                 <div id="graphic"></div>
             </div>
             <div class="col-lg-5">
 
-                <div id="rankplot"></div>
+                <div id="tooltip">
+                    <div id="tooltipgraph"></div>
+                </div>
             </div>
         </div>
     </div>

@@ -84,8 +84,8 @@ hr {
     border: 0 !important;
     height: 0 !important;
     border-bottom: 1px solid #ccc !important;
-    border-bottom-color: #ccc !important; 
-    color: #ccc !important; 
+    border-bottom-color: #ccc !important;
+    color: #ccc !important;
     margin-top: 15px !important;
     margin-bottom: 15px !important;
     display: block;
@@ -105,31 +105,86 @@ hr {
     text-transform: uppercase;
     color: #000000;
     margin-left: 15px;
+    display: inline-block;
 }
 
 .styled-select {
     width: 120px;
-    height: 60px;
+    height: 50px;
     display: inline-block;
     border-left: 1px solid #333;
 }
 
 .styled-select select {
-    width: 90px;
-    height: 45px;
     font-size: 13px;
-    color: #333;
+    color: #1696d2;
+    background: none;
+    border: none;
     margin-left: 15px;
+    width: 100px;
+    overflow: hidden;
+}
+
+.triangle {
+    display: inline-block;
+    float: right;
+    margin-top: 15px;
+    margin-right: 10px;
+    width: 0;
+    height: 1px;
+    border-style: solid;
+    border-width: 8px 5px 0 5px;
+    border-color: #000000 transparent transparent;
+    -webkit-transform: rotate(360deg);
 }
 
 
+/*legend*/
+
+.legend-item {
+    display: inline-block;
+    margin-right: 25px;
+}
+.circle {
+    border-radius: 50%;
+    width: 10px;
+    height: 10px;
+    display: inline-block;
+    margin-right: 4px;
+}
+
+.legend {
+    display: inline-block;
+    color: #333;
+}
+
+.circle.score_m1 {
+    background: #fdbf11;
+}
+
+.circle.score_m128 {
+    background: #1696d2;
+}
+
 /*graphs*/
+
+.score_m1 {
+    fill: #fdbf11;
+}
+
+.score_m128 {
+    fill: #1696d2;
+}
 
 #graphic {
     width: 100%;
 }
 
 #rankplot {
+    width: 100%;
+}
+
+#tooltipgraph {
     width: 100%;
 }
 
@@ -207,12 +262,4 @@ hr {
 .axistitle {
     font-size: 13px;
     font-style: italic;
-}
-
-.score_m1 {
-    fill: #fdbf11;
-}
-
-.score_m128 {
-    fill: #1696d2;
 }
