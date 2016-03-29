@@ -78,6 +78,19 @@ li {
     list-style: square;
 }
 
+hr {
+    width: 100%;
+    display: inline-block;
+    border: 0 !important;
+    height: 0 !important;
+    border-bottom: 1px solid #ccc !important;
+    border-bottom-color: #ccc !important; 
+    color: #ccc !important; 
+    margin-top: 15px !important;
+    margin-bottom: 15px !important;
+    display: block;
+}
+
 
 /*dropdown bar*/
 
@@ -113,11 +126,11 @@ li {
 /*graphs*/
 
 #graphic {
-    max-width: 500px;
+    width: 100%;
 }
 
 #rankplot {
-    max-width: 1200px;
+    width: 100%;
 }
 
 .axis,

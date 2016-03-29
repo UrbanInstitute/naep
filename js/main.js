@@ -24,7 +24,7 @@ function dotplot() {
         return a[VALUES[1]] - b[VALUES[1]];
     });
 
-    var chart_aspect_height = 2.1;
+    var chart_aspect_height = 1.75;
     var margin = {
         top: 55,
         right: 15,
