@@ -28,7 +28,10 @@ subjectSelect.on("change", function () {
 function dotplot() {
 
     var LABELS = ["Unadjusted", "Adjusted"];
-    var VALUES = ["score_m1", "score_m128"];
+    var VALUES = {
+        unadjusted: "score_0000000",
+        adjusted: "score_1111111"
+    };
 
     var chart_aspect_height = 1.75;
     var margin = {
@@ -73,9 +76,9 @@ function dotplot() {
 
     x.domain(d3.extent(
     [].concat(data.map(function (d) {
-            return (d[VALUES[0]]);
+            return (d[VALUES.unadjusted]);
         }), data.map(function (d) {
-            return (d[VALUES[1]]);
+            return (d[VALUES.adjusted]);
         }))));
 
     var xAxis = d3.svg.axis()
@@ -119,13 +122,25 @@ function dotplot() {
             return y(d[STATEVAR]) + y.rangeBand() / 3;
         })
         .attr("x1", function (d) {
-            return x(d[VALUES[0]]);
+            return x(d[VALUES.unadjusted]);
         })
         .attr("x2", function (d) {
-            return x(d[VALUES[1]]);
+            return x(d[VALUES.adjusted]);
         });
 
-    for (i = 0; i < VALUES.length; i++) {
+    for (key in VALUES) {
+        circles.append("circle")
+            .attr("class", key)
+            .attr("r", CIRCLERADIUS)
+            .attr("cx", function (d) {
+                return x(d[VALUES[key]]);
+            })
+            .attr("cy", function (d) {
+                return y(d[STATEVAR]) + y.rangeBand() / 3;
+            });
+    }
+
+    /*for (i = 0; i < VALUES.length; i++) {
         circles.append("circle")
             .attr("class", VALUES[i])
             .attr("r", CIRCLERADIUS)
@@ -135,112 +150,9 @@ function dotplot() {
             .attr("cy", function (d) {
                 return y(d[STATEVAR]) + y.rangeBand() / 3;
             });
-    }
+    }*/
 }
 
-function rankplot() {
-
-    var VALUES = "rank";
-
-    //from buttons eventually
-    data = data_main.filter(function (d) {
-        return d.subject == "reading" & d.grade == 4 & d.FIPS != "";
-    })
-
-    data.forEach(function (d) {
-        d[VALUES] = +d[VALUES];
-        d.year = +d.year;
-    });
-
-    var chart_aspect_height = 1.2;
-    var margin = {
-        top: 35,
-        right: 15,
-        bottom: 20,
-        left: 35
-    };
-    var width = 150 - margin.left - margin.right,
-        height = Math.ceil(width * chart_aspect_height) - margin.top - margin.bottom;
-
-    $rankplot.empty();
-
-    var data_nest = d3.nest()
-        .key(function (d) {
-            return d.FIPS;
-        })
-        .sortKeys(d3.ascending)
-        .entries(data);
-
-    var svg = d3.select("#rankplot").selectAll("svg")
-        .data(data_nest)
-        .enter()
-        .append("svg:svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
-        .append("g")
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-    var y = d3.scale.linear()
-        .range([height, 0])
-        .domain([51, 1]);
-
-    //do extent domain eventually
-    var x = d3.scale.linear()
-        .range([0, width])
-        .domain(d3.extent(data.map(function (d) {
-            return d.year;
-        })));
-
-    //Title for each chart
-    var charttitle = svg.append("g")
-        .append("text")
-        .attr("class", "charttitle")
-        .attr("x", 5)
-        .attr("y", -15)
-        .text(function (d) {
-            return d.key;
-        });
-
-    /*var xAxis = d3.svg.axis()
-        .scale(x)
-        .tickValues([1998, 2013])
-        .tickFormat(d3.format("d"))
-        .orient("bottom");
-
-    var gx = svg.append("g")
-        .attr("transform", "translate(0," + height + ")")
-        .attr("class", "x axis-show")
-        .call(xAxis);*/
-
-    /*var yAxis = d3.svg.axis()
-        .scale(y)
-        .tickValues([51, 1])
-        .orient("left");
-
-    var gy = svg.append("g")
-        .attr("class", "y axis")
-        .call(yAxis);
-
-    gy.selectAll("text")
-        .attr("dx", -4);*/
-
-    var line = d3.svg.line()
-        .interpolate("step-after")
-        .x(function (d) {
-            return x(d.year);
-        })
-        .y(function (d) {
-            return y(d.rank);
-        });
-
-    svg.append("path")
-        .attr("class", "rankline")
-        .attr("d", function (d) {
-            return line(d.values);
-        });
-
-
-}
 
 function tooltip() {
 

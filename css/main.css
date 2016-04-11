@@ -158,21 +158,21 @@ hr {
     color: #333;
 }
 
-.circle.score_m1 {
+.circle.unadjusted {
     background: #fdbf11;
 }
 
-.circle.score_m128 {
+.circle.adjusted {
     background: #1696d2;
 }
 
 /*graphs*/
 
-.score_m1 {
+.unadjusted {
     fill: #fdbf11;
 }
 
-.score_m128 {
+.adjusted {
     fill: #1696d2;
 }
 
