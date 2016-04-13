@@ -67,6 +67,9 @@ naep <- naep %>%
   group_by(year, grade, subject) %>%
   mutate(rank=row_number())
 
+# Keep 1996 + 
+naep <- naep %>% filter(year >= 1996)
+
 # Export data
 write.csv(naep, "data/main.csv", row.names=F, na="")
 

@@ -91,7 +91,7 @@ hr {
     display: block;
 }
 
-footer, 
+footer,
 #header {
     background-color: #f1f2f2;
 }
@@ -101,6 +101,16 @@ footer {
     padding-top: 25px;
     padding-bottom: 25px;
     bottom: 0;
+}
+
+.name {
+    display: inline;
+    color: #333;
+}
+
+#graphname {
+    font-size: 14px;
+    color: #666;
 }
 
 /*dropdown bar*/
@@ -149,13 +159,13 @@ footer {
     -webkit-transform: rotate(360deg);
 }
 
-
 /*legend*/
 
 .legend-item {
     display: inline-block;
     margin-right: 25px;
 }
+
 .circle {
     border-radius: 50%;
     width: 10px;
@@ -176,6 +186,7 @@ footer {
 .circle.adjusted {
     background: #1696d2;
 }
+
 
 /*graphs*/
 
@@ -234,7 +245,6 @@ footer {
 .yearstitle {
     font-size: 13px;
 }
-
 
 .chartline {
     fill: none;

@@ -12,6 +12,12 @@ var VALUES = {
     adjusted: "score_111111"
 };
 
+// Allow Bootstrap dropdown menus to have forms/checkboxes inside, 
+// and when clicking on a dropdown item, the menu doesn't disappear.
+/*$(document).on('click', '.dropdown-menu.dropdown-menu-form', function(e) {
+  e.stopPropagation();
+});*/
+
 
 //select the metric to display using dropdowns
 var gradeSelect = d3.select("#grade-select");
@@ -22,14 +28,22 @@ SUBJECTVAL = subjectSelect.property("value");
 
 gradeSelect.on("change", function () {
     GRADEVAL = gradeSelect.property("value");
+    graphname(GRADEVAL, SUBJECTVAL);
     dotplot();
     tooltip();
 });
 subjectSelect.on("change", function () {
     SUBJECTVAL = subjectSelect.property("value");
+    graphname(GRADEVAL, SUBJECTVAL);
     dotplot();
     tooltip();
 });
+
+function graphname(GRADEVAL, SUBJECTVAL) {
+    d3.select("#gradename").html(GRADEVAL + "th");
+    d3.select("#subjectname").html(SUBJECTVAL);
+    d3.select("#controlsname").html("age, race, limited English proficiency, free and reduced price lunch, and English spoken at home");
+}
 
 function dotplot() {
 
@@ -158,11 +172,6 @@ function tooltip() {
 
     //var VALUES = "rank";
 
-    //from buttons eventually
-    data = data_main.filter(function (d) {
-        return d.subject == SUBJECTVAL & d.grade == GRADEVAL & d.FIPS == "Virginia" & d.year >= 1996;
-    })
-
     data.forEach(function (d) {
         d[VALUES['unadjusted']] = +d[VALUES['unadjusted']];
         d[VALUES['adjusted']] = +d[VALUES['adjusted']];
@@ -190,7 +199,18 @@ function tooltip() {
     var y = d3.scale.linear()
         .range([height, 0])
         //.domain([51, 1]);
-        .domain([200, 300]);
+        //.domain([200, 300]);
+    
+    y.domain(d3.extent(
+    [].concat(data.map(function (d) {
+            return (d[VALUES.unadjusted]);
+        }), data.map(function (d) {
+            return (d[VALUES.adjusted]);
+        }))));
+    
+    data = data_main.filter(function (d) {
+        return d.subject == SUBJECTVAL & d.grade == GRADEVAL & d.FIPS == "Virginia";
+    })
 
     var years = d3.extent(data.map(function (d) {
         return d.year;
@@ -198,8 +218,8 @@ function tooltip() {
 
     var x = d3.scale.linear()
         .range([0, width])
-        //.domain(years);
-        .domain([1996, 2013]);
+        .domain(years);
+        //.domain([1996, 2013]);
     
     var xAxis = d3.svg.axis()
         .scale(x)
@@ -296,6 +316,7 @@ function tooltip() {
 function drawgraphs() {
     dotplot();
     tooltip();
+    graphname(GRADEVAL, SUBJECTVAL);
 }
 
 $(window).load(function () {
