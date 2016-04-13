@@ -6,25 +6,27 @@ library("ggplot2")
 library("tidyr")
 library("readxl")
 
-math4 <- read.csv("data/original/i_math4.csv", stringsAsFactors = F)
-math8 <- read.csv("data/original/i_math8.csv", stringsAsFactors = F)
-read4 <- read.csv("data/original/i_read4.csv", stringsAsFactors = F)
-read8 <- read.csv("data/original/i_read8.csv", stringsAsFactors = F)
+math4 <- read.csv("data/original/i_math4_full.csv", stringsAsFactors = F)
+math8 <- read.csv("data/original/i_math8_full.csv", stringsAsFactors = F)
+read4 <- read.csv("data/original/i_read4_full.csv", stringsAsFactors = F)
+read8 <- read.csv("data/original/i_read8_full.csv", stringsAsFactors = F)
 
-varnames <- read_excel("/Users/hrecht/Documents/Box Sync/COMM/**Project Folders**/NAEP (National Assessment of Educational Progress)/Data Files/Variable Combinations.xlsx", sheet="VarNames")
+varnames <- read_excel("/Users/hrecht/Documents/Box Sync/COMM/**Project Folders**/NAEP (National Assessment of Educational Progress)/Data Files/Variable Combinations_New.xlsx", sheet="VarNames1")
 
 ########################################################################################################
 # Map variable names (score_m# where 1 <= # <= 128) to binary 0 1 concatenation
 ########################################################################################################
 
-varnames <- varnames[,c(1, 9:15)]
-colnames(varnames) <- c("score_m", "gender", "race", "frpl", "lep", "sped", "age", "enghome")
-varnames <- varnames %>% mutate(score_m = paste("score_m", score_m, sep=""))
-varnames <- varnames %>% mutate(newname = paste("score_", gender, race, frpl, lep, sped, age, enghome, sep=""))
+varnames <- varnames[,c(1, 8:13)]
+colnames(varnames) <- c("score_m", "race", "frpl", "lep", "sped", "age", "enghome")
+
+varnames <- varnames %>% filter(!is.na(score_m)) %>%
+  mutate(score_m = paste("score_m", score_m, sep=""))
+varnames <- varnames %>% mutate(newname = paste("score_", race, frpl, lep, sped, age, enghome, sep=""))
 
 write.csv(varnames, "data/variablenames.csv", na="", row.names=F)
 
-# Prepare to join to existing varnames
+# Prepare to join to existing varnames - make dataset with old names as colnames, new names as row 1
 names <- varnames %>% select(score_m, newname)
 names <- t(names)
 colnames(names) <- names[1,]
@@ -45,28 +47,34 @@ naepfull <- rbind(math4, read4, math8, read8)
 naepfull <- naepfull %>% select(year, FIPS, grade, subject, everything()) %>%
   select(-starts_with("score_st_"))
 
-# Add new column names
+# Add new column names to score vars
 naepleft <- naepfull %>% select(-starts_with("score_m"))
-
 naepscores <- naepfull %>% select(starts_with("score_m"), year, FIPS, grade, subject)
 naepscores <- rbind(names, naepscores)
 colnames(naepscores) <- naepscores[1,]
+
 naepscores <- naepscores[-1,]
-naepscores[,1:129] <- lapply(naepscores[,1:129] , as.numeric)
+naepscores[,1:64] <- lapply(naepscores[,1:64] , as.numeric)
 naepscores$grade <- as.numeric(naepscores$grade)
 naepscores$year <- as.numeric(naepscores$year)
 
-
+# Rejoin newly named cols to demographic info
 naep <- left_join(naepleft, naepscores, by = c("year", "FIPS", "grade", "subject"))
 
 # Rank over time
 naep <- naep %>% 
-  arrange(year, grade, subject, -score_1111111) %>%
+  arrange(year, grade, subject, -score_111111) %>%
   group_by(year, grade, subject) %>%
   mutate(rank=row_number())
 
 # Export data
 write.csv(naep, "data/main.csv", row.names=F, na="")
+
+# See what we have by year
+years <- naep %>% mutate(p = 1) %>%
+  group_by(year, grade, subject) %>%
+  summarize(states = sum(p))
+write.csv(years, "data/testsbyyear.csv", row.names = F)
 
 ########################################################################################################
 # Exploratory viz

@@ -6,6 +6,12 @@ var data;
 var CIRCLERADIUS = 5;
 //the column name might change, so paramaterize it
 var STATEVAR = "FIPS";
+var LABELS = ["Unadjusted", "Adjusted"];
+var VALUES = {
+    unadjusted: "score_000000",
+    adjusted: "score_111111"
+};
+
 
 //select the metric to display using dropdowns
 var gradeSelect = d3.select("#grade-select");
@@ -26,12 +32,6 @@ subjectSelect.on("change", function () {
 });
 
 function dotplot() {
-
-    var LABELS = ["Unadjusted", "Adjusted"];
-    var VALUES = {
-        unadjusted: "score_0000000",
-        adjusted: "score_1111111"
-    };
 
     var chart_aspect_height = 1.75;
     var margin = {
@@ -62,12 +62,12 @@ function dotplot() {
     })
 
     data.forEach(function (d) {
-        d[VALUES[0]] = +d[VALUES[0]];
-        d[VALUES[1]] = +d[VALUES[1]];
+        d[VALUES['unadjusted']] = +d[VALUES['unadjusted']];
+        d[VALUES['adjusted']] = +d[VALUES['adjusted']];
     });
 
     data.sort(function (a, b) {
-        return a[VALUES[1]] - b[VALUES[1]];
+        return a[VALUES['adjusted']] - b[VALUES['adjusted']];
     });
 
     y.domain(data.map(function (d) {
@@ -156,15 +156,16 @@ function dotplot() {
 
 function tooltip() {
 
-    var VALUES = "rank";
+    //var VALUES = "rank";
 
     //from buttons eventually
     data = data_main.filter(function (d) {
-        return d.subject == SUBJECTVAL & d.grade == GRADEVAL & d.FIPS == "Iowa";
+        return d.subject == SUBJECTVAL & d.grade == GRADEVAL & d.FIPS == "Virginia" & d.year >= 1996;
     })
 
     data.forEach(function (d) {
-        d[VALUES] = +d[VALUES];
+        d[VALUES['unadjusted']] = +d[VALUES['unadjusted']];
+        d[VALUES['adjusted']] = +d[VALUES['adjusted']];
         d.year = +d.year;
     });
 
@@ -188,7 +189,8 @@ function tooltip() {
 
     var y = d3.scale.linear()
         .range([height, 0])
-        .domain([51, 1]);
+        //.domain([51, 1]);
+        .domain([200, 300]);
 
     var years = d3.extent(data.map(function (d) {
         return d.year;
@@ -196,24 +198,24 @@ function tooltip() {
 
     var x = d3.scale.linear()
         .range([0, width])
-        .domain(years);
-
-    /*var xAxis = d3.svg.axis()
+        //.domain(years);
+        .domain([1996, 2013]);
+    
+    var xAxis = d3.svg.axis()
         .scale(x)
-        .tickValues(years)
         .tickFormat(function(d) {
             return d;
         })
+        .ticks(5)
         .orient("bottom");
 
     var gx = svg.append("g")
-        .attr("class", "x axis")
+        .attr("class", "x axis-show")
         .attr("transform", "translate(0," + height + ")")
-        .call(xAxis);*/
+        .call(xAxis);
 
-    /*var yAxis = d3.svg.axis()
+    var yAxis = d3.svg.axis()
         .scale(y)
-        .tickValues([51, 1])
         .orient("left");
 
     var gy = svg.append("g")
@@ -221,7 +223,7 @@ function tooltip() {
         .call(yAxis);
 
     gy.selectAll("text")
-        .attr("dx", -4);*/
+        .attr("dx", -4);
 
     data_nest = d3.nest().key(function (d) {
         return d.abbrev;
@@ -232,7 +234,20 @@ function tooltip() {
             val: +d[VALUES]
         };
     }));
+    
+    var types = ([VALUES['unadjusted'], VALUES['adjusted']]).map(function (name) {
+        return {
+            name: name,
+            values: data.map(function (d) {
+                return {
+                    year: d.year,
+                    val: +d[name]
+                };
+            })
+        };
+    });
 
+    console.log(types);
     //title for the little chart (state name)
     var charttitle = svg.append("g")
         .data(data_nest)
@@ -253,7 +268,7 @@ function tooltip() {
         .text(years[0] + "—" + years[1]);
 
     var line = d3.svg.line()
-        .interpolate("step-after")
+        //.interpolate("step-after")
         .x(function (d) {
             return x(d.year);
         })
@@ -262,14 +277,14 @@ function tooltip() {
         });
 
     var states = svg.selectAll(".state")
-        .data(data_nest, function (d) {
-            return d.key;
-        })
+        .data(types)
         .enter().append("g")
         .attr("class", "state");
 
     states.append("path")
-        .attr("class", "rankline")
+        .attr("class", function (d) {
+            return d.name + "line";
+        })
         .attr("d", function (d) {
             return line(d.values);
         })

@@ -91,6 +91,17 @@ hr {
     display: block;
 }
 
+footer, 
+#header {
+    background-color: #f1f2f2;
+}
+
+footer {
+    margin-top: 25px;
+    padding-top: 25px;
+    padding-bottom: 25px;
+    bottom: 0;
+}
 
 /*dropdown bar*/
 
@@ -232,10 +243,17 @@ hr {
     shape-rendering: crispEdges;
 }
 
-.rankline {
+.rankline,
+.score_111111line {
     fill: none;
     stroke-width: 1px;
     stroke: #1696d2;
+}
+
+.score_000000line {
+    fill: none;
+    stroke-width: 1px;
+    stroke: #fdbf11;
 }
 
 .point-label {
