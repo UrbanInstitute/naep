@@ -9,7 +9,7 @@
     <title>NAEP</title>
 
     <link href="http://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="lib/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="css/urban-header.css">
     <link rel="stylesheet" type="text/css" href="css/main.css">
 
@@ -52,73 +52,26 @@
                     <div id="intro">
                         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
 
-                        <!--div class="dropdown">
-                            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                Controls
-                                <span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox" value="age">Age</label>
-                                </div>
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox" value="race">Race</label>
-                                </div>
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox" value="lep">Limited English Proficiency</label>
-                                </div>
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox" value="sped">Special Education status</label>
-                                </div>
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox" value="frpl">Free and Reduced Price Lunch</label>
-                                </div>
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox" value="enghome">English Spoken at Home</label>
-                                </div>
-                            </ul>
-                        </div-->
-
-                        <!--div class="checkbox"-->
-                        <label>
-                            <input type="checkbox" value="age" checked="checked">Age</label>
-                        <!--/div-->
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox" value="race" checked="checked">Race</label>
-                        </div>
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox" value="lep" checked="checked">Limited English Proficiency</label>
-                        </div>
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox" value="sped" checked="checked">Special Education status</label>
-                        </div>
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox" value="frpl" checked="checked">Free and Reduced Price Lunch</label>
-                        </div>
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox" value="enghome" checked="checked">English Spoken at Home</label>
-                        </div>
-
                     </div>
 
                     <div id="controlbar">
                         <div class="row">
-                            <div class="col-lg-7 col-md-7">
+                            <div class="col-md-6">
                                 <div id="main-title">National Assessment of Education Progress</div>
                             </div>
-                            <div class="col-lg-5 col-md-5">
+                            <div class="col-md-6">
                                 <div id="mainbtns">
+
+                                    <div class="styled-select">
+                                        <div class="select-title">Year</div>
+                                        <div class="triangle"></div>
+                                        <select id="year-select" class="stateselect">
+                                            <option selected value="2015">2015</option>
+                                            <option value="2013">2013</option>
+                                            <option value="2011">2011</option>
+                                        </select>
+                                    </div>
+
                                     <div class="styled-select">
                                         <div class="select-title">Grade</div>
                                         <div class="triangle"></div>
@@ -127,6 +80,7 @@
                                             <option value="8">8th</option>
                                         </select>
                                     </div>
+
                                     <div class="styled-select">
                                         <div class="select-title">Test</div>
                                         <div class="triangle"></div>
@@ -135,14 +89,35 @@
                                             <option value="reading">Reading</option>
                                         </select>
                                     </div>
-                                    <div class="styled-select">
+
+                                    <div class="styled-select" id="controlsbox">
                                         <div class="select-title">Controls</div>
                                         <div class="triangle"></div>
-                                        <select id="grade-select" class="stateselect">
-                                            <option selected value="allon">All on</option>
-                                            <option value="alloff">All off</option>
-                                        </select>
+
                                     </div>
+                                    <div id="controlsdd">
+                                        <btn class="urban-button" id="allon">All on</btn>
+                                        <btn class="urban-button" id="alloff">All off</btn>
+                                        <div id="controlstext">explanation of what the controls do lorem ipsum lorem ipsum lorem ipsum</div>
+                                        <input type="checkbox" name="chage" id="chage" class="css-checkbox" value="age" checked="checked" />
+                                        <label for="chage" class="css-label">Age</label>
+
+                                        <input type="checkbox" name="chage" id="chrace" class="css-checkbox" value="race" checked="checked" />
+                                        <label for="chrace" class="css-label">Race</label>
+
+                                        <input type="checkbox" name="chage" id="chlep" class="css-checkbox" value="lep" checked="checked" />
+                                        <label for="chlep" class="css-label">Limited English Proficiency</label>
+
+                                        <input type="checkbox" name="chsped" id="chsped" class="css-checkbox" value="sped" checked="checked" />
+                                        <label for="chsped" class="css-label">Special Education status</label>
+
+                                        <input type="checkbox" name="chsped" id="chfrpl" class="css-checkbox" value="frpl" checked="checked" />
+                                        <label for="chfrpl" class="css-label">Free and Reduced Price Lunch</label>
+
+                                        <input type="checkbox" name="cheng" id="cheng" class="css-checkbox" value="eng" checked="checked" />
+                                        <label for="cheng" class="css-label">English Spoken at Home</label>
+                                    </div>
+
                                 </div>
                             </div>
                         </div>

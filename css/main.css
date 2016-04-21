@@ -113,6 +113,75 @@ footer {
     color: #666;
 }
 
+.urban-button {
+    font-size: 14px;
+    font-family: Lato, sans-serif;
+    padding-top: 14px;
+    padding-bottom: 14px;
+    width: 100px;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    color: white;
+    background-color: #ffffff;
+    color: #666666;
+    display: inline-block;
+    line-height: 12px;
+    text-align: center;
+    margin-right: 12px;
+    
+}
+
+.urban-button:hover, 
+.urban-button.selected {
+    background-color: #1696d2;
+    color: #ffffff;
+    text-decoration: none;
+    border: 1px solid #1696d2;
+}
+
+/*check boxes*/
+
+input[type=checkbox].css-checkbox {
+    position: absolute;
+    z-index: -1000;
+    left: -1000px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    width: 1px;
+    margin: -1px;
+    padding: 0;
+    border: 0;
+}
+
+input[type=checkbox].css-checkbox + label.css-label {
+    padding-left: 25px;
+    height: 16px;
+    display: block;
+    line-height: 16px;
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    font-size: 15px;
+    font-weight: 400;
+    vertical-align: middle;
+    cursor: pointer;
+    margin-bottom: 12px;
+}
+
+input[type=checkbox].css-checkbox:checked + label.css-label {
+    background-position: 0 -16px;
+}
+
+label.css-label {
+    background-image: url("../img/checkboxes.png");
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
 /*dropdown bar*/
 
 #main-title {
@@ -130,7 +199,7 @@ footer {
 }
 
 .styled-select {
-    width: 120px;
+    width: 24%;
     height: 50px;
     display: inline-block;
     border-left: 1px solid #333;
@@ -157,6 +226,21 @@ footer {
     border-width: 8px 5px 0 5px;
     border-color: #000000 transparent transparent;
     -webkit-transform: rotate(360deg);
+}
+
+#controlsdd {
+    width: 275px;
+    float: right;
+    border: 1px solid #ccc;
+    padding: 20px;
+}
+
+#controlstext {
+    font-size: 13px;
+    padding-bottom: 14px;
+    padding-top: 14px;
+    font-style: italic;
+    color: #666;
 }
 
 /*legend*/

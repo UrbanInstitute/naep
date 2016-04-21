@@ -45,6 +45,30 @@ function graphname(GRADEVAL, SUBJECTVAL) {
     d3.select("#controlsname").html("age, race, limited English proficiency, free and reduced price lunch, and English spoken at home");
 }
 
+function controls() {
+    $('#controlsdd').hide();
+    $('#controlsbox').click(function () {
+        console.log("clicked");
+        $('#controlsdd').show();
+    });
+
+    /*$('#content span').click(function () {
+        $('#input').val($(this).html())
+        $('#content').hide();
+    });*/
+
+
+    /*$(window).click(function () {
+        if ($("#controlsbox").is(":focus")) {
+
+        } else {
+            $('#controls').hide();
+        }
+    });*/
+}
+
+controls();
+
 function dotplot() {
 
     var chart_aspect_height = 1.75;
@@ -200,14 +224,14 @@ function tooltip() {
         .range([height, 0])
         //.domain([51, 1]);
         //.domain([200, 300]);
-    
+
     y.domain(d3.extent(
     [].concat(data.map(function (d) {
             return (d[VALUES.unadjusted]);
         }), data.map(function (d) {
             return (d[VALUES.adjusted]);
         }))));
-    
+
     data = data_main.filter(function (d) {
         return d.subject == SUBJECTVAL & d.grade == GRADEVAL & d.FIPS == "Virginia";
     })
@@ -219,11 +243,11 @@ function tooltip() {
     var x = d3.scale.linear()
         .range([0, width])
         .domain(years);
-        //.domain([1996, 2013]);
-    
+    //.domain([1996, 2013]);
+
     var xAxis = d3.svg.axis()
         .scale(x)
-        .tickFormat(function(d) {
+        .tickFormat(function (d) {
             return d;
         })
         .ticks(5)
@@ -254,7 +278,7 @@ function tooltip() {
             val: +d[VALUES]
         };
     }));
-    
+
     var types = ([VALUES['unadjusted'], VALUES['adjusted']]).map(function (name) {
         return {
             name: name,
