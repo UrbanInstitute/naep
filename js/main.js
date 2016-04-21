@@ -45,26 +45,29 @@ function graphname(GRADEVAL, SUBJECTVAL) {
     d3.select("#controlsname").html("age, race, limited English proficiency, free and reduced price lunch, and English spoken at home");
 }
 
+//clicking on the controls box shows/hides the dropdown (which is really a div)
 function controls() {
-    $('#controlsdd').hide();
-    $('#controlsbox').click(function () {
-        console.log("clicked");
-        $('#controlsdd').show();
+
+    d3.select("#controlsval").html("All on");
+
+    d3.select("#allon").on("click", function () {
+        if (d3.select(this).classed("selected", true)) {
+            console.log("yo");
+            d3.select(this).classed("selected", false)
+        } else {
+            d3.select(this).classed("selected", true)
+        }
     });
 
-    /*$('#content span').click(function () {
-        $('#input').val($(this).html())
-        $('#content').hide();
-    });*/
+    $('#controlsdd').hide();
 
-
-    /*$(window).click(function () {
-        if ($("#controlsbox").is(":focus")) {
-
+    $('#controlsbox').click(function () {
+        if ($("#controlsdd").is(":visible")) {
+            $('#controlsdd').hide();
         } else {
-            $('#controls').hide();
+            $('#controlsdd').show();
         }
-    });*/
+    });
 }
 
 controls();
