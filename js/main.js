@@ -20,28 +20,39 @@ var VALUES = {
 
 
 //select the metric to display using dropdowns
-var gradeSelect = d3.select("#grade-select");
-var subjectSelect = d3.select("#subject-select");
+var yearSelect = d3.select("#year-select"),
+    gradeSelect = d3.select("#grade-select"),
+    subjectSelect = d3.select("#subject-select");
 
-GRADEVAL = gradeSelect.property("value");
-SUBJECTVAL = subjectSelect.property("value");
+var YEARVAL = yearSelect.property("value"),
+    GRADEVAL = gradeSelect.property("value"),
+    SUBJECTVAL = subjectSelect.property("value");
+
+yearSelect.on("change", function () {
+    YEARVAL = yearSelect.property("value");
+    graphname(YEARVAL, GRADEVAL, SUBJECTVAL);
+    dotplot();
+    tooltip();
+});
 
 gradeSelect.on("change", function () {
     GRADEVAL = gradeSelect.property("value");
-    graphname(GRADEVAL, SUBJECTVAL);
-    dotplot();
-    tooltip();
-});
-subjectSelect.on("change", function () {
-    SUBJECTVAL = subjectSelect.property("value");
-    graphname(GRADEVAL, SUBJECTVAL);
+    graphname(YEARVAL, GRADEVAL, SUBJECTVAL);
     dotplot();
     tooltip();
 });
 
-function graphname(GRADEVAL, SUBJECTVAL) {
-    d3.select("#gradename").html(GRADEVAL + "th");
-    d3.select("#subjectname").html(SUBJECTVAL);
+subjectSelect.on("change", function () {
+    SUBJECTVAL = subjectSelect.property("value");
+    graphname(YEARVAL, GRADEVAL, SUBJECTVAL);
+    dotplot();
+    tooltip();
+});
+
+function graphname(yv, gv, sv) {
+    d3.select("#yearname").html(yv);
+    d3.select("#gradename").html(gv + "th");
+    d3.select("#subjectname").html(sv);
     d3.select("#controlsname").html("age, race, limited English proficiency, free and reduced price lunch, and English spoken at home");
 }
 
@@ -99,7 +110,7 @@ function dotplot() {
         .range([0, width]);
 
     data = data_main.filter(function (d) {
-        return d.year == 2013 & d.subject == SUBJECTVAL & d.grade == GRADEVAL;
+        return d.year == YEARVAL & d.subject == SUBJECTVAL & d.grade == GRADEVAL;
     })
 
     data.forEach(function (d) {
@@ -294,7 +305,6 @@ function tooltip() {
         };
     });
 
-    console.log(types);
     //title for the little chart (state name)
     var charttitle = svg.append("g")
         .data(data_nest)
@@ -343,7 +353,7 @@ function tooltip() {
 function drawgraphs() {
     dotplot();
     tooltip();
-    graphname(GRADEVAL, SUBJECTVAL);
+    graphname(YEARVAL, GRADEVAL, SUBJECTVAL);
 }
 
 $(window).load(function () {
