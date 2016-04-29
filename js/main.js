@@ -9,6 +9,10 @@ var VALUES = {
     unadjusted: "score_000000",
     adjusted: "score_111111"
 };
+//default settings for data
+var YEARVAL = 2015;
+    GRADEVAL = 4;
+    SUBJECTVAL = "math";
 //controls on or off
 var ADJUST = {
     age: 1,
@@ -33,13 +37,23 @@ var yearSelect = d3.select("#year-select"),
     gradeSelect = d3.select("#grade-select"),
     subjectSelect = d3.select("#subject-select");
 
-var YEARVAL = yearSelect.property("value"),
-    GRADEVAL = gradeSelect.property("value"),
-    SUBJECTVAL = subjectSelect.property("value");
+function capitalizeFirst(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
 
 yearSelect.on("change", function () {
     YEARVAL = yearSelect.property("value");
-    d3.select("#yearname").html(YEARVAL);
+    d3.select("#yeardisplay").html(YEARVAL);
+    // if the year/subject combo is unavailable, change the subject and the test dropdown box
+    if ((YEARVAL == 1996 | YEARVAL == 2000) & SUBJECTVAL == "reading") {
+        SUBJECTVAL = "math";
+        d3.select("#subjectdisplay").html(capitalizeFirst(SUBJECTVAL));
+    } else if ((YEARVAL == 1998 | YEARVAL == 2002) & SUBJECTVAL == "math") {
+        SUBJECTVAL = "reading";
+        d3.select("#subjectdisplay").html(capitalizeFirst(SUBJECTVAL));
+    }
+    //reset the graph name text
+    graphname(YEARVAL, GRADEVAL, SUBJECTVAL);
     dotplot();
     tooltip();
 });
@@ -47,13 +61,15 @@ yearSelect.on("change", function () {
 gradeSelect.on("change", function () {
     GRADEVAL = gradeSelect.property("value");
     d3.select("#gradename").html(GRADEVAL + "th");
+    d3.select("#gradedisplay").html(GRADEVAL + "th");
     dotplot();
     tooltip();
 });
 
 subjectSelect.on("change", function () {
     SUBJECTVAL = subjectSelect.property("value");
-    d3.select("#subjectname").html(SUBJECTVAL);
+    d3.select("#subjectname").html(capitalizeFirst(SUBJECTVAL));
+    d3.select("#subjectdisplay").html(capitalizeFirst(SUBJECTVAL));
     dotplot();
     tooltip();
 });
@@ -85,22 +101,33 @@ function setControlsText() {
     d3.select("#controlsname").html(controlsText);
 }
 
+function graphname(yv, gv, sv) {
+    d3.select("#yearname").html(yv);
+    d3.select("#gradename").html(gv + "th");
+    d3.select("#subjectname").html(sv);
+    setControlsText();
+}
+
 $(document).ready(function () {
+    /*YEARVAL = 2015;
+    GRADEVAL = 4;
+    SUBJECTVAL = "math";*/
+    
     //default: don't see dropdown
     $('#controlsdd').hide();
 
     //set text that appears in controls dropdown box
     //default value is all on
-    d3.select("#controlsval").html("All on");
+    d3.select("#controlsdisplay").html("All on");
+     d3.select("#subjectdisplay").html(capitalizeFirst(SUBJECTVAL));
+    d3.select("#gradedisplay").html(GRADEVAL + "th");
+    d3.select("#yeardisplay").html(YEARVAL);
     
     //make sure all the checkboxes are checked
     $(".css-checkbox").prop("checked", true);
 
     //set the description of the graph on initial load
-    d3.select("#yearname").html(YEARVAL);
-    d3.select("#gradename").html(GRADEVAL + "th");
-    d3.select("#subjectname").html(SUBJECTVAL);
-    setControlsText();
+    graphname(YEARVAL, GRADEVAL, SUBJECTVAL);
 });
 
 //reset the adjusted score based on values of ADJUST
@@ -110,19 +137,19 @@ function changeAdjust() {
     var numOn = ADJUST.age + ADJUST.race + ADJUST.lep + ADJUST.sped + ADJUST.frpl + ADJUST.eng;
     //show number of selected controls in bar, set All on/All off buttons correctly
     if (numOn == 0) {
-        d3.select("#controlsval").html("All off");
+        d3.select("#controlsdisplay").html("All off");
         d3.select("#alloff").classed("selected", true)
         d3.select("#allon").classed("selected", false)
 
     } else if (numOn == 6) {
-        d3.select("#controlsval").html("All on");
+        d3.select("#controlsdisplay").html("All on");
         d3.select("#alloff").classed("selected", false)
         d3.select("#allon").classed("selected", true)
 
     } else {
         d3.select("#alloff").classed("selected", false)
         d3.select("#allon").classed("selected", false)
-        d3.select("#controlsval").html(numOn + " on");
+        d3.select("#controlsdisplay").html(numOn + " on");
     }
     setControlsText();
     dotplot();
