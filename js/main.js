@@ -1,23 +1,32 @@
-var main_data_url = "data/main.csv";
-var $graphic = $("#graphic");
-var $rankplot = $("#rankplot");
-var $tooltipgraph = $("#tooltipgraph");
-var data;
-var CIRCLERADIUS = 5;
-//the column name might change, so paramaterize it
-var STATEVAR = "FIPS";
-var LABELS = ["Unadjusted", "Adjusted"];
+var main_data_url = "data/main.csv",
+    $graphic = $("#graphic"),
+    $tooltipgraph = $("#tooltipgraph"),
+    data,
+    CIRCLERADIUS = 5,
+    STATEVAR = "FIPS",
+    LABELS = ["Unadjusted", "Adjusted"];
 var VALUES = {
     unadjusted: "score_000000",
     adjusted: "score_111111"
 };
-
-// Allow Bootstrap dropdown menus to have forms/checkboxes inside, 
-// and when clicking on a dropdown item, the menu doesn't disappear.
-/*$(document).on('click', '.dropdown-menu.dropdown-menu-form', function(e) {
-  e.stopPropagation();
-});*/
-
+//controls on or off
+var ADJUST = {
+    age: 1,
+    race: 1,
+    lep: 1,
+    sped: 1,
+    frpl: 1,
+    eng: 1
+};
+//labels for controls in the graph sentence
+var ADJTEXT = {
+    age: "age",
+    race: "race",
+    lep: "limited English proficiency",
+    sped: "special education status",
+    frpl: "free and reduced price lunch",
+    eng: "English spoken at home"
+}
 
 //select the metric to display using dropdowns
 var yearSelect = d3.select("#year-select"),
@@ -49,6 +58,11 @@ subjectSelect.on("change", function () {
     tooltip();
 });
 
+function setControlsText() {
+    var controlsText = ADJTEXT.age + ", " + ADJTEXT.age;
+    console.log(controlsText);
+}
+
 function graphname(yv, gv, sv) {
     d3.select("#yearname").html(yv);
     d3.select("#gradename").html(gv + "th");
@@ -56,22 +70,74 @@ function graphname(yv, gv, sv) {
     d3.select("#controlsname").html("age, race, limited English proficiency, free and reduced price lunch, and English spoken at home");
 }
 
+//reset the adjusted score based on values of ADJUST
+function changeAdjust() {
+    VALUES.adjusted = "score_" + ADJUST.age + ADJUST.race + ADJUST.lep + ADJUST.sped + ADJUST.frpl + ADJUST.eng;
+    console.log(VALUES.adjusted);
+    
+    //show number of selected controls in bar
+    if (ADJUST.age + ADJUST.race + ADJUST.lep + ADJUST.sped + ADJUST.frpl + ADJUST.eng == 0) {
+        d3.select("#controlsval").html("All off");
+    } else if (ADJUST.age + ADJUST.race + ADJUST.lep + ADJUST.sped + ADJUST.frpl + ADJUST.eng == 6) {
+        d3.select("#controlsval").html("All on");
+    } else {
+        var temp = ADJUST.age + ADJUST.race + ADJUST.lep + ADJUST.sped + ADJUST.frpl + ADJUST.eng;
+        d3.select("#controlsval").html(temp + " on");
+    }
+    
+    dotplot();
+}
+
+$(document).ready(function () {
+    //set text that appears in dropdown
+    //default value is all on
+    d3.select("#controlsval").html("All on");
+    $(".css-checkbox").prop("checked", true);
+    //default: don't see dropdown
+    $('#controlsdd').hide();
+});
+
 //clicking on the controls box shows/hides the dropdown (which is really a div)
 function controls() {
 
-    d3.select("#controlsval").html("All on");
+    //when you click the checkboxes, change the adjustment shown
+    $(".css-checkbox").change(function () {
+        console.log(+this.checked);
+        console.log(this.id);
+        ADJUST[this.id] = +this.checked;
+        changeAdjust();
 
-    d3.select("#allon").on("click", function () {
-        if (d3.select(this).classed("selected", true)) {
-            console.log("yo");
-            d3.select(this).classed("selected", false)
-        } else {
-            d3.select(this).classed("selected", true)
-        }
     });
 
-    $('#controlsdd').hide();
+    //if selecting the all on button, set all on and make sure deselect the all off button
+    d3.select("#allon").on("click", function () {
+        d3.select(this).classed("selected", true)
+        d3.select("#alloff").classed("selected", false)
+        $(".css-checkbox").prop("checked", true);
+        ADJUST.age = 1;
+        ADJUST.race = 1;
+        ADJUST.lep = 1;
+        ADJUST.sped = 1;
+        ADJUST.frpl = 1;
+        ADJUST.eng = 1;
+        changeAdjust();
+    });
 
+    d3.select("#alloff").on("click", function () {
+        console.log("blah");
+        d3.select(this).classed("selected", true)
+        d3.select("#allon").classed("selected", false)
+        $(".css-checkbox").prop("checked", false);
+        ADJUST.age = 0;
+        ADJUST.race = 0;
+        ADJUST.lep = 0;
+        ADJUST.sped = 0;
+        ADJUST.frpl = 0;
+        ADJUST.eng = 0;
+        changeAdjust();
+    });
+
+    //show the dropdown when clicking to it
     $('#controlsbox').click(function () {
         if ($("#controlsdd").is(":visible")) {
             $('#controlsdd').hide();
@@ -90,7 +156,7 @@ function dotplot() {
         top: 10,
         right: 15,
         bottom: 25,
-        left: 105
+        left: 135
     };
     var width = $graphic.width() - margin.left - margin.right,
         height = Math.ceil(width * chart_aspect_height) - margin.top - margin.bottom;
@@ -274,6 +340,7 @@ function tooltip() {
 
     var yAxis = d3.svg.axis()
         .scale(y)
+        .ticks(5)
         .orient("left");
 
     var gy = svg.append("g")

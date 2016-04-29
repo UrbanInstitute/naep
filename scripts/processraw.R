@@ -6,16 +6,11 @@ library("ggplot2")
 library("tidyr")
 library("readxl")
 
-math4 <- read.csv("data/original/i_math4_full.csv", stringsAsFactors = F)
-math8 <- read.csv("data/original/i_math8_full.csv", stringsAsFactors = F)
-read4 <- read.csv("data/original/i_read4_full.csv", stringsAsFactors = F)
-read8 <- read.csv("data/original/i_read8_full.csv", stringsAsFactors = F)
-
-varnames <- read_excel("/Users/hrecht/Documents/Box Sync/COMM/**Project Folders**/NAEP (National Assessment of Educational Progress)/Data Files/Variable Combinations_New.xlsx", sheet="VarNames1")
-
 ########################################################################################################
 # Map variable names (score_m# where 1 <= # <= 128) to binary 0 1 concatenation
 ########################################################################################################
+
+varnames <- read_excel("/Users/hrecht/Documents/Box Sync/COMM/**Project Folders**/NAEP (National Assessment of Educational Progress)/Data Files/Variable Combinations_New.xlsx", sheet="VarNames1")
 
 varnames <- varnames[,c(1, 8:13)]
 colnames(varnames) <- c("score_m", "race", "frpl", "lep", "sped", "age", "enghome")
@@ -25,6 +20,9 @@ varnames <- varnames %>% filter(!is.na(score_m)) %>%
 varnames <- varnames %>% mutate(newname = paste("score_", race, frpl, lep, sped, age, enghome, sep=""))
 
 write.csv(varnames, "data/variablenames.csv", na="", row.names=F)
+
+# Later sessions, read in
+varnames <- read.csv("data/variablenames.csv", stringsAsFactors = F)
 
 # Prepare to join to existing varnames - make dataset with old names as colnames, new names as row 1
 names <- varnames %>% select(score_m, newname)
@@ -37,6 +35,11 @@ names <- names[2,] %>% mutate(year = "year", FIPS = "FIPS", subject = "subject",
 ########################################################################################################
 # Join raw data into long dataset with rows by grade, subject, year, state
 ########################################################################################################
+
+math4 <- read.csv("data/original/i_math4_2015.csv", stringsAsFactors = F)
+math8 <- read.csv("data/original/i_math8_2015.csv", stringsAsFactors = F)
+read4 <- read.csv("data/original/i_read4_2015.csv", stringsAsFactors = F)
+read8 <- read.csv("data/original/i_read8_2015.csv", stringsAsFactors = F)
 
 math4 <- math4 %>% mutate(grade = 4, subject = "math")
 math8 <- math8 %>% mutate(grade = 8, subject = "math")
@@ -62,22 +65,26 @@ naepscores$year <- as.numeric(naepscores$year)
 naep <- left_join(naepleft, naepscores, by = c("year", "FIPS", "grade", "subject"))
 
 # Rank over time
-naep <- naep %>% 
-  arrange(year, grade, subject, -score_111111) %>%
-  group_by(year, grade, subject) %>%
-  mutate(rank=row_number())
-
-# Keep 1996 + 
-naep <- naep %>% filter(year >= 1996)
-
-# Export data
-write.csv(naep, "data/main.csv", row.names=F, na="")
+#naep <- naep %>% 
+#  arrange(year, grade, subject, -score_111111) %>%
+#  group_by(year, grade, subject) %>%
+#  mutate(rank=row_number())
 
 # See what we have by year
 years <- naep %>% mutate(p = 1) %>%
   group_by(year, grade, subject) %>%
   summarize(states = sum(p))
-write.csv(years, "data/testsbyyear.csv", row.names = F)
+#write.csv(years, "data/testsbyyear.csv", row.names = F)
+
+# Keep 1996 + 
+# We have one weird phantom 2000 reading row - remove that
+naep <- naep %>% filter(year >= 1996) %>% 
+  filter(!(year==2000 & subject=="reading"))
+# Full name for DC
+naep <- naep %>% mutate(FIPS = ifelse(FIPS == "D.C.", "District of Columbia", FIPS))
+
+# Export data
+write.csv(naep, "data/main.csv", row.names=F, na="")
 
 ########################################################################################################
 # Exploratory viz
