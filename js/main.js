@@ -39,88 +39,106 @@ var YEARVAL = yearSelect.property("value"),
 
 yearSelect.on("change", function () {
     YEARVAL = yearSelect.property("value");
-    graphname(YEARVAL, GRADEVAL, SUBJECTVAL);
+    d3.select("#yearname").html(YEARVAL);
     dotplot();
     tooltip();
 });
 
 gradeSelect.on("change", function () {
     GRADEVAL = gradeSelect.property("value");
-    graphname(YEARVAL, GRADEVAL, SUBJECTVAL);
+    d3.select("#gradename").html(GRADEVAL + "th");
     dotplot();
     tooltip();
 });
 
 subjectSelect.on("change", function () {
     SUBJECTVAL = subjectSelect.property("value");
-    graphname(YEARVAL, GRADEVAL, SUBJECTVAL);
+    d3.select("#subjectname").html(SUBJECTVAL);
     dotplot();
     tooltip();
 });
 
+//line of text above the graph showing what controls are on
 function setControlsText() {
-    var controlsText = ADJTEXT.age + ", " + ADJTEXT.age;
-    console.log(controlsText);
+    var controlsText = "";
+    //if no controls selected, write "nothing"
+    //otherwise, separate with commas - & last element with 'and'
+    if (ADJUST.age + ADJUST.race + ADJUST.lep + ADJUST.sped + ADJUST.frpl + ADJUST.eng == 0) {
+        controlsText = "nothing";
+    } else {
+        var temp = [];
+        for (var key in ADJTEXT) {
+            if (ADJTEXT.hasOwnProperty(key)) {
+                if (ADJUST[key] == 1) {
+                    temp.push(ADJTEXT[key]);
+                }
+            }
+        }
+        if (temp.length === 1) {
+            controlsText = temp[0];
+        } else if (temp.length === 2) {
+            controlsText = temp.join(' and ');
+        } else if (temp.length > 2) {
+            controlsText = temp.slice(0, -1).join(', ') + ', and ' + temp.slice(-1);
+        }
+    }
+    d3.select("#controlsname").html(controlsText);
 }
 
-function graphname(yv, gv, sv) {
-    d3.select("#yearname").html(yv);
-    d3.select("#gradename").html(gv + "th");
-    d3.select("#subjectname").html(sv);
-    d3.select("#controlsname").html("age, race, limited English proficiency, free and reduced price lunch, and English spoken at home");
-}
+$(document).ready(function () {
+    //default: don't see dropdown
+    $('#controlsdd').hide();
+
+    //set text that appears in controls dropdown box
+    //default value is all on
+    d3.select("#controlsval").html("All on");
+    
+    //make sure all the checkboxes are checked
+    $(".css-checkbox").prop("checked", true);
+
+    //set the description of the graph on initial load
+    d3.select("#yearname").html(YEARVAL);
+    d3.select("#gradename").html(GRADEVAL + "th");
+    d3.select("#subjectname").html(SUBJECTVAL);
+    setControlsText();
+});
 
 //reset the adjusted score based on values of ADJUST
 function changeAdjust() {
     VALUES.adjusted = "score_" + ADJUST.age + ADJUST.race + ADJUST.lep + ADJUST.sped + ADJUST.frpl + ADJUST.eng;
-    console.log(VALUES.adjusted);
 
-    //show number of selected controls in bar
-    if (ADJUST.age + ADJUST.race + ADJUST.lep + ADJUST.sped + ADJUST.frpl + ADJUST.eng == 0) {
+    var numOn = ADJUST.age + ADJUST.race + ADJUST.lep + ADJUST.sped + ADJUST.frpl + ADJUST.eng;
+    //show number of selected controls in bar, set All on/All off buttons correctly
+    if (numOn == 0) {
         d3.select("#controlsval").html("All off");
         d3.select("#alloff").classed("selected", true)
         d3.select("#allon").classed("selected", false)
 
-    } else if (ADJUST.age + ADJUST.race + ADJUST.lep + ADJUST.sped + ADJUST.frpl + ADJUST.eng == 6) {
+    } else if (numOn == 6) {
         d3.select("#controlsval").html("All on");
         d3.select("#alloff").classed("selected", false)
         d3.select("#allon").classed("selected", true)
 
     } else {
-        var temp = ADJUST.age + ADJUST.race + ADJUST.lep + ADJUST.sped + ADJUST.frpl + ADJUST.eng;
         d3.select("#alloff").classed("selected", false)
         d3.select("#allon").classed("selected", false)
-        d3.select("#controlsval").html(temp + " on");
+        d3.select("#controlsval").html(numOn + " on");
     }
-
+    setControlsText();
     dotplot();
 }
-
-$(document).ready(function () {
-    //set text that appears in dropdown
-    //default value is all on
-    d3.select("#controlsval").html("All on");
-    $(".css-checkbox").prop("checked", true);
-    //default: don't see dropdown
-    $('#controlsdd').hide();
-});
 
 //clicking on the controls box shows/hides the dropdown (which is really a div)
 function controls() {
 
     //when you click the checkboxes, change the adjustment shown
     $(".css-checkbox").change(function () {
-        console.log(+this.checked);
-        console.log(this.id);
         ADJUST[this.id] = +this.checked;
         changeAdjust();
-
     });
 
     //if selecting the all on button, set all on and make sure deselect the all off button
     d3.select("#allon").on("click", function () {
-        d3.select(this).classed("selected", true)
-        d3.select("#alloff").classed("selected", false)
         $(".css-checkbox").prop("checked", true);
         ADJUST.age = 1;
         ADJUST.race = 1;
@@ -132,9 +150,6 @@ function controls() {
     });
 
     d3.select("#alloff").on("click", function () {
-        console.log("blah");
-        d3.select(this).classed("selected", true)
-        d3.select("#allon").classed("selected", false)
         $(".css-checkbox").prop("checked", false);
         ADJUST.age = 0;
         ADJUST.race = 0;
@@ -428,7 +443,6 @@ function tooltip() {
 function drawgraphs() {
     dotplot();
     tooltip();
-    graphname(YEARVAL, GRADEVAL, SUBJECTVAL);
 }
 
 $(window).load(function () {
