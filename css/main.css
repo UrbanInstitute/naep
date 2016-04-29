@@ -98,13 +98,17 @@ hr {
     display: block;
 }
 
-/* opening image and title*/ 
+
+/* opening image and title*/
+
 #openimg {
-    margin-top: 50px;
+    top: 50px;
     background-image: url("../img/introImageCrop2_1500.jpg");
     background-repeat: no-repeat;
     background-size: cover;
-    height: 500px;
+    height: 450px;
+    width: 100%;
+
 }
 
 #titleparent {
@@ -123,7 +127,9 @@ h1.projtitle {
     display: inline-block;
 }
 
+
 /* intro and footer */
+
 #intro {
     padding-top: 50px;
     padding-bottom: 50px;
@@ -164,6 +170,7 @@ h4 {
     font-style: italic;
 }
 
+
 /* buttons */
 
 .intro-button {
@@ -189,7 +196,6 @@ h4 {
     text-decoration: none;
     border: 1px solid #1696d2;
 }
-
 
 .dropdown-button {
     font-size: 14px;
@@ -343,6 +349,7 @@ label.css-label {
     color: #666;
 }
 
+
 /*legend*/
 
 .legend-item {
@@ -480,4 +487,25 @@ label.css-label {
 .axistitle {
     font-size: 13px;
     font-style: italic;
+}
+
+@media (min-width: 1600px) {
+    #openimg {
+        height: 500px;
+        width: 100%;
+    }
+}
+
+@media (max-width: 1050px) {
+    #openimg {
+        height: 300px;
+        width: 100%;
+    }
+}
+
+@media (max-width: 699px) {
+    #openimg {
+        height: 250px;
+        width: 100%;
+    }
 }
