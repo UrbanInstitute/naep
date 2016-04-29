@@ -64,7 +64,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-7">
-                    <p>Often called the “nation’s report card,” the National Assessment of Educational Progress (NAEP) reading and mathematics main assessments are administered to a representative sample of fourth and eighth graders in each state every two years. NAEP scores offer something rare in education policy: data that are standardized across states and across time. Policymakers and pundits seize upon these data as evidence to support their preferred policies. But comparing NAEP scores assumes that states serve the same students —and we know they don’t.  Schools in Massachusetts serve a different student population than schools in Mississippi, and the student population in 2015 looks different from the student population in 1996.</p>
+                    <p>Often called the “nation’s report card,” the National Assessment of Educational Progress (NAEP) reading and mathematics main assessments are administered to a representative sample of fourth and eighth graders in each state every two years. NAEP scores offer something rare in education policy: data that are standardized across states and across time. Policymakers and pundits seize upon these data as evidence to support their preferred policies. But comparing NAEP scores assumes that states serve the same students —and we know they don’t. Schools in Massachusetts serve a different student population than schools in Mississippi, and the student population in 2015 looks different from the student population in 1996.</p>
 
                     <p>In a report released last year, we proposed a better way to compare and talk about NAEP scores. The report calculated adjusted NAEP scores by accounting for demographic differences across students in each state. These adjusted scores allow for students to be compared with their demographically similar peers using factors such as race, receipt of special education services, and status as an English language learner. These are factors we know can affect test results, yet they are not shown in NAEP scores. By accounting for these characteristics, our adjusted NAEP scores help to isolate the effects of differences in policies and practices across states.</p>
 
@@ -89,11 +89,12 @@
             <div class="col-md-6">
                 <div id="mainbtns">
 
-                    <div class="styled-select">
-                        <div class="select-title">Year</div>
-                        <div class="triangle"></div>
-                        <div id="yeardisplay" class="ddval"></div>
-                        <select id="year-select" class="stateselect">
+                    <div class="holder">
+                        <div class="styled-select" id="yearbox">
+                            <div class="select-title">Year</div>
+                            <div class="triangle"></div>
+                            <div id="yeardisplay" class="ddval"></div>
+                            <!--select id="year-select" class="stateselect">
                             <option selected value="2015">2015</option>
                             <option value="2013">2013</option>
                             <option value="2011">2011</option>
@@ -105,57 +106,99 @@
                             <option value="2000">2000</option>
                             <option value="1998">1998</option>
                             <option value="1996">1996</option>
-                        </select>
+                        </select-->
+                        </div>
+                        <div id="yeardd" class="dd maindd">
+                            <option selected value="2015">2015</option>
+                            <option value="2013">2013</option>
+                            <option value="2011">2011</option>
+                            <option value="2009">2009</option>
+                            <option value="2007">2007</option>
+                            <option value="2005">2005</option>
+                            <option value="2003">2003</option>
+                            <option value="2002">2002</option>
+                            <option value="2000">2000</option>
+                            <option value="1998">1998</option>
+                            <option value="1996">1996</option>
+                        </div>
                     </div>
 
-                    <div class="styled-select">
-                        <div class="select-title">Grade</div>
-                        <div class="triangle"></div>
-                        <div id="gradedisplay" class="ddval"></div>
-                        <select id="grade-select" class="stateselect">
+                    <div class="holder">
+                        <div class="styled-select" id="gradebox">
+                            <div class="select-title">Grade</div>
+                            <div class="triangle"></div>
+                            <div id="gradedisplay" class="ddval"></div>
+                            <!--select id="grade-select" class="stateselect">
                             <option selected value="4">4th</option>
                             <option value="8">8th</option>
-                        </select>
+                        </select-->
+                        </div>
+                        <div id="gradedd" class="dd maindd">
+                            <form>
+                                <input type="radio" name="grade-select" value="4" checked>4th
+                                <br>
+                                <input type="radio" name="grade-select" value="8">8th
+                            </form>
+                            <!--div class="radio">
+                                <label>
+                                    <input type="radio" name="grade-select" value="4" checked>4th</label>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="grade-select" value="8">8th</label>
+                            </div-->
+                        </div>
                     </div>
 
-                    <div class="styled-select">
-                        <div class="select-title">Test</div>
-                        <div class="triangle"></div>
-                        <div id="subjectdisplay" class="ddval"></div>
-                        <select id="subject-select" class="stateselect">
+                    <div class="holder">
+                        <div class="styled-select" id="subjectbox">
+                            <div class="select-title">Test</div>
+                            <div class="triangle"></div>
+                            <div id="subjectdisplay" class="ddval"></div>
+                            <!--select id="subject-select" class="stateselect">
                             <option selected value="math">Math</option>
                             <option value="reading">Reading</option>
-                        </select>
+                        </select-->
+                        </div>
+                        <div id="subjectdd" class="dd maindd">
+                            <form>
+                                <input type="radio" name="subject-select" value="math" checked>Math
+                                <br>
+                                <input type="radio" name="subject-select" value="reading">Reading
+                            </form>
+                        </div>
                     </div>
 
-                    <div class="styled-select" id="controlsbox">
-                        <div class="select-title">Controls</div>
-                        <div class="triangle"></div>
-                        <div id="controlsdisplay" class="ddval"></div>
+                    <div class="holder">
+                        <div class="styled-select" id="controlsbox">
+                            <div class="select-title">Controls</div>
+                            <div class="triangle"></div>
+                            <div id="controlsdisplay" class="ddval"></div>
 
-                    </div>
-                    <div id="controlsdd">
-                        <btn id="allon" class="dropdown-button selected">All on</btn>
-                        <btn id="alloff" class="dropdown-button">All off</btn>
+                        </div>
+                        <div id="controlsdd" class="dd">
+                            <btn id="allon" class="dropdown-button selected">All on</btn>
+                            <btn id="alloff" class="dropdown-button">All off</btn>
 
-                        <div id="controlstext">explanation of what the controls do lorem ipsum lorem ipsum lorem ipsum</div>
-                        <input type="checkbox" name="chage" id="age" class="css-checkbox" value="age" checked="checked" />
-                        <label for="age" class="css-label">Age</label>
+                            <div id="controlstext">explanation of what the controls do lorem ipsum lorem ipsum lorem ipsum</div>
+                            <input type="checkbox" name="chage" id="age" class="css-checkbox" value="age" checked="checked" />
+                            <label for="age" class="css-label">Age</label>
 
-                        <input type="checkbox" name="chage" id="race" class="css-checkbox" value="race" checked="checked" />
-                        <label for="race" class="css-label">Race</label>
+                            <input type="checkbox" name="chage" id="race" class="css-checkbox" value="race" checked="checked" />
+                            <label for="race" class="css-label">Race</label>
 
-                        <input type="checkbox" name="chage" id="lep" class="css-checkbox" value="lep" checked="checked" />
-                        <label for="lep" class="css-label">Limited English Proficiency</label>
+                            <input type="checkbox" name="chage" id="lep" class="css-checkbox" value="lep" checked="checked" />
+                            <label for="lep" class="css-label">Limited English Proficiency</label>
 
-                        <input type="checkbox" name="chsped" id="sped" class="css-checkbox" value="sped" checked="checked" />
-                        <label for="sped" class="css-label">Special Education status</label>
+                            <input type="checkbox" name="chsped" id="sped" class="css-checkbox" value="sped" checked="checked" />
+                            <label for="sped" class="css-label">Special Education status</label>
 
-                        <input type="checkbox" name="chsped" id="frpl" class="css-checkbox" value="frpl" checked="checked" />
-                        <label for="frpl" class="css-label">Free and Reduced Price Lunch</label>
+                            <input type="checkbox" name="chsped" id="frpl" class="css-checkbox" value="frpl" checked="checked" />
+                            <label for="frpl" class="css-label">Free and Reduced Price Lunch</label>
 
-                        <input type="checkbox" name="cheng" id="eng" class="css-checkbox" value="eng" checked="checked" />
-                        <label for="eng" class="css-label">English Spoken at Home</label>
+                            <input type="checkbox" name="cheng" id="eng" class="css-checkbox" value="eng" checked="checked" />
+                            <label for="eng" class="css-label">English Spoken at Home</label>
+                        </div>
                     </div>
 
                 </div>

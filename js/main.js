@@ -11,8 +11,8 @@ var VALUES = {
 };
 //default settings for data
 var YEARVAL = 2015;
-    GRADEVAL = 4;
-    SUBJECTVAL = "math";
+GRADEVAL = 4;
+SUBJECTVAL = "math";
 //controls on or off
 var ADJUST = {
     age: 1,
@@ -112,22 +112,44 @@ $(document).ready(function () {
     /*YEARVAL = 2015;
     GRADEVAL = 4;
     SUBJECTVAL = "math";*/
-    
+
     //default: don't see dropdown
-    $('#controlsdd').hide();
+    $('.dd').hide();
 
     //set text that appears in controls dropdown box
     //default value is all on
     d3.select("#controlsdisplay").html("All on");
-     d3.select("#subjectdisplay").html(capitalizeFirst(SUBJECTVAL));
+    d3.select("#subjectdisplay").html(capitalizeFirst(SUBJECTVAL));
     d3.select("#gradedisplay").html(GRADEVAL + "th");
     d3.select("#yeardisplay").html(YEARVAL);
-    
+
     //make sure all the checkboxes are checked
     $(".css-checkbox").prop("checked", true);
 
     //set the description of the graph on initial load
     graphname(YEARVAL, GRADEVAL, SUBJECTVAL);
+});
+
+$('#yearbox').click(function () {
+    if ($("#yeardd").is(":visible")) {
+        $('#yeardd').hide();
+    } else {
+        $('#yeardd').show();
+    }
+});
+$('#gradebox').click(function () {
+    if ($("#gradedd").is(":visible")) {
+        $('#gradedd').hide();
+    } else {
+        $('#gradedd').show();
+    }
+});
+$('#subjectbox').click(function () {
+    if ($("#subjectdd").is(":visible")) {
+        $('#subjectdd').hide();
+    } else {
+        $('#subjectdd').show();
+    }
 });
 
 //reset the adjusted score based on values of ADJUST

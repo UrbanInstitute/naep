@@ -286,9 +286,9 @@ label.css-label {
     display: inline-block;
 }
 
-.styled-select {
-    cursor: pointer;
+.holder {
     width: 24%;
+        cursor: pointer;
     height: 60px;
     display: inline-block;
     border-left: 1px solid #333;
@@ -324,11 +324,26 @@ label.css-label {
     margin-top: 10px;
 }
 
+.dd {
+    z-index: 10;
+    background-color: #ffffff;
+    position: absolute;
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    border-top: 2px solid #1696d2;
+    padding: 20px;
+    margin-top: 18px;
+}
+
+.maindd {
+    width: 130px;
+    font-size: 13px;
+}
+
 #controlsdd {
     width: 275px;
-    float: right;
-    border: 1px solid #ccc;
-    padding: 20px;
+    float: right !important;
 }
 
 #controlstext {
