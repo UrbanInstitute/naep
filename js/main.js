@@ -74,17 +74,25 @@ function graphname(yv, gv, sv) {
 function changeAdjust() {
     VALUES.adjusted = "score_" + ADJUST.age + ADJUST.race + ADJUST.lep + ADJUST.sped + ADJUST.frpl + ADJUST.eng;
     console.log(VALUES.adjusted);
-    
+
     //show number of selected controls in bar
     if (ADJUST.age + ADJUST.race + ADJUST.lep + ADJUST.sped + ADJUST.frpl + ADJUST.eng == 0) {
         d3.select("#controlsval").html("All off");
+        d3.select("#alloff").classed("selected", true)
+        d3.select("#allon").classed("selected", false)
+
     } else if (ADJUST.age + ADJUST.race + ADJUST.lep + ADJUST.sped + ADJUST.frpl + ADJUST.eng == 6) {
         d3.select("#controlsval").html("All on");
+        d3.select("#alloff").classed("selected", false)
+        d3.select("#allon").classed("selected", true)
+
     } else {
         var temp = ADJUST.age + ADJUST.race + ADJUST.lep + ADJUST.sped + ADJUST.frpl + ADJUST.eng;
+        d3.select("#alloff").classed("selected", false)
+        d3.select("#allon").classed("selected", false)
         d3.select("#controlsval").html(temp + " on");
     }
-    
+
     dotplot();
 }
 
