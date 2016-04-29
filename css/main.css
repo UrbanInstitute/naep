@@ -288,7 +288,7 @@ label.css-label {
 
 .holder {
     width: 24%;
-        cursor: pointer;
+    cursor: pointer;
     height: 60px;
     display: inline-block;
     border-left: 1px solid #333;
@@ -337,7 +337,7 @@ label.css-label {
 }
 
 .maindd {
-    width: 130px;
+    width: inherit;
     font-size: 13px;
 }
 
