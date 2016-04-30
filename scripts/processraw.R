@@ -6,6 +6,8 @@ library("ggplot2")
 library("tidyr")
 library("readxl")
 
+states <- read.csv("data/states.csv", colClasses="character")
+
 ########################################################################################################
 # Map variable names (score_m# where 1 <= # <= 128) to binary 0 1 concatenation
 ########################################################################################################
@@ -82,6 +84,11 @@ naep <- naep %>% filter(year >= 1996) %>%
   filter(!(year==2000 & subject=="reading"))
 # Full name for DC
 naep <- naep %>% mutate(FIPS = ifelse(FIPS == "D.C.", "District of Columbia", FIPS))
+
+naep <- naep %>% rename(state = FIPS)
+# Add state fips code
+naep <- left_join(naep, states, by = "state")
+naep <- naep %>% select(year, fips, everything())
 
 # Export data
 write.csv(naep, "data/main.csv", row.names=F, na="")

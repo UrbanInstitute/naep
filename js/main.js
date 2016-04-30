@@ -1,9 +1,9 @@
 var main_data_url = "data/main.csv",
     $graphic = $("#graphic"),
     $tooltipgraph = $("#tooltipgraph"),
-    data,
-    CIRCLERADIUS = 5,
-    STATEVAR = "FIPS",
+    data, data_long;
+CIRCLERADIUS = 5,
+    STATEVAR = "state",
     LABELS = ["Unadjusted", "Adjusted"];
 var VALUES = {
     unadjusted: "score_000000",
@@ -32,76 +32,11 @@ var ADJTEXT = {
     eng: "English spoken at home"
 }
 
+var dispatch = d3.dispatch("dotsMove");
+
 function capitalizeFirst(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
-
-//use radio buttons in faked dropdowns to change the graph
-$('input:radio[name="year-select"]').change(function () {
-    //set year value to selected
-    YEARVAL = $(this).val();
-    d3.select("#yeardisplay").html(YEARVAL);
-    // if the year/subject combo is unavailable, change the subject and the test dropdown box
-    if ((YEARVAL == 1996 | YEARVAL == 2000) & SUBJECTVAL == "reading") {
-        SUBJECTVAL = "math";
-        d3.select("#subjectdisplay").html(capitalizeFirst(SUBJECTVAL));
-    } else if ((YEARVAL == 1998 | YEARVAL == 2002) & SUBJECTVAL == "math") {
-        SUBJECTVAL = "reading";
-        d3.select("#subjectdisplay").html(capitalizeFirst(SUBJECTVAL));
-    }
-    //hide the dropdown
-    ($(this).parent()).hide();
-    //reset the graph name text
-    graphname(YEARVAL, GRADEVAL, SUBJECTVAL);
-    //redraw
-    dotplot();
-});
-
-$('input:radio[name="grade-select"]').change(function () {
-    //set grade value to selected
-    GRADEVAL = $(this).val();
-    d3.select("#gradename").html(GRADEVAL + "th");
-    d3.select("#gradedisplay").html(GRADEVAL + "th");
-    //hide the dropdown
-    ($(this).parent()).hide();
-    //redraw
-    dotplot();
-    tooltip();
-});
-
-$('input:radio[name="subject-select"]').change(function () {
-    //set subject value to selected
-    SUBJECTVAL = $(this).val();
-    d3.select("#subjectname").html(SUBJECTVAL);
-    d3.select("#subjectdisplay").html(capitalizeFirst(SUBJECTVAL));
-    //hide the dropdown
-    ($(this).parent()).hide();
-    //redraw
-    dotplot();
-    tooltip();
-});
-
-$('#yearbox').click(function () {
-    if ($("#yeardd").is(":visible")) {
-        $('#yeardd').hide();
-    } else {
-        $('#yeardd').show();
-    }
-});
-$('#gradebox').click(function () {
-    if ($("#gradedd").is(":visible")) {
-        $('#gradedd').hide();
-    } else {
-        $('#gradedd').show();
-    }
-});
-$('#subjectbox').click(function () {
-    if ($("#subjectdd").is(":visible")) {
-        $('#subjectdd').hide();
-    } else {
-        $('#subjectdd').show();
-    }
-});
 
 //line of text above the graph showing what controls are on
 function setControlsText() {
@@ -152,8 +87,79 @@ $(document).ready(function () {
     //make sure all the checkboxes are checked
     $(".css-checkbox").prop("checked", true);
 
+    //set the dropdowns to the default starting values
+    $('input[name="year-select"][value=2015]').prop('checked', true);
+    $('input[name="grade-select"][value=4]').prop('checked', true);
+    $('input[name="subject-select"][value="math"]').prop('checked', true);
+
     //set the description of the graph on initial load
     graphname(YEARVAL, GRADEVAL, SUBJECTVAL);
+});
+
+//use radio buttons in faked dropdowns to change the graph
+$('input:radio[name="year-select"]').change(function () {
+    //set year value to selected
+    YEARVAL = $(this).val();
+    d3.select("#yeardisplay").html(YEARVAL);
+    // if the year/subject combo is unavailable, change the subject and the test dropdown box
+    if ((YEARVAL == 1996 | YEARVAL == 2000) & SUBJECTVAL == "reading") {
+        SUBJECTVAL = "math";
+        d3.select("#subjectdisplay").html(capitalizeFirst(SUBJECTVAL));
+    } else if ((YEARVAL == 1998 | YEARVAL == 2002) & SUBJECTVAL == "math") {
+        SUBJECTVAL = "reading";
+        d3.select("#subjectdisplay").html(capitalizeFirst(SUBJECTVAL));
+    }
+    //hide the dropdown
+    ($(this).parent()).hide();
+    //reset the graph name text
+    graphname(YEARVAL, GRADEVAL, SUBJECTVAL);
+    //redraw
+    //dotplot();
+    dispatch.dotsMove(YEARVAL, GRADEVAL, SUBJECTVAL);
+});
+
+$('input:radio[name="grade-select"]').change(function () {
+    //set grade value to selected
+    GRADEVAL = $(this).val();
+    d3.select("#gradename").html(GRADEVAL + "th");
+    d3.select("#gradedisplay").html(GRADEVAL + "th");
+    //hide the dropdown
+    ($(this).parent()).hide();
+    //redraw
+    dispatch.dotsMove(YEARVAL, GRADEVAL, SUBJECTVAL);
+});
+
+$('input:radio[name="subject-select"]').change(function () {
+    //set subject value to selected
+    SUBJECTVAL = $(this).val();
+    d3.select("#subjectname").html(SUBJECTVAL);
+    d3.select("#subjectdisplay").html(capitalizeFirst(SUBJECTVAL));
+    //hide the dropdown
+    ($(this).parent()).hide();
+    //redraw
+    dispatch.dotsMove(YEARVAL, GRADEVAL, SUBJECTVAL);
+});
+
+$('#yearbox').click(function () {
+    if ($("#yeardd").is(":visible")) {
+        $('#yeardd').hide();
+    } else {
+        $('#yeardd').show();
+    }
+});
+$('#gradebox').click(function () {
+    if ($("#gradedd").is(":visible")) {
+        $('#gradedd').hide();
+    } else {
+        $('#gradedd').show();
+    }
+});
+$('#subjectbox').click(function () {
+    if ($("#subjectdd").is(":visible")) {
+        $('#subjectdd').hide();
+    } else {
+        $('#subjectdd').show();
+    }
 });
 
 //reset the adjusted score based on values of ADJUST
@@ -178,7 +184,7 @@ function changeAdjust() {
         d3.select("#controlsdisplay").html(numOn + " on");
     }
     setControlsText();
-    dotplot();
+    dispatch.dotsMove(YEARVAL, GRADEVAL, SUBJECTVAL);
 }
 
 //clicking on the controls box shows/hides the dropdown (which is really a div)
@@ -226,6 +232,36 @@ function controls() {
 controls();
 
 function dotplot() {
+    
+    var dataKey = function (d) {
+        return d.fips;
+    };
+
+    function setData(yv, sv, gv) {
+        data = data_main.filter(function (d) {
+            return d.year == yv & d.subject == sv & d.grade == gv;
+        })
+
+        data.forEach(function (d) {
+            d[VALUES['unadjusted']] = +d[VALUES['unadjusted']];
+            d[VALUES['adjusted']] = +d[VALUES['adjusted']];
+        });
+
+        data.sort(function (a, b) {
+            return a[VALUES['adjusted']] - b[VALUES['adjusted']];
+        });
+
+        y.domain(data.map(function (d) {
+            return d[STATEVAR];
+        }));
+
+        x.domain(d3.extent(
+    [].concat(data.map(function (d) {
+                return (d[VALUES.unadjusted]);
+            }), data.map(function (d) {
+                return (d[VALUES.adjusted]);
+            }))));
+    }
 
     var chart_aspect_height = 1.75;
     var margin = {
@@ -251,29 +287,7 @@ function dotplot() {
     var x = d3.scale.linear()
         .range([0, width]);
 
-    data = data_main.filter(function (d) {
-        return d.year == YEARVAL & d.subject == SUBJECTVAL & d.grade == GRADEVAL;
-    })
-
-    data.forEach(function (d) {
-        d[VALUES['unadjusted']] = +d[VALUES['unadjusted']];
-        d[VALUES['adjusted']] = +d[VALUES['adjusted']];
-    });
-
-    data.sort(function (a, b) {
-        return a[VALUES['adjusted']] - b[VALUES['adjusted']];
-    });
-
-    y.domain(data.map(function (d) {
-        return d[STATEVAR];
-    }));
-
-    x.domain(d3.extent(
-    [].concat(data.map(function (d) {
-            return (d[VALUES.unadjusted]);
-        }), data.map(function (d) {
-            return (d[VALUES.adjusted]);
-        }))));
+    setData(YEARVAL, SUBJECTVAL, GRADEVAL);
 
     var xAxis = d3.svg.axis()
         .scale(x)
@@ -297,17 +311,16 @@ function dotplot() {
     gy.selectAll("text")
         .attr("dx", -15);
 
-    var lines = svg.selectAll(".line")
-        .data(data)
-        .enter()
-        .append("g");
+    var lines = svg.selectAll(".chartline")
+        .data(data, dataKey);
 
-    var circles = svg.selectAll(".dot")
-        .data(data)
-        .enter()
-        .append("g")
+    var circunadj = svg.selectAll(".circunadj")
+        .data(data, dataKey);
 
-    lines.append("line")
+    var circadj = svg.selectAll(".circadj")
+        .data(data, dataKey);
+
+    lines.enter().append("line")
         .attr("class", "chartline")
         .attr("y1", function (d) {
             return y(d[STATEVAR]) + y.rangeBand() / 3;
@@ -322,37 +335,175 @@ function dotplot() {
             return x(d[VALUES.adjusted]);
         });
 
-    for (key in VALUES) {
-        circles.append("circle")
-            .attr("class", key)
-            .attr("r", CIRCLERADIUS)
-            .attr("cx", function (d) {
-                return x(d[VALUES[key]]);
-            })
-            .attr("cy", function (d) {
-                return y(d[STATEVAR]) + y.rangeBand() / 3;
-            });
+    circunadj.enter().append("circle")
+        .attr("class", "unadjusted circunadj")
+        .attr("r", CIRCLERADIUS)
+        .attr("cx", function (d) {
+            return x(d[VALUES.unadjusted]);
+        })
+        .attr("cy", function (d) {
+            return y(d[STATEVAR]) + y.rangeBand() / 3;
+        });
+
+    circadj.enter().append("circle")
+        .attr("class", "adjusted circadj")
+        .attr("r", CIRCLERADIUS)
+        .attr("cx", function (d) {
+            return x(d[VALUES.adjusted]);
+        })
+        .attr("cy", function (d) {
+            return y(d[STATEVAR]) + y.rangeBand() / 3;
+        });
+
+    //when the inputs are changed, reset the scales, redraw axes,
+    //rebind data and transition to new positions
+    function redraw(dt) {
+        gy.transition()
+            .duration(1000)
+            .call(yAxis);
+
+        gy.selectAll("text")
+            .attr("dx", -15);
+
+        //reset x axis
+        gx.transition()
+            .duration(10)
+            .call(xAxis);
+
+        //move lines
+        var lines = svg.selectAll(".chartline")
+            .data(dt, dataKey);
+
+        lines.enter()
+            .append("line")
+            .call(newlines);
+
+        lines.exit()
+            .remove();
+
+        lines.call(newlines);
+
+        //move circles
+        var circunadj = svg.selectAll(".circunadj")
+            .data(dt, dataKey);
+
+        var circadj = svg.selectAll(".circadj")
+            .data(dt, dataKey);
+
+        circunadj.enter()
+            .append("circle")
+            .call(newcircles);
+
+        circunadj.exit()
+            .remove();
+
+        circunadj.call(newcircles);
+
+        circadj.enter()
+            .append("circle")
+            .call(newcircles2);
+
+        circadj.exit()
+            .remove();
+
+        circadj.call(newcircles2);
+
+        function newlines(myItems) {
+            myItems
+                .transition()
+                .duration(1000)
+                .attr("class", "chartline")
+                .attr("y1", function (d) {
+                    return y(d[STATEVAR]) + y.rangeBand() / 3;
+                })
+                .attr("y2", function (d) {
+                    return y(d[STATEVAR]) + y.rangeBand() / 3;
+                })
+                .attr("x1", function (d) {
+                    return x(d[VALUES.unadjusted]);
+                })
+                .attr("x2", function (d) {
+                    return x(d[VALUES.adjusted]);
+                });
+        }
+
+        function newcircles(myItems) {
+            myItems
+                .transition()
+                .duration(1000)
+                .attr("class", "unadjusted circunadj")
+                .attr("r", CIRCLERADIUS)
+                .attr("cx", function (d) {
+                    return x(d[VALUES.unadjusted]);
+                })
+                .attr("cy", function (d) {
+                    return y(d[STATEVAR]) + y.rangeBand() / 3;
+                });
+        }
+
+        function newcircles2(myItems) {
+            myItems
+                .transition()
+                .duration(1000)
+                .attr("class", "adjusted circadj")
+                .attr("r", CIRCLERADIUS)
+                .attr("cx", function (d) {
+                    return x(d[VALUES.adjusted]);
+                })
+                .attr("cy", function (d) {
+                    return y(d[STATEVAR]) + y.rangeBand() / 3;
+                });
+        }
     }
 
-    /*for (i = 0; i < VALUES.length; i++) {
-        circles.append("circle")
-            .attr("class", VALUES[i])
-            .attr("r", CIRCLERADIUS)
-            .attr("cx", function (d) {
-                return x(d[VALUES[i]]);
-            })
-            .attr("cy", function (d) {
-                return y(d[STATEVAR]) + y.rangeBand() / 3;
-            });
-    }*/
+    dispatch.on("dotsMove", function (yv, gv, sv) {
+        data = data_main.filter(function (d) {
+            return d.year == yv & d.subject == sv & d.grade == gv;
+        })
+
+        data.forEach(function (d) {
+            d[VALUES['unadjusted']] = +d[VALUES['unadjusted']];
+            d[VALUES['adjusted']] = +d[VALUES['adjusted']];
+        });
+
+        data.sort(function (a, b) {
+            return a[VALUES['adjusted']] - b[VALUES['adjusted']];
+        });
+
+        y = d3.scale.ordinal()
+            .rangeRoundBands([height, 0], .1);
+
+        x = d3.scale.linear()
+            .range([0, width]);
+
+        y.rangeRoundBands([height, 0], .1)
+        y.domain(data.map(function (d) {
+            return d[STATEVAR];
+        }));
+
+        x.domain(d3.extent(
+    [].concat(data.map(function (d) {
+                return (d[VALUES.unadjusted]);
+            }), data.map(function (d) {
+                return (d[VALUES.adjusted]);
+            }))));
+
+        //reset y axis
+        yAxis.scale(y)
+        xAxis.scale(x).ticks(6)
+
+        redraw(data);
+    });
 }
 
 
 function tooltip() {
 
-    //var VALUES = "rank";
+    data_long = data_main.filter(function (d) {
+        return d.subject == SUBJECTVAL & d.grade == GRADEVAL & d.state == "Virginia";
+    })
 
-    data.forEach(function (d) {
+    data_long.forEach(function (d) {
         d[VALUES['unadjusted']] = +d[VALUES['unadjusted']];
         d[VALUES['adjusted']] = +d[VALUES['adjusted']];
         d.year = +d.year;
@@ -382,17 +533,13 @@ function tooltip() {
         //.domain([200, 300]);
 
     y.domain(d3.extent(
-    [].concat(data.map(function (d) {
+    [].concat(data_long.map(function (d) {
             return (d[VALUES.unadjusted]);
-        }), data.map(function (d) {
+        }), data_long.map(function (d) {
             return (d[VALUES.adjusted]);
         }))));
 
-    data = data_main.filter(function (d) {
-        return d.subject == SUBJECTVAL & d.grade == GRADEVAL & d.FIPS == "Virginia";
-    })
-
-    var years = d3.extent(data.map(function (d) {
+    var years = d3.extent(data_long.map(function (d) {
         return d.year;
     }));
 
@@ -428,9 +575,9 @@ function tooltip() {
 
     data_nest = d3.nest().key(function (d) {
         return d.abbrev;
-    }).entries(data.map(function (d) {
+    }).entries(data_long.map(function (d) {
         return {
-            abbrev: d.FIPS,
+            abbrev: d.state,
             year: +d.year,
             val: +d[VALUES]
         };
@@ -439,7 +586,7 @@ function tooltip() {
     var types = ([VALUES['unadjusted'], VALUES['adjusted']]).map(function (name) {
         return {
             name: name,
-            values: data.map(function (d) {
+            values: data_long.map(function (d) {
                 return {
                     year: d.year,
                     val: +d[name]
@@ -495,7 +642,7 @@ function tooltip() {
 
 function drawgraphs() {
     dotplot();
-    tooltip();
+    //tooltip();
 }
 
 $(window).load(function () {
