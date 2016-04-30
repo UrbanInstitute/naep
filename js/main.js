@@ -10,9 +10,9 @@ var VALUES = {
     adjusted: "score_111111"
 };
 //default settings for data
-var YEARVAL = 2015;
-GRADEVAL = 4;
-SUBJECTVAL = "math";
+var YEARVAL = 2015,
+    GRADEVAL = 4,
+    SUBJECTVAL = "math";
 //controls on or off
 var ADJUST = {
     age: 1,
@@ -32,17 +32,14 @@ var ADJTEXT = {
     eng: "English spoken at home"
 }
 
-//select the metric to display using dropdowns
-var yearSelect = d3.select("#year-select"),
-    gradeSelect = d3.select("#grade-select"),
-    subjectSelect = d3.select("#subject-select");
-
 function capitalizeFirst(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-yearSelect.on("change", function () {
-    YEARVAL = yearSelect.property("value");
+//use radio buttons in faked dropdowns to change the graph
+$('input:radio[name="year-select"]').change(function () {
+    //set year value to selected
+    YEARVAL = $(this).val();
     d3.select("#yeardisplay").html(YEARVAL);
     // if the year/subject combo is unavailable, change the subject and the test dropdown box
     if ((YEARVAL == 1996 | YEARVAL == 2000) & SUBJECTVAL == "reading") {
@@ -52,26 +49,58 @@ yearSelect.on("change", function () {
         SUBJECTVAL = "reading";
         d3.select("#subjectdisplay").html(capitalizeFirst(SUBJECTVAL));
     }
+    //hide the dropdown
+    ($(this).parent()).hide();
     //reset the graph name text
     graphname(YEARVAL, GRADEVAL, SUBJECTVAL);
+    //redraw
     dotplot();
-    tooltip();
 });
 
-gradeSelect.on("change", function () {
-    GRADEVAL = gradeSelect.property("value");
+$('input:radio[name="grade-select"]').change(function () {
+    //set grade value to selected
+    GRADEVAL = $(this).val();
     d3.select("#gradename").html(GRADEVAL + "th");
     d3.select("#gradedisplay").html(GRADEVAL + "th");
+    //hide the dropdown
+    ($(this).parent()).hide();
+    //redraw
     dotplot();
     tooltip();
 });
 
-subjectSelect.on("change", function () {
-    SUBJECTVAL = subjectSelect.property("value");
-    d3.select("#subjectname").html(capitalizeFirst(SUBJECTVAL));
+$('input:radio[name="subject-select"]').change(function () {
+    //set subject value to selected
+    SUBJECTVAL = $(this).val();
+    d3.select("#subjectname").html(SUBJECTVAL);
     d3.select("#subjectdisplay").html(capitalizeFirst(SUBJECTVAL));
+    //hide the dropdown
+    ($(this).parent()).hide();
+    //redraw
     dotplot();
     tooltip();
+});
+
+$('#yearbox').click(function () {
+    if ($("#yeardd").is(":visible")) {
+        $('#yeardd').hide();
+    } else {
+        $('#yeardd').show();
+    }
+});
+$('#gradebox').click(function () {
+    if ($("#gradedd").is(":visible")) {
+        $('#gradedd').hide();
+    } else {
+        $('#gradedd').show();
+    }
+});
+$('#subjectbox').click(function () {
+    if ($("#subjectdd").is(":visible")) {
+        $('#subjectdd').hide();
+    } else {
+        $('#subjectdd').show();
+    }
 });
 
 //line of text above the graph showing what controls are on
@@ -109,11 +138,8 @@ function graphname(yv, gv, sv) {
 }
 
 $(document).ready(function () {
-    /*YEARVAL = 2015;
-    GRADEVAL = 4;
-    SUBJECTVAL = "math";*/
 
-    //default: don't see dropdown
+    //default: don't see dropdowns
     $('.dd').hide();
 
     //set text that appears in controls dropdown box
@@ -128,28 +154,6 @@ $(document).ready(function () {
 
     //set the description of the graph on initial load
     graphname(YEARVAL, GRADEVAL, SUBJECTVAL);
-});
-
-$('#yearbox').click(function () {
-    if ($("#yeardd").is(":visible")) {
-        $('#yeardd').hide();
-    } else {
-        $('#yeardd').show();
-    }
-});
-$('#gradebox').click(function () {
-    if ($("#gradedd").is(":visible")) {
-        $('#gradedd').hide();
-    } else {
-        $('#gradedd').show();
-    }
-});
-$('#subjectbox').click(function () {
-    if ($("#subjectdd").is(":visible")) {
-        $('#subjectdd').hide();
-    } else {
-        $('#subjectdd').show();
-    }
 });
 
 //reset the adjusted score based on values of ADJUST

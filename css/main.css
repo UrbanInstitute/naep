@@ -221,6 +221,55 @@ h4 {
     border: 1px solid #1696d2;
 }
 
+/*radio buttons*/
+input[type=radio].urban-radio {
+    position: absolute;
+    z-index: -1000;
+    left: -1000px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    width: 1px;
+    margin: -1px;
+    padding: 0;
+    border: 0;
+}
+
+input[type=radio].urban-radio + label.radio-label {
+    padding-left: 25px;
+    height: 17px;
+    display: block;
+    line-height: 17px;
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    font-size: 13px;
+    vertical-align: middle;
+    font-weight: 400;
+    cursor: pointer;
+    margin-bottom: 12px;
+}
+
+input[type=radio].urban-radio:not(:checked) + label.radio-label {
+    color: #989898;
+}
+
+.urban-radio:checked + label.radio-label {
+    color: #000000;
+}
+
+input[type=radio].urban-radio:checked + label.radio-label {
+    background-position: 0 -17px;
+}
+
+label.radio-label {
+    background-image: url(http://csscheckbox.com/checkboxes/u/csscheckbox_e36817a8d5b61bb2c664871b98f6544c.png);
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
 
 /*check boxes*/
 
@@ -294,16 +343,6 @@ label.css-label {
     border-left: 1px solid #333;
 }
 
-.styled-select select {
-    font-size: 13px;
-    color: #1696d2;
-    background: none;
-    border: none;
-    margin-left: 15px;
-    width: 100px;
-    overflow: hidden;
-}
-
 .triangle {
     display: inline-block;
     float: right;
@@ -332,7 +371,8 @@ label.css-label {
     border-right: 1px solid #ccc;
     border-bottom: 1px solid #ccc;
     border-top: 2px solid #1696d2;
-    padding: 20px;
+    /*padding: 20px;*/
+    padding: 20px 10px 10px 20px;
     margin-top: 18px;
 }
 
