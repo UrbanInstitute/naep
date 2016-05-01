@@ -444,6 +444,35 @@ label.css-label {
     fill: #1696d2;
 }
 
+.chartline {
+    fill: none;
+    stroke-width: 1px;
+    stroke: #626262;
+    shape-rendering: crispEdges;
+}
+
+.dot.lowlight,
+.dot.deselected {
+    opacity: 0.3;
+}
+
+,
+.chartline.lowlight,
+.chartline.deselected {
+    stroke-width: 8px;
+}
+
+.statename.lowlight,
+.statename.deselected {
+    fill: #ccc;
+}
+
+.statename.highlight,
+.statename.selected {
+    fill: #1696d2;
+    font-weight: 700;
+}
+
 #graphic {
     width: 100%;
 }
@@ -459,6 +488,7 @@ label.css-label {
 .axis,
 .axis-show {
     font-size: 12px;
+    font-weight: 400;
     color: #333;
 }
 
@@ -490,13 +520,6 @@ label.css-label {
 
 .yearstitle {
     font-size: 13px;
-}
-
-.chartline {
-    fill: none;
-    stroke-width: 1px;
-    stroke: #626262;
-    shape-rendering: crispEdges;
 }
 
 .rankline,

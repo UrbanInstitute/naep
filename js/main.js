@@ -32,7 +32,7 @@ var ADJTEXT = {
     eng: "English spoken at home"
 }
 
-var dispatch = d3.dispatch("dotsMove");
+var dispatch = d3.dispatch("dotsMove", "clickState", "hoverState", "dehoverState");
 
 function capitalizeFirst(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
@@ -232,7 +232,7 @@ function controls() {
 controls();
 
 function dotplot() {
-    
+
     var dataKey = function (d) {
         return d.fips;
     };
@@ -309,6 +309,10 @@ function dotplot() {
         .call(yAxis);
 
     gy.selectAll("text")
+        .attr("fid", function (d) {
+            return d;
+        })
+        .attr("class", "statename")
         .attr("dx", -15);
 
     var lines = svg.selectAll(".chartline")
@@ -321,38 +325,83 @@ function dotplot() {
         .data(data, dataKey);
 
     lines.enter().append("line")
+        .attr("fid", function (d) {
+            return d.state;
+        })
         .attr("class", "chartline")
         .attr("y1", function (d) {
-            return y(d[STATEVAR]) + y.rangeBand() / 3;
+            return y(d[STATEVAR]) + y.rangeBand() / 2;
         })
         .attr("y2", function (d) {
-            return y(d[STATEVAR]) + y.rangeBand() / 3;
+            return y(d[STATEVAR]) + y.rangeBand() / 2;
         })
         .attr("x1", function (d) {
             return x(d[VALUES.unadjusted]);
         })
         .attr("x2", function (d) {
             return x(d[VALUES.adjusted]);
+        })
+        .on("click", function (d) {
+            dispatch.clickState(d3.select(this).attr("fid"));
+        })
+        .on("mouseover", function (d) {
+            dispatch.hoverState(d3.select(this).attr("fid"));
+        })
+        .on("mouseout", function (d) {
+            dispatch.dehoverState();
+        })
+        .on("mouseleave", function (d) {
+            dispatch.dehoverState();
         });
 
     circunadj.enter().append("circle")
-        .attr("class", "unadjusted circunadj")
+        .attr("fid", function (d) {
+            return d.state;
+        })
+        .attr("class", "dot unadjusted circunadj")
         .attr("r", CIRCLERADIUS)
         .attr("cx", function (d) {
             return x(d[VALUES.unadjusted]);
         })
         .attr("cy", function (d) {
-            return y(d[STATEVAR]) + y.rangeBand() / 3;
+            return y(d[STATEVAR]) + y.rangeBand() / 2;
+        })
+        .on("click", function (d) {
+            dispatch.clickState(d3.select(this).attr("fid"));
+        })
+        .on("mouseover", function (d) {
+            dispatch.hoverState(d3.select(this).attr("fid"));
+        })
+        .on("mouseout", function (d) {
+            dispatch.dehoverState();
+        })
+        .on("mouseleave", function (d) {
+            dispatch.dehoverState();
         });
 
     circadj.enter().append("circle")
-        .attr("class", "adjusted circadj")
+        .attr("fid", function (d) {
+            return d.state;
+        })
+        .attr("class", "dot adjusted circadj")
         .attr("r", CIRCLERADIUS)
         .attr("cx", function (d) {
             return x(d[VALUES.adjusted]);
         })
         .attr("cy", function (d) {
-            return y(d[STATEVAR]) + y.rangeBand() / 3;
+            return y(d[STATEVAR]) + y.rangeBand() / 2;
+        })
+        .on("click", function (d) {
+            dispatch.clickState(d3.select(this).attr("fid"));
+        })
+        .on("mouseover", function (d) {
+            dispatch.hoverState(d3.select(this).attr("fid"));
+        })
+        .on("mouseout", function (d) {
+            dispatch.dehoverState();
+        })
+        .on("mouseleave", function (d) {
+            dispatch.dehoverState();
         });
 
     //when the inputs are changed, reset the scales, redraw axes,
@@ -363,6 +412,10 @@ function dotplot() {
             .call(yAxis);
 
         gy.selectAll("text")
+            .attr("fid", function (d) {
+                return d;
+            })
+            .attr("class", "statename")
             .attr("dx", -15);
 
         //reset x axis
@@ -413,6 +466,9 @@ function dotplot() {
                 .transition()
                 .duration(1000)
                 .attr("class", "chartline")
+                .attr("fid", function (d) {
+                    return d.state;
+                })
                 .attr("y1", function (d) {
                     return y(d[STATEVAR]) + y.rangeBand() / 3;
                 })
@@ -431,7 +487,10 @@ function dotplot() {
             myItems
                 .transition()
                 .duration(1000)
-                .attr("class", "unadjusted circunadj")
+                .attr("class", "dot unadjusted circunadj")
+                .attr("fid", function (d) {
+                    return d.state;
+                })
                 .attr("r", CIRCLERADIUS)
                 .attr("cx", function (d) {
                     return x(d[VALUES.unadjusted]);
@@ -445,7 +504,10 @@ function dotplot() {
             myItems
                 .transition()
                 .duration(1000)
-                .attr("class", "adjusted circadj")
+                .attr("class", "dot adjusted circadj")
+                .attr("fid", function (d) {
+                    return d.state;
+                })
                 .attr("r", CIRCLERADIUS)
                 .attr("cx", function (d) {
                     return x(d[VALUES.adjusted]);
@@ -456,6 +518,7 @@ function dotplot() {
         }
     }
 
+    //dispatch function for moving/redrawing dots & lines on changing inputs
     dispatch.on("dotsMove", function (yv, gv, sv) {
         data = data_main.filter(function (d) {
             return d.year == yv & d.subject == sv & d.grade == gv;
@@ -493,6 +556,49 @@ function dotplot() {
         xAxis.scale(x).ticks(6)
 
         redraw(data);
+    });
+
+    //dispatch function for click selecting state
+    dispatch.on("clickState", function (fips) {
+        console.log(fips);
+        //select that state, deselect all others
+        d3.selectAll(".statename[fid='" + fips + "']")
+            .classed("selected", true);
+        d3.selectAll("circle:not([fid='" + fips + "']), .statename:not([fid='" + fips + "'])")
+            .classed("deselected", true);
+        //class is attaching but appearance won't change :(
+        d3.selectAll(".chartline:not([fid='" + fips + "'])")
+            .classed("deselected", true);
+
+        //no lowlights
+        d3.selectAll(".lowlight")
+            .classed("lowlight", false);
+    });
+
+    //dispatch function for highlighting state
+    dispatch.on("hoverState", function (fips) {
+        //highlight that state, make sure it's not lowlighted
+        d3.selectAll(".statename[fid='" + fips + "']")
+            .classed("highlight", true);
+        d3.selectAll("circle[fid='" + fips + "'], .statename[fid='" + fips + "']")
+            .classed("lowlight", false);
+
+        //lowlight the other states
+        d3.selectAll("circle:not([fid='" + fips + "']), .statename:not([fid='" + fips + "'])")
+            .classed("lowlight", true);
+
+        //class is attaching but appearance won't change :(
+        d3.selectAll(".chartline:not([fid='" + fips + "'])")
+            .classed("lowlight", true);
+    });
+
+    //dispatch function for dehilighting state
+    dispatch.on("dehoverState", function () {
+        //no lowlighting
+        d3.selectAll(".lowlight")
+            .classed("lowlight", false);
+        d3.selectAll(".highlight")
+            .classed("highlight", false);
     });
 }
 
