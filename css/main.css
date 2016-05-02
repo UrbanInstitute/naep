@@ -433,7 +433,10 @@ label.css-label {
     background: #1696d2;
 }
 
-
+#yearwarn {
+    font-style: italic;
+    color: #666666;
+}
 /*graphs*/
 
 .unadjusted {

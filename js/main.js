@@ -77,6 +77,9 @@ $(document).ready(function () {
     //default: don't see dropdowns
     $('.dd').hide();
 
+    //don't see year warn statement
+    $('#yearwarn').hide();
+
     //set text that appears in controls dropdown box
     //default value is all on
     d3.select("#controlsdisplay").html("All on");
@@ -101,13 +104,28 @@ $('input:radio[name="year-select"]').change(function () {
     //set year value to selected
     YEARVAL = $(this).val();
     d3.select("#yeardisplay").html(YEARVAL);
-    // if the year/subject combo is unavailable, change the subject and the test dropdown box
-    if ((YEARVAL == 1996 | YEARVAL == 2000) & SUBJECTVAL == "reading") {
-        SUBJECTVAL = "math";
-        d3.select("#subjectdisplay").html(capitalizeFirst(SUBJECTVAL));
-    } else if ((YEARVAL == 1998 | YEARVAL == 2002) & SUBJECTVAL == "math") {
-        SUBJECTVAL = "reading";
-        d3.select("#subjectdisplay").html(capitalizeFirst(SUBJECTVAL));
+    // if the year/subject combo is unavailable, change the subject, radio button and the test dropdown box
+    // disable the other subject's radio button
+    // display sentence about limited data
+    if (YEARVAL == 1996 | YEARVAL == 2000) {
+        $('input[name="subject-select"][value="reading"]').prop('disabled', true);
+        $('input[name="subject-select"][value="math"]').prop('checked', true);
+        if (SUBJECTVAL == "reading") {
+            SUBJECTVAL = "math";
+            d3.select("#subjectdisplay").html(capitalizeFirst(SUBJECTVAL));
+        }
+        $('#yearwarn').show();
+    } else if (YEARVAL == 1998 | YEARVAL == 2002) {
+        $('input[name="subject-select"][value="math"]').prop('disabled', true);
+        $('input[name="subject-select"][value="reading"]').prop('checked', true);
+        if (SUBJECTVAL == "math") {
+            SUBJECTVAL = "reading";
+            d3.select("#subjectdisplay").html(capitalizeFirst(SUBJECTVAL));
+        }
+        $('#yearwarn').show();
+    } else {
+        $('input[name="subject-select"]').prop('disabled', false);
+        $('#yearwarn').hide();
     }
     //hide the dropdown
     ($(this).parent()).hide();
