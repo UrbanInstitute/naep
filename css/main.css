@@ -451,20 +451,24 @@ label.css-label {
     shape-rendering: crispEdges;
 }
 
-.dot.lowlight,
-.dot.deselected {
-    opacity: 0.3;
+.unadjusted.lowlight,
+.unadjusted.deselected {
+    fill: #fee9bb;
 }
 
-,
+.adjusted.lowlight,
+.adjusted.deselected {
+    fill: #bfd7ef;
+}
+
 .chartline.lowlight,
 .chartline.deselected {
-    stroke-width: 8px;
+    stroke: #aba8a7;
 }
 
 .statename.lowlight,
 .statename.deselected {
-    fill: #ccc;
+    fill: #989696;
 }
 
 .statename.highlight,
