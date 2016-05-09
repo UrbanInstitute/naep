@@ -124,7 +124,8 @@ $('input:radio[name="year-select"]').change(function () {
         }
         $('#yearwarn').show();
     } else {
-        $('input[name="subject-select"]').prop('disabled', false);
+        $('input[name="subject-select"][value="reading"]').prop('disabled', false);
+        $('input[name="subject-select"][value="math"]').prop('disabled', false);
         $('#yearwarn').hide();
     }
     //hide the dropdown

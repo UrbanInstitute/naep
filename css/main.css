@@ -246,9 +246,9 @@ input[type=radio].urban-radio {
 
 input[type=radio].urban-radio + label.radio-label {
     padding-left: 25px;
-    height: 17px;
+    height: 16px;
     display: block;
-    line-height: 17px;
+    line-height: 16px;
     background-repeat: no-repeat;
     background-position: 0 0;
     font-size: 13px;
@@ -258,7 +258,7 @@ input[type=radio].urban-radio + label.radio-label {
     margin-bottom: 12px;
 }
 
-input[type=radio].urban-radio:not(:checked) + label.radio-label {
+input[type=radio].urban-radio:disabled + label.radio-label {
     color: #989898;
 }
 
@@ -267,17 +267,24 @@ input[type=radio].urban-radio:not(:checked) + label.radio-label {
 }
 
 input[type=radio].urban-radio:checked + label.radio-label {
-    background-position: 0 -17px;
+    background-position: 0 -16px;
 }
 
 label.radio-label {
-    background-image: url(http://csscheckbox.com/checkboxes/u/csscheckbox_e36817a8d5b61bb2c664871b98f6544c.png);
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     -khtml-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
-    user-select: none;
+    user-select: none;    
+}
+
+label.radio-label:not(:disabled) {
+    background-image: url("../img/radios.png");
+}
+
+input[type=radio].urban-radio:disabled + label.radio-label {
+    background-image: url("../img/radioNotAvailable.png");
 }
 
 /*check boxes*/
