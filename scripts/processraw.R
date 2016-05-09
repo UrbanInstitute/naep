@@ -49,8 +49,7 @@ read4 <- read4 %>% mutate(grade = 4, subject = "reading")
 read8 <- read8 %>% mutate(grade = 8, subject = "reading")
 
 naepfull <- rbind(math4, read4, math8, read8)
-naepfull <- naepfull %>% select(year, FIPS, grade, subject, everything()) %>%
-  select(-starts_with("score_st_"))
+naepfull <- naepfull %>% select(year, FIPS, grade, subject, everything()) 
 
 # Add new column names to score vars
 naepleft <- naepfull %>% select(-starts_with("score_m"))
