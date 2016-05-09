@@ -109,6 +109,7 @@ $('input:radio[name="year-select"]').change(function () {
     // display sentence about limited data
     if (YEARVAL == 1996 | YEARVAL == 2000) {
         $('input[name="subject-select"][value="reading"]').prop('disabled', true);
+        $('input[name="subject-select"][value="math"]').prop('disabled', false);
         $('input[name="subject-select"][value="math"]').prop('checked', true);
         if (SUBJECTVAL == "reading") {
             SUBJECTVAL = "math";
@@ -117,6 +118,7 @@ $('input:radio[name="year-select"]').change(function () {
         $('#yearwarn').show();
     } else if (YEARVAL == 1998 | YEARVAL == 2002) {
         $('input[name="subject-select"][value="math"]').prop('disabled', true);
+        $('input[name="subject-select"][value="reading"]').prop('disabled', false);
         $('input[name="subject-select"][value="reading"]').prop('checked', true);
         if (SUBJECTVAL == "math") {
             SUBJECTVAL = "reading";
