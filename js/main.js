@@ -35,6 +35,14 @@ var ADJTEXT = {
     eng: "English spoken at home"
 }
 
+function RANKFORMATTER(d) {
+    if (d == "rank_000000") {
+        return "unadjusted";
+    } else {
+        return "adjusted";
+    }
+}
+
 var dispatch = d3.dispatch("dotsMove", "clickState", "hoverState", "dehoverState");
 
 function capitalizeFirst(string) {
@@ -588,10 +596,13 @@ function dotplot() {
     dispatch.on("clickState", function (fips) {
         console.log(fips);
         //select that state, deselect all others
-        d3.selectAll(".statename[fid='" + fips + "']")
-            .classed("selected", true);
+        //d3.selectAll("circle[fid='" + fips + "'], .statename[fid='" + fips + "']")
+        d3.selectAll("[fid='" + fips + "']")
+            .classed("selected", true)
+            .classed("deselected", false)
         d3.selectAll("circle:not([fid='" + fips + "']), .statename:not([fid='" + fips + "'])")
-            .classed("deselected", true);
+            .classed("deselected", true)
+            .classed("selected", false);
         //class is attaching but appearance won't change :(
         d3.selectAll(".chartline:not([fid='" + fips + "'])")
             .classed("deselected", true);
@@ -608,19 +619,11 @@ function dotplot() {
             d.year = +d.year;
         });
 
-        function FORMATTER(d) {
-            if (d=="rank_000000") {
-                return "unadjusted";
-            } else {
-                return "adjusted";
-            }
-        }
-        
         RANKVALS = ["rank_000000", "rank_" + VALUES['adjusted'].split("_")[1]];
-        console.log(RANKVALS);
+
         var ranks = (RANKVALS).map(function (name) {
             return {
-                name: FORMATTER(name),
+                name: RANKFORMATTER(name),
                 values: ttdata.map(function (d) {
                     return {
                         year: d.year,
@@ -630,23 +633,6 @@ function dotplot() {
             };
         });
 
-        /*var ranks = [{
-            name: "rank_a",
-            values: ttdata.map(function (d) {
-                return {
-                    year: d.year,
-                    val: +d["rank_000000"]
-                };
-            })
-        }, {
-            name: "rank_111111",
-            values: ttdata.map(function (d) {
-                return {
-                    year: d.year,
-                    val: +d["rank_111111"]
-                };
-            })
-        }];*/
         tooltip(fips, ranks)
     });
 
