@@ -65,11 +65,13 @@ naepscores$year <- as.numeric(naepscores$year)
 # Rejoin newly named cols to demographic info
 naep <- left_join(naepleft, naepscores, by = c("year", "FIPS", "grade", "subject"))
 
-# Rank over time
-#naep <- naep %>% 
-#  arrange(year, grade, subject, -score_111111) %>%
-#  group_by(year, grade, subject) %>%
-#  mutate(rank=row_number())
+# Rank over time - no DC
+naep <- naep %>% filter(FIPS != "D.C.")
+ranks <- naep %>% group_by(year, grade, subject) %>%
+	mutate_each(funs(rank(desc(.))), starts_with("score_"))
+ranks <- ranks %>% select(year, grade, subject, FIPS, starts_with("score"))
+colnames(ranks) <- gsub("score", "rank", colnames(ranks))
+naep <- left_join(naep, ranks, by=c("year", "grade", "subject", "FIPS"))
 
 # See what we have by year
 years <- naep %>% mutate(p = 1) %>%
@@ -82,7 +84,7 @@ years <- naep %>% mutate(p = 1) %>%
 naep <- naep %>% filter(year >= 1996) %>% 
   filter(!(year==2000 & subject=="reading"))
 # Full name for DC
-naep <- naep %>% mutate(FIPS = ifelse(FIPS == "D.C.", "District of Columbia", FIPS))
+# naep <- naep %>% mutate(FIPS = ifelse(FIPS == "D.C.", "District of Columbia", FIPS))
 
 naep <- naep %>% rename(state = FIPS)
 # Add state fips code
