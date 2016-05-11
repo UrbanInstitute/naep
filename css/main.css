@@ -545,17 +545,17 @@ label.css-label {
     font-size: 13px;
 }
 
-.rankline,
-.score_111111line {
+.rankline {
     fill: none;
     stroke-width: 1px;
-    stroke: #1696d2;
 }
 
-.score_000000line {
-    fill: none;
-    stroke-width: 1px;
+.unadjusted.rankline {
     stroke: #fdbf11;
+}
+
+.adjusted.rankline {
+    stroke: #1696d2;
 }
 
 .point-label {

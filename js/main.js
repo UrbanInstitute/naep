@@ -1,14 +1,17 @@
 var main_data_url = "data/main.csv",
     $graphic = $("#graphic"),
     $tooltipgraph = $("#tooltipgraph"),
-    data, data_long;
-CIRCLERADIUS = 5,
+    data,
+    data_long,
+    ttdata,
+    CIRCLERADIUS = 5,
     STATEVAR = "state",
     LABELS = ["Unadjusted", "Adjusted"];
 var VALUES = {
     unadjusted: "score_000000",
     adjusted: "score_111111"
 };
+var RANKVALS;
 //default settings for data
 var YEARVAL = 2015,
     GRADEVAL = 4,
@@ -292,7 +295,9 @@ function dotplot() {
         left: 135
     };
     var width = $graphic.width() - margin.left - margin.right,
-        height = Math.ceil(width * chart_aspect_height) - margin.top - margin.bottom;
+        //height = Math.ceil(width * chart_aspect_height) - margin.top - margin.bottom;
+        //fixed height
+        height = 880 - margin.top - margin.bottom;
 
     $graphic.empty();
 
@@ -594,6 +599,55 @@ function dotplot() {
         //no lowlights
         d3.selectAll(".lowlight")
             .classed("lowlight", false);
+        ttdata = data_main.filter(function (d) {
+            return d.subject == SUBJECTVAL & d.grade == GRADEVAL & d.state == fips;
+        })
+        ttdata.forEach(function (d) {
+            d[VALUES['unadjusted']] = +d[VALUES['unadjusted']];
+            d[VALUES['adjusted']] = +d[VALUES['adjusted']];
+            d.year = +d.year;
+        });
+
+        function FORMATTER(d) {
+            if (d=="rank_000000") {
+                return "unadjusted";
+            } else {
+                return "adjusted";
+            }
+        }
+        
+        RANKVALS = ["rank_000000", "rank_" + VALUES['adjusted'].split("_")[1]];
+        console.log(RANKVALS);
+        var ranks = (RANKVALS).map(function (name) {
+            return {
+                name: FORMATTER(name),
+                values: ttdata.map(function (d) {
+                    return {
+                        year: d.year,
+                        val: +d[name]
+                    };
+                })
+            };
+        });
+
+        /*var ranks = [{
+            name: "rank_a",
+            values: ttdata.map(function (d) {
+                return {
+                    year: d.year,
+                    val: +d["rank_000000"]
+                };
+            })
+        }, {
+            name: "rank_111111",
+            values: ttdata.map(function (d) {
+                return {
+                    year: d.year,
+                    val: +d["rank_111111"]
+                };
+            })
+        }];*/
+        tooltip(fips, ranks)
     });
 
     //dispatch function for highlighting state
@@ -624,17 +678,7 @@ function dotplot() {
 }
 
 
-function tooltip() {
-
-    data_long = data_main.filter(function (d) {
-        return d.subject == SUBJECTVAL & d.grade == GRADEVAL & d.state == "Virginia";
-    })
-
-    data_long.forEach(function (d) {
-        d[VALUES['unadjusted']] = +d[VALUES['unadjusted']];
-        d[VALUES['adjusted']] = +d[VALUES['adjusted']];
-        d.year = +d.year;
-    });
+function tooltip(fips, rankdata) {
 
     var chart_aspect_height = 0.7;
     var margin = {
@@ -656,24 +700,15 @@ function tooltip() {
 
     var y = d3.scale.linear()
         .range([height, 0])
-        //.domain([51, 1]);
-        //.domain([200, 300]);
+        .domain([50, 1]);
 
-    y.domain(d3.extent(
-    [].concat(data_long.map(function (d) {
-            return (d[VALUES.unadjusted]);
-        }), data_long.map(function (d) {
-            return (d[VALUES.adjusted]);
-        }))));
-
-    var years = d3.extent(data_long.map(function (d) {
+    var years = d3.extent(ttdata.map(function (d) {
         return d.year;
     }));
 
     var x = d3.scale.linear()
         .range([0, width])
         .domain(years);
-    //.domain([1996, 2013]);
 
     var xAxis = d3.svg.axis()
         .scale(x)
@@ -690,7 +725,7 @@ function tooltip() {
 
     var yAxis = d3.svg.axis()
         .scale(y)
-        .ticks(5)
+        .tickValues([1, 10, 20, 30, 40, 50])
         .orient("left");
 
     var gy = svg.append("g")
@@ -700,38 +735,13 @@ function tooltip() {
     gy.selectAll("text")
         .attr("dx", -4);
 
-    data_nest = d3.nest().key(function (d) {
-        return d.abbrev;
-    }).entries(data_long.map(function (d) {
-        return {
-            abbrev: d.state,
-            year: +d.year,
-            val: +d[VALUES]
-        };
-    }));
-
-    var types = ([VALUES['unadjusted'], VALUES['adjusted']]).map(function (name) {
-        return {
-            name: name,
-            values: data_long.map(function (d) {
-                return {
-                    year: d.year,
-                    val: +d[name]
-                };
-            })
-        };
-    });
-
     //title for the little chart (state name)
     var charttitle = svg.append("g")
-        .data(data_nest)
         .append("text")
         .attr("class", "charttitle")
         .attr("x", 5)
         .attr("y", -23)
-        .text(function (d) {
-            return d.key;
-        });
+        .text(fips);
 
     //years in chart
     var yearstitle = svg.append("g")
@@ -742,7 +752,7 @@ function tooltip() {
         .text(years[0] + "—" + years[1]);
 
     var line = d3.svg.line()
-        //.interpolate("step-after")
+        .interpolate("step-after")
         .x(function (d) {
             return x(d.year);
         })
@@ -751,13 +761,15 @@ function tooltip() {
         });
 
     var states = svg.selectAll(".state")
-        .data(types)
+        .data(rankdata)
         .enter().append("g")
         .attr("class", "state");
 
+    console.log(rankdata);
+
     states.append("path")
         .attr("class", function (d) {
-            return d.name + "line";
+            return "rankline " + d.name;
         })
         .attr("d", function (d) {
             return line(d.values);
@@ -767,17 +779,12 @@ function tooltip() {
         });
 }
 
-function drawgraphs() {
-    dotplot();
-    //tooltip();
-}
-
 $(window).load(function () {
     if (Modernizr.svg) { // if svg is supported, draw dynamic chart
         d3.csv(main_data_url, function (rates) {
             data_main = rates;
-            drawgraphs();
-            window.onresize = drawgraphs;
+            dotplot();
+            window.onresize = dotplot;
         });
     }
 });
