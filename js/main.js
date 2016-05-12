@@ -701,12 +701,12 @@ function dotplot() {
 function tooltip(fips, rankdata, ypos) {
 
     var margin = {
-        right: 15,
-        left: 35
+        right: 45,
+        left: 55
     };
 
     var padding = 50;
-    var ttheight = 270;
+    var ttheight = 250;
     //want tt to be vertically aligned with dots from that state
     //if it's in the bottom section, need to adjust so it stays on screen
     if (GRAPHHEIGHT - parseInt(ypos) - padding >= ttheight + padding) {
