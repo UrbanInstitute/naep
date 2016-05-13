@@ -4,6 +4,7 @@ var main_data_url = "data/main.csv",
     data,
     data_long,
     ttdata,
+    STATESELECT = null,
     GRAPHHEIGHT = 880,
     CIRCLERADIUS = 5,
     STATEVAR = "state",
@@ -450,7 +451,17 @@ function dotplot() {
             .attr("fid", function (d) {
                 return d;
             })
-            .attr("class", "statename")
+            .attr("class", function (d) {
+                if (STATESELECT != null) {
+                    if (d == STATESELECT) {
+                        return "statename selected"
+                    } else {
+                        return "statename deselected";
+                    }
+                } else {
+                    return "statename";
+                }
+            })
             .attr("dx", -15);
 
         //reset x axis
@@ -460,7 +471,8 @@ function dotplot() {
 
         //move lines
         var lines = svg.selectAll(".chartline")
-            .data(dt, dataKey);
+            .data(dt, dataKey)
+            .attr("class", "chartline");
 
         lines.enter()
             .append("line")
@@ -473,10 +485,12 @@ function dotplot() {
 
         //move circles
         var circunadj = svg.selectAll(".circunadj")
-            .data(dt, dataKey);
+            .data(dt, dataKey)
+            .attr("class", "dot unadjusted circunadj");
 
         var circadj = svg.selectAll(".circadj")
-            .data(dt, dataKey);
+            .data(dt, dataKey)
+            .attr("class", "dot adjusted circadj");
 
         circunadj.enter()
             .append("circle")
@@ -500,7 +514,17 @@ function dotplot() {
             myItems
                 .transition()
                 .duration(1000)
-                .attr("class", "chartline")
+                .attr("class", function (d) {
+                    if (STATESELECT != null) {
+                        if (d.state == STATESELECT) {
+                            return "chartline selected"
+                        } else {
+                            return "chartline deselected";
+                        }
+                    } else {
+                        return "chartline";
+                    }
+                })
                 .attr("fid", function (d) {
                     return d.state;
                 })
@@ -522,7 +546,18 @@ function dotplot() {
             myItems
                 .transition()
                 .duration(1000)
-                .attr("class", "dot unadjusted circunadj")
+                .attr("class", function (d) {
+                    if (STATESELECT != null) {
+                        //keep state selection on change
+                        if (d.state == STATESELECT) {
+                            return "dot unadjusted circunadj selected"
+                        } else {
+                            return "dot unadjusted circunadj deselected";
+                        }
+                    } else {
+                        return "dot unadjusted circunadj";
+                    }
+                })
                 .attr("fid", function (d) {
                     return d.state;
                 })
@@ -539,7 +574,17 @@ function dotplot() {
             myItems
                 .transition()
                 .duration(1000)
-                .attr("class", "dot adjusted circadj")
+                .attr("class", function (d) {
+                    if (STATESELECT != null) {
+                        if (d.state == STATESELECT) {
+                            return "dot adjusted circadj selected"
+                        } else {
+                            return "dot adjusted circadj deselected";
+                        }
+                    } else {
+                        return "dot adjusted circadj";
+                    }
+                })
                 .attr("fid", function (d) {
                     return d.state;
                 })
@@ -592,11 +637,10 @@ function dotplot() {
 
         $tooltipgraph.empty();
         redraw(data);
+
     });
 
-    //dispatch function for click selecting state
-    dispatch.on("clickState", function (fips) {
-        console.log(fips);
+    function selectState(fips) {
         //select that state, deselect all others
         //d3.selectAll("circle[fid='" + fips + "'], .statename[fid='" + fips + "']")
         d3.selectAll("[fid='" + fips + "']")
@@ -612,8 +656,14 @@ function dotplot() {
         //no lowlights
         d3.selectAll(".lowlight")
             .classed("lowlight", false);
+    }
 
+    //dispatch function for click selecting state
+    dispatch.on("clickState", function (fips) {
+        console.log(fips);
+        STATESELECT = fips;
 
+        selectState(fips);
         ttdata = data_main.filter(function (d) {
             return d.subject == SUBJECTVAL & d.grade == GRADEVAL & d.state == fips;
         })
@@ -746,11 +796,11 @@ function tooltip(fips, rankdata, ypos) {
             return d;
         })
         .tickValues(function () {
-           if (years[0] == 1996) {
-               return [years[0], 2000, 2003, 2007, 2011, 2015];
-           } else {
-               return [years[0], 2003, 2007, 2011, 2015];
-           }
+            if (years[0] == 1996) {
+                return [years[0], 2000, 2003, 2007, 2011, 2015];
+            } else {
+                return [years[0], 2003, 2007, 2011, 2015];
+            }
         })
         .orient("bottom");
 
@@ -813,12 +863,17 @@ function tooltip(fips, rankdata, ypos) {
         });
 }
 
+function resizeclear() {
+    dotplot();
+    $tooltipgraph.empty();
+}
+
 $(window).load(function () {
     if (Modernizr.svg) { // if svg is supported, draw dynamic chart
         d3.csv(main_data_url, function (rates) {
             data_main = rates;
             dotplot();
-            window.onresize = dotplot;
+            window.onresize = resizeclear;
         });
     }
 });
