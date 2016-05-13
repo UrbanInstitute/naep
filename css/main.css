@@ -441,11 +441,13 @@ label.css-label {
     color: #333;
 }
 
-.circle.unadjusted {
+.circle.unadjusted,
+.unadjusted.highlight {
     background: #fdbf11;
 }
 
-.circle.adjusted {
+.circle.adjusted,
+.unadjusted.highlight {
     background: #1696d2;
 }
 
@@ -463,7 +465,8 @@ label.css-label {
     fill: #1696d2;
 }
 
-.chartline {
+.chartline,
+.chartline.highlight {
     fill: none;
     stroke-width: 1px;
     stroke: #626262;

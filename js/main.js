@@ -646,12 +646,9 @@ function dotplot() {
         d3.selectAll("[fid='" + fips + "']")
             .classed("selected", true)
             .classed("deselected", false)
-        d3.selectAll("circle:not([fid='" + fips + "']), .statename:not([fid='" + fips + "'])")
+        d3.selectAll("circle:not([fid='" + fips + "']), .statename:not([fid='" + fips + "']), .chartline:not([fid='" + fips + "'])")
             .classed("deselected", true)
             .classed("selected", false);
-        //class is attaching but appearance won't change :(
-        d3.selectAll(".chartline:not([fid='" + fips + "'])")
-            .classed("deselected", true);
 
         //no lowlights
         d3.selectAll(".lowlight")
@@ -695,17 +692,12 @@ function dotplot() {
     //dispatch function for highlighting state
     dispatch.on("hoverState", function (fips) {
         //highlight that state, make sure it's not lowlighted
-        d3.selectAll(".statename[fid='" + fips + "']")
-            .classed("highlight", true);
-        d3.selectAll("circle[fid='" + fips + "'], .statename[fid='" + fips + "']")
+        d3.selectAll("[fid='" + fips + "']")
+            .classed("highlight", true)
             .classed("lowlight", false);
 
         //lowlight the other states
-        d3.selectAll("circle:not([fid='" + fips + "']), .statename:not([fid='" + fips + "'])")
-            .classed("lowlight", true);
-
-        //class is attaching but appearance won't change :(
-        d3.selectAll(".chartline:not([fid='" + fips + "'])")
+        d3.selectAll("circle:not([fid='" + fips + "']), .statename:not([fid='" + fips + "']), .chartline:not([fid='" + fips + "'])")
             .classed("lowlight", true);
 
         ttdata = data_main.filter(function (d) {
