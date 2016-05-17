@@ -350,6 +350,9 @@ function dotplot() {
         })
         .attr("class", "statename")
         .attr("dx", -15)
+        .on("click", function (d) {
+            dispatch.clickState(d3.select(this).attr("fid"));
+        })
         .on("mouseover", function (d) {
             dispatch.hoverState(d3.select(this).attr("fid"));
         })
@@ -472,6 +475,9 @@ function dotplot() {
                 }
             })
             .attr("dx", -15)
+            .on("click", function (d) {
+                dispatch.clickState(d3.select(this).attr("fid"));
+            })
             .on("mouseover", function (d) {
                 dispatch.hoverState(d3.select(this).attr("fid"));
             })
@@ -719,9 +725,9 @@ function tooltip(mystate) {
 
     //filter data to that state, subject, grade and all years
     ttdata = data_main.filter(function (d) {
-        return d.subject == SUBJECTVAL & d.grade == GRADEVAL & d.state == mystate;
-    })
-    //use rank unadjusted and adjusted in the graph
+            return d.subject == SUBJECTVAL & d.grade == GRADEVAL & d.state == mystate;
+        })
+        //use rank unadjusted and adjusted in the graph
     RANKVALS = ["rank_000000", "rank_" + VALUES['adjusted'].split("_")[1]];
 
     ttdata.forEach(function (d) {
@@ -748,7 +754,7 @@ function tooltip(mystate) {
     };
     var padding = 50;
     var ttheight = 225;
-    
+
     //want tt to be vertically aligned with dots from that state
     //if it's in the bottom section, need to adjust so it stays on screen
     if (GRAPHHEIGHT - parseInt(yposition) - padding >= ttheight + padding) {
