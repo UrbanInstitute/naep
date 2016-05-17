@@ -103,7 +103,7 @@ hr {
 /* opening image and title*/
 
 #openimg {
-    top: 50px;
+    margin-top: 50px;
     background-image: url("../img/introcropped.jpg");
     background-repeat: no-repeat;
     background-size: cover;
@@ -632,5 +632,15 @@ label.css-label {
     }*/
     #tooltipgraph {
         display: none;
+    }
+}
+
+@media (max-width: 600px) {
+    #openimg {
+        background-image: url("../img/mobileIntroImage.jpg");
+        height: 250px;
+    }
+    #titleparent {
+        height: 250px;
     }
 }

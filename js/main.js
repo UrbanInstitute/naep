@@ -349,7 +349,16 @@ function dotplot() {
             return d;
         })
         .attr("class", "statename")
-        .attr("dx", -15);
+        .attr("dx", -15)
+        .on("mouseover", function (d) {
+            dispatch.hoverState(d3.select(this).attr("fid"));
+        })
+        .on("mouseout", function (d) {
+            dispatch.dehoverState();
+        })
+        .on("mouseleave", function (d) {
+            dispatch.dehoverState();
+        });
 
     var lines = svg.selectAll(".chartline")
         .data(data, dataKey);
@@ -462,7 +471,16 @@ function dotplot() {
                     return "statename";
                 }
             })
-            .attr("dx", -15);
+            .attr("dx", -15)
+            .on("mouseover", function (d) {
+                dispatch.hoverState(d3.select(this).attr("fid"));
+            })
+            .on("mouseout", function (d) {
+                dispatch.dehoverState();
+            })
+            .on("mouseleave", function (d) {
+                dispatch.dehoverState();
+            });
 
         //reset x axis
         gx.transition()
@@ -594,7 +612,7 @@ function dotplot() {
                 })
                 .attr("cy", function (d) {
                     return y(d[STATEVAR]) + y.rangeBand() / 3;
-                });
+                })
         }
     }
 
@@ -657,36 +675,9 @@ function dotplot() {
 
     //dispatch function for click selecting state
     dispatch.on("clickState", function (fips) {
-        console.log(fips);
         STATESELECT = fips;
-
         selectState(fips);
-        ttdata = data_main.filter(function (d) {
-            return d.subject == SUBJECTVAL & d.grade == GRADEVAL & d.state == fips;
-        })
-        ttdata.forEach(function (d) {
-            d[VALUES['unadjusted']] = +d[VALUES['unadjusted']];
-            d[VALUES['adjusted']] = +d[VALUES['adjusted']];
-            d.year = +d.year;
-        });
-
-        RANKVALS = ["rank_000000", "rank_" + VALUES['adjusted'].split("_")[1]];
-
-        var ranks = (RANKVALS).map(function (name) {
-            return {
-                name: RANKFORMATTER(name),
-                values: ttdata.map(function (d) {
-                    return {
-                        year: d.year,
-                        val: +d[name]
-                    };
-                })
-            };
-        });
-
-        var yposition = d3.select("circle.circunadj[fid='" + fips + "']").attr("cy");
-
-        tooltip(fips, ranks, yposition)
+        tooltip(fips)
     });
 
     //dispatch function for highlighting state
@@ -700,32 +691,7 @@ function dotplot() {
         d3.selectAll("circle:not([fid='" + fips + "']), .statename:not([fid='" + fips + "']), .chartline:not([fid='" + fips + "'])")
             .classed("lowlight", true);
 
-        ttdata = data_main.filter(function (d) {
-            return d.subject == SUBJECTVAL & d.grade == GRADEVAL & d.state == fips;
-        })
-        ttdata.forEach(function (d) {
-            d[VALUES['unadjusted']] = +d[VALUES['unadjusted']];
-            d[VALUES['adjusted']] = +d[VALUES['adjusted']];
-            d.year = +d.year;
-        });
-
-        RANKVALS = ["rank_000000", "rank_" + VALUES['adjusted'].split("_")[1]];
-
-        var ranks = (RANKVALS).map(function (name) {
-            return {
-                name: RANKFORMATTER(name),
-                values: ttdata.map(function (d) {
-                    return {
-                        year: d.year,
-                        val: +d[name]
-                    };
-                })
-            };
-        });
-
-        var yposition = d3.select("circle.circunadj[fid='" + fips + "']").attr("cy");
-
-        tooltip(fips, ranks, yposition)
+        tooltip(fips)
     });
 
     //dispatch function for dehilighting state
@@ -736,24 +702,58 @@ function dotplot() {
         d3.selectAll(".highlight")
             .classed("highlight", false);
 
+        //clear tooltip graph, or return to selected state if there is one
+        if (STATESELECT == null) {
+            $tooltipgraph.empty();
+        } else {
+            tooltip(STATESELECT)
+        }
     });
 }
 
 
-function tooltip(fips, rankdata, ypos) {
+function tooltip(mystate) {
+
+    //y height is position of that line of data in the main graph
+    var yposition = d3.select("circle.circunadj[fid='" + mystate + "']").attr("cy");
+
+    //filter data to that state, subject, grade and all years
+    ttdata = data_main.filter(function (d) {
+        return d.subject == SUBJECTVAL & d.grade == GRADEVAL & d.state == mystate;
+    })
+    //use rank unadjusted and adjusted in the graph
+    RANKVALS = ["rank_000000", "rank_" + VALUES['adjusted'].split("_")[1]];
+
+    ttdata.forEach(function (d) {
+        d[RANKVALS[0]] = +d[RANKVALS[0]];
+        d[RANKVALS[1]] = +d[RANKVALS[1]];
+        d.year = +d.year;
+    });
+    //format data for lines
+    var rankdata = (RANKVALS).map(function (name) {
+        return {
+            name: RANKFORMATTER(name),
+            values: ttdata.map(function (d) {
+                return {
+                    year: d.year,
+                    val: +d[name]
+                };
+            })
+        };
+    });
 
     var margin = {
         right: 45,
-        left: 55
+        left: 65
     };
-
     var padding = 50;
-    var ttheight = 250;
+    var ttheight = 225;
+    
     //want tt to be vertically aligned with dots from that state
     //if it's in the bottom section, need to adjust so it stays on screen
-    if (GRAPHHEIGHT - parseInt(ypos) - padding >= ttheight + padding) {
-        margin.top = parseInt(ypos) + padding;
-        margin.bottom = GRAPHHEIGHT - parseInt(ypos) - ttheight - padding;
+    if (GRAPHHEIGHT - parseInt(yposition) - padding >= ttheight + padding) {
+        margin.top = parseInt(yposition) + padding;
+        margin.bottom = GRAPHHEIGHT - parseInt(yposition) - ttheight - padding;
     } else {
         margin.top = GRAPHHEIGHT - ttheight - padding;
         margin.bottom = padding;
@@ -819,7 +819,7 @@ function tooltip(fips, rankdata, ypos) {
         .attr("class", "charttitle")
         .attr("x", 5)
         .attr("y", -33)
-        .text(fips);
+        .text(mystate);
 
     //years in chart
     var yearstitle = svg.append("g")
@@ -855,6 +855,7 @@ function tooltip(fips, rankdata, ypos) {
         });
 }
 
+//remake the dotplot and empty the tt on resize - otherwise tt gets weird
 function resizeclear() {
     dotplot();
     $tooltipgraph.empty();
