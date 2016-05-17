@@ -71,9 +71,15 @@
                 </div>
 
                 <div class="col-md-4 col-md-offset-1">
-                    <btn class="intro-button">Button title #1</btn>
-                    <btn class="intro-button">Button title #2</btn>
-                    <btn class="intro-button">Button title #3</btn>
+                    <a href="data/NAEP_fulldata.xlsx" class="nodec">
+                        <btn class="intro-button">Full dataset</btn>
+                    </a>
+                    <a href="http://www.urban.org/sites/default/files/naep-technical-appendix.pdf" class="nodec">
+                        <btn class="intro-button">Technical appendix</btn>
+                    </a>
+                    <a href="http://www.urban.org/research/publication/breaking-curve-promises-and-pitfalls-using-naep-data-assess-state-role-student-achievement" class="nodec">
+                        <btn class="intro-button"><i>Breaking the Curve</i> report</btn>
+                    </a>
                 </div>
             </div>
         </div>
@@ -82,7 +88,7 @@
     <div class="container">
         <div id="controlbar" class="row">
             <div class="col-md-6">
-                <div id="main-title">National Assessment of Education Progress</div>
+                <div id="main-title">National Assessment of Educational Progress</div>
             </div>
             <div class="col-md-6">
                 <div id="mainbtns">
@@ -164,10 +170,10 @@
                             <label for="age" class="css-label">Age</label>
 
                             <input type="checkbox" name="chage" id="race" class="css-checkbox" value="race" checked="checked" />
-                            <label for="race" class="css-label">Race</label>
+                            <label for="race" class="css-label">Race/Ethnicity</label>
 
-                            <input type="checkbox" name="chage" id="lep" class="css-checkbox" value="lep" checked="checked" />
-                            <label for="lep" class="css-label">English proficiency</label>
+                            <input type="checkbox" name="cheng" id="eng" class="css-checkbox" value="eng" checked="checked" />
+                            <label for="eng" class="css-label">Frequency of English spoken at home</label>
 
                             <input type="checkbox" name="chsped" id="sped" class="css-checkbox" value="sped" checked="checked" />
                             <label for="sped" class="css-label">Special education status</label>
@@ -175,8 +181,9 @@
                             <input type="checkbox" name="chsped" id="frpl" class="css-checkbox" value="frpl" checked="checked" />
                             <label for="frpl" class="css-label">Free or reduced-price lunch eligibility</label>
 
-                            <input type="checkbox" name="cheng" id="eng" class="css-checkbox" value="eng" checked="checked" />
-                            <label for="eng" class="css-label">Amount of English spoken at home</label>
+                            <input type="checkbox" name="chage" id="lep" class="css-checkbox" value="lep" checked="checked" />
+                            <label for="lep" class="css-label">English language learner status</label>
+
                         </div>
                     </div>
 
@@ -232,11 +239,11 @@
 
                 <div class="col-md-7">
                     <h2>About the data</h2>
-                    <p>The adjusted scores are based on an analysis of student-level, restricted-use NAEP data from the US Department of Education. Data are from the 1996, 1998, 2000, 2002, 2003, 2005, 2007, 2009, 2011, and 2013 administrations of the NAEP assessments.</p>
+                    <p>The adjusted scores are based on an analysis of student-level, restricted-use NAEP data from the US Department of Education. Data are from the 1996, 1998, 2000, 2002, 2003, 2005, 2007, 2009, 2011, and 2013 administrations of the NAEP assessments. State participation was voluntary before 2003. As a result, state rankings in these years end at the number of states assessed in the year, not at 50.</p>
 
                     <p>We perform an adjustment across states and time by estimating the relationship between student characteristics and NAEP scores using the student-level data from 2003 (roughly the midpoint of the data). Our adjusted scores for each state reflect the difference between predicted student performance and actual student performance. Student-level data for 2015 are not yet available to researchers, so for that year we forecast an adjusted score that applies the 2013 adjustment to the 2015 raw score.</p>
 
-                    <p>The details of the data and methodology are provided in the technical appendix.</p>
+                    <p>The details of the data and methodology are provided in the <a href="http://www.urban.org/sites/default/files/naep-technical-appendix.pdf">technical appendix.</a></p>
 
                 </div>
                 <div class="col-md-4 col-md-offset-1">
@@ -246,7 +253,7 @@
                     <div class="urbanstatement">As an organization, the Urban Institute does not take positions on issues, but it does empower and support its experts in sharing their own evidence-based views and policy recommendations that have been shaped by scholarship.</div>
 
                     <h3 class="job">Research</h3>
-                    <a href="http://www.urban.org/author/matthew-chingos" target="blank">Matt Chingos</a> and <a href="http://www.urban.org/author/kristin-blagg" target="blank">Kristin Blagg</a>
+                    <a href="http://www.urban.org/author/matthew-chingos" target="blank">Matthew Chingos</a> and <a href="http://www.urban.org/author/kristin-blagg" target="blank">Kristin Blagg</a>
 
                     <h3 class="job">Development and Design</h3>
                     <a href="http://www.urban.org/author/hannah-recht" target="blank">Hannah Recht</a> and <a href="http://www.urban.org/author/christina-baird" target="blank">Christina Baird</a>

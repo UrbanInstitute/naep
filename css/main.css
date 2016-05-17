@@ -197,6 +197,12 @@ h4 {
     text-align: center;
     margin-right: 12px;
     margin-bottom: 15px;
+    text-decoration: none;
+}
+
+a.nodec:hover,
+.intro-button a:hover{
+    text-decoration: none;
 }
 
 .intro-button:hover {
@@ -309,7 +315,7 @@ input[type=checkbox].css-checkbox + label.css-label {
     line-height: 16px;
     background-repeat: no-repeat;
     background-position: 0 0;
-    font-size: 15px;
+    font-size: 13px;
     font-weight: 400;
     vertical-align: middle;
     cursor: pointer;

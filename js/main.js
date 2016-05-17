@@ -30,11 +30,11 @@ var ADJUST = {
 //labels for controls in the graph sentence
 var ADJTEXT = {
     age: "age",
-    race: "race",
-    lep: "limited English proficiency",
+    race: "race/ethnicity",
+    eng: "frequency of English spoken at home",
     sped: "special education status",
     frpl: "free and reduced-price lunch",
-    eng: "English spoken at home"
+    lep: "English language learner status"
 }
 
 function RANKFORMATTER(d) {
@@ -56,7 +56,7 @@ function setControlsText() {
     var controlsText = "";
     //if no controls selected, write "nothing"
     //otherwise, separate with commas - & last element with 'and'
-    if (ADJUST.age + ADJUST.race + ADJUST.lep + ADJUST.sped + ADJUST.frpl + ADJUST.eng == 0) {
+    if (ADJUST.race + ADJUST.frpl + ADJUST.lep + ADJUST.sped + ADJUST.age + ADJUST.eng == 0) {
         controlsText = "nothing";
     } else {
         var temp = [];
@@ -198,9 +198,9 @@ $('#subjectbox').click(function () {
 
 //reset the adjusted score based on values of ADJUST
 function changeAdjust() {
-    VALUES.adjusted = "score_" + ADJUST.age + ADJUST.race + ADJUST.lep + ADJUST.sped + ADJUST.frpl + ADJUST.eng;
+    VALUES.adjusted = "score_" + ADJUST.race + ADJUST.frpl + ADJUST.lep + ADJUST.sped + ADJUST.age + ADJUST.eng;
 
-    var numOn = ADJUST.age + ADJUST.race + ADJUST.lep + ADJUST.sped + ADJUST.frpl + ADJUST.eng;
+    var numOn = ADJUST.race + ADJUST.frpl + ADJUST.lep + ADJUST.sped + ADJUST.age + ADJUST.eng;
     //show number of selected controls in bar, set All on/All off buttons correctly
     if (numOn == 0) {
         d3.select("#controlsdisplay").html("All off");
@@ -233,22 +233,22 @@ function controls() {
     //if selecting the all on button, set all on and make sure deselect the all off button
     d3.select("#allon").on("click", function () {
         $(".css-checkbox").prop("checked", true);
-        ADJUST.age = 1;
         ADJUST.race = 1;
+        ADJUST.frpl = 1;
         ADJUST.lep = 1;
         ADJUST.sped = 1;
-        ADJUST.frpl = 1;
+        ADJUST.age = 1;
         ADJUST.eng = 1;
         changeAdjust();
     });
 
     d3.select("#alloff").on("click", function () {
         $(".css-checkbox").prop("checked", false);
-        ADJUST.age = 0;
         ADJUST.race = 0;
+        ADJUST.frpl = 0;
         ADJUST.lep = 0;
         ADJUST.sped = 0;
-        ADJUST.frpl = 0;
+        ADJUST.age = 0;
         ADJUST.eng = 0;
         changeAdjust();
     });
