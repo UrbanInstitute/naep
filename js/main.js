@@ -681,9 +681,18 @@ function dotplot() {
 
     //dispatch function for click selecting state
     dispatch.on("clickState", function (fips) {
-        STATESELECT = fips;
-        selectState(fips);
-        tooltip(fips)
+        if (STATESELECT != fips) {
+            STATESELECT = fips;
+            selectState(fips);
+            tooltip(fips)
+        } else {
+            //deselect the state
+            STATESELECT = null;
+            d3.selectAll(".selected")
+                .classed("selected", false);
+            d3.selectAll(".deselected")
+                .classed("deselected", false);
+        }
     });
 
     //dispatch function for highlighting state
