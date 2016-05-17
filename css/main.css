@@ -10,6 +10,7 @@ body {
     font-weight: 400;
     font-size: 16pt;
     color: #666;
+    overflow-x: none;
 }
 
 #maincontent {
@@ -621,12 +622,15 @@ label.css-label {
     }
 }
 
-/*@media (max-width: 699px) {
-    #openimg {
+@media (max-width: 990px) {
+    /*#openimg {
         height: 300px;
         width: 100%;
     }
     #titleparent {
         height: 300px;
+    }*/
+    #tooltipgraph {
+        display: none;
     }
-}*/
+}
