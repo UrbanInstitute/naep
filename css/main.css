@@ -103,16 +103,15 @@ hr {
 
 #openimg {
     top: 50px;
-    background-image: url("../img/introImageCrop2_1500.jpg");
+    background-image: url("../img/introcropped.jpg");
     background-repeat: no-repeat;
     background-size: cover;
-    height: 450px;
+    height: 350px;
     width: 100%;
-
 }
 
 #titleparent {
-    height: 500px;
+    height: 350px;
     display: table;
 }
 
@@ -180,6 +179,7 @@ h4 {
     margin-bottom: 1em;
 }
 
+
 /* buttons */
 
 .intro-button {
@@ -201,7 +201,7 @@ h4 {
 }
 
 a.nodec:hover,
-.intro-button a:hover{
+.intro-button a:hover {
     text-decoration: none;
 }
 
@@ -236,7 +236,9 @@ a.nodec:hover,
     border: 1px solid #1696d2;
 }
 
+
 /*radio buttons*/
+
 input[type=radio].urban-radio {
     position: absolute;
     z-index: -1000;
@@ -282,7 +284,7 @@ label.radio-label {
     -khtml-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
-    user-select: none;    
+    user-select: none;
 }
 
 label.radio-label:not(:disabled) {
@@ -292,6 +294,7 @@ label.radio-label:not(:disabled) {
 input[type=radio].urban-radio:disabled + label.radio-label {
     background-image: url("../img/radioNotAvailable.png");
 }
+
 
 /*check boxes*/
 
@@ -461,6 +464,8 @@ label.css-label {
     font-style: italic;
     color: #666666;
 }
+
+
 /*graphs*/
 
 .unadjusted {
@@ -514,7 +519,7 @@ label.css-label {
 }
 
 #tooltipgraph {
-   width: 90%;
+    width: 90%;
 }
 
 .axis,
@@ -601,7 +606,7 @@ label.css-label {
 
 @media (min-width: 1600px) {
     #openimg {
-        height: 500px;
+        height: 350px;
         width: 100%;
     }
 }
@@ -611,11 +616,17 @@ label.css-label {
         height: 300px;
         width: 100%;
     }
-}
-
-@media (max-width: 699px) {
-    #openimg {
-        height: 250px;
-        width: 100%;
+    #titleparent {
+        height: 300px;
     }
 }
+
+/*@media (max-width: 699px) {
+    #openimg {
+        height: 300px;
+        width: 100%;
+    }
+    #titleparent {
+        height: 300px;
+    }
+}*/
