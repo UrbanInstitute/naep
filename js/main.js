@@ -285,6 +285,11 @@ controls();
 
 function dotplot() {
 
+    d3.selectAll(".dd").style("width",function(){ 
+        if(d3.select(this).attr("id") == "controlsdd") return "275px"
+        else return d3.select(d3.select(this).node().parentNode).style("width") 
+    })
+
     var dataKey = function (d) {
         return d.fips;
     };
