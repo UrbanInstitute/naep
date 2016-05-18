@@ -449,6 +449,7 @@ label.css-label {
 .legend {
     display: inline-block;
     color: #333;
+    font-size: 13px;
 }
 
 .circle.unadjusted,
@@ -468,6 +469,53 @@ label.css-label {
 
 
 /*graphs*/
+
+#graphic {
+    width: 100%;
+}
+
+#tooltipgraph {
+    width: 90%;
+}
+
+.axis,
+.axis-show {
+    font-size: 12px;
+    font-weight: 400;
+    color: #333;
+}
+
+.axis path {
+    display: none;
+}
+
+.axis line {
+    stroke: #000;
+    shape-rendering: crispEdges;
+}
+
+.axis-show path,
+.axis-show line {
+    fill: none;
+    stroke-width: 1px;
+    stroke: #000;
+    shape-rendering: crispEdges;
+}
+
+.charttitle {
+    font-size: 18px;
+    fill: #1696d2;
+}
+
+.yearstitle {
+    font-size: 13px;
+}
+
+.dot,
+.chartline,
+.statename {
+    cursor: pointer;
+}
 
 .unadjusted {
     fill: #fdbf11;
@@ -511,55 +559,6 @@ label.css-label {
     font-weight: 700;
 }
 
-#graphic {
-    width: 100%;
-}
-
-#rankplot {
-    width: 100%;
-}
-
-#tooltipgraph {
-    width: 90%;
-}
-
-.axis,
-.axis-show {
-    font-size: 12px;
-    font-weight: 400;
-    color: #333;
-}
-
-.axis path {
-    display: none;
-}
-
-.axis line {
-    stroke: #000;
-    shape-rendering: crispEdges;
-}
-
-.axis .minor line {
-    stroke: #efefef;
-}
-
-.axis-show path,
-.axis-show line {
-    fill: none;
-    stroke-width: 1px;
-    stroke: #000;
-    shape-rendering: crispEdges;
-}
-
-.charttitle {
-    font-size: 18px;
-    fill: #1696d2;
-}
-
-.yearstitle {
-    font-size: 13px;
-}
-
 .rankline {
     fill: none;
     stroke-width: 1px;
@@ -575,29 +574,6 @@ label.css-label {
 
 .point-label {
     font-size: 12px;
-}
-
-.legend {
-    font-size: 13px;
-}
-
-.bar {
-    fill: #1696d2;
-}
-
-.annotate-shape {
-    fill: #ebebeb;
-}
-
-.annotation {
-    font-size: 13px;
-}
-
-.annotate-line {
-    fill: none;
-    stroke-width: 1.5px;
-    stroke: #ccc;
-    shape-rendering: crispEdges;
 }
 
 .axistitle {
