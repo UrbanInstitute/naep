@@ -169,7 +169,9 @@ $('input:radio[name="subject-select"]').change(function () {
     d3.select("#subjectname").html(SUBJECTVAL);
     d3.select("#subjectdisplay").html(capitalizeFirst(SUBJECTVAL));
     //hide the dropdown
-    ($(this).parent()).hide();
+    d3.select('#subjectbox').select(".triangle")
+        .classed("blue", false);
+        ($(this).parent()).hide();
     //redraw
     dispatch.dotsMove(YEARVAL, GRADEVAL, SUBJECTVAL);
 });
@@ -177,21 +179,33 @@ $('input:radio[name="subject-select"]').change(function () {
 $('#yearbox').click(function () {
     if ($("#yeardd").is(":visible")) {
         $('#yeardd').hide();
+        d3.select(this).select(".triangle")
+            .classed("blue", false);
     } else {
+        d3.select(this).select(".triangle")
+            .classed("blue", true);
         $('#yeardd').show();
     }
 });
 $('#gradebox').click(function () {
     if ($("#gradedd").is(":visible")) {
         $('#gradedd').hide();
+        d3.select(this).select(".triangle")
+            .classed("blue", false);
     } else {
+        d3.select(this).select(".triangle")
+            .classed("blue", true);
         $('#gradedd').show();
     }
 });
 $('#subjectbox').click(function () {
     if ($("#subjectdd").is(":visible")) {
         $('#subjectdd').hide();
+        d3.select(this).select(".triangle")
+            .classed("blue", false);
     } else {
+        d3.select(this).select(".triangle")
+            .classed("blue", true);
         $('#subjectdd').show();
     }
 });
@@ -203,18 +217,18 @@ function changeAdjust() {
     var numOn = ADJUST.race + ADJUST.frpl + ADJUST.lep + ADJUST.sped + ADJUST.age + ADJUST.eng;
     //show number of selected controls in bar, set All on/All off buttons correctly
     if (numOn == 0) {
-        d3.select("#controlsdisplay").html("All off");
-        d3.select("#alloff").classed("selected", true)
-        d3.select("#allon").classed("selected", false)
+        d3.select("#controlsdisplay").html("All off");;
+        d3.select("#alloff").classed("selected", true);
+        d3.select("#allon").classed("selected", false);
 
     } else if (numOn == 6) {
         d3.select("#controlsdisplay").html("All on");
-        d3.select("#alloff").classed("selected", false)
-        d3.select("#allon").classed("selected", true)
+        d3.select("#alloff").classed("selected", false);
+        d3.select("#allon").classed("selected", true);
 
     } else {
-        d3.select("#alloff").classed("selected", false)
-        d3.select("#allon").classed("selected", false)
+        d3.select("#alloff").classed("selected", false);
+        d3.select("#allon").classed("selected", false);
         d3.select("#controlsdisplay").html(numOn + " on");
     }
     setControlsText();
@@ -256,8 +270,12 @@ function controls() {
     //show the dropdown when clicking to it
     $('#controlsbox').click(function () {
         if ($("#controlsdd").is(":visible")) {
+            d3.select(this).select(".triangle")
+                .classed("blue", false)
             $('#controlsdd').hide();
         } else {
+            d3.select(this).select(".triangle")
+                .classed("blue", true)
             $('#controlsdd').show();
         }
     });

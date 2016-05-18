@@ -382,6 +382,10 @@ label.css-label {
     -webkit-transform: rotate(360deg);
 }
 
+.triangle.blue {
+    border-color: #1696d2 transparent transparent;
+}
+
 .ddval {
     font-size: 13px;
     color: #1696d2;
