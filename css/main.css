@@ -452,13 +452,11 @@ label.css-label {
     font-size: 13px;
 }
 
-.circle.unadjusted,
-.unadjusted.highlight {
+.circle.unadjusted {
     background: #fdbf11;
 }
 
-.circle.adjusted,
-.unadjusted.highlight {
+.circle.adjusted {
     background: #1696d2;
 }
 
@@ -517,16 +515,27 @@ label.css-label {
     cursor: pointer;
 }
 
-.unadjusted {
+.unadjusted,
+.unadjusted.highlight,
+.unadjusted.deselected.highlight,
+.unadjusted.selected,
+.unadjusted.selected.lowlight{
     fill: #fdbf11;
 }
 
-.adjusted {
+.adjusted,
+.adjusted.highlight,
+.adjusted.deselected.highlight,
+.adjusted.selected,
+.adjusted.selected.lowlight {
     fill: #1696d2;
 }
 
 .chartline,
-.chartline.highlight {
+.chartline.highlight,
+.chartline.deselected.highlight,
+.chartline.selected,
+.chartline.selected.lowlight {
     fill: none;
     stroke-width: 1px;
     stroke: #626262;
