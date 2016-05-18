@@ -362,6 +362,7 @@ label.css-label {
 }
 
 .holder {
+    position: relative;
     width: 24%;
     cursor: pointer;
     height: 60px;
@@ -400,10 +401,12 @@ label.css-label {
     /*padding: 20px;*/
     padding: 20px 10px 10px 20px;
     margin-top: 18px;
+    right: 0;
+
 }
 
 .maindd {
-    width: inherit;
+    width: initial;
     font-size: 13px;
 }
 
