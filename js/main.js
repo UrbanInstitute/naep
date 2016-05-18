@@ -33,7 +33,7 @@ var ADJTEXT = {
     race: "race/ethnicity",
     eng: "frequency of English spoken at home",
     sped: "special education status",
-    frpl: "free and reduced-price lunch",
+    frpl: "free or reduced-price lunch eligibility",
     lep: "English language learner status"
 }
 
