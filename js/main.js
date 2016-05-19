@@ -4,9 +4,9 @@ var main_data_url = "data/main.csv",
     data,
     data_long,
     ttdata,
-    numticks = 6;
-    isMobile = false;
-STATESELECT = null,
+    numticks = 6,
+    isMobile = false,
+    STATESELECT = null,
     GRAPHHEIGHT = 880,
     CIRCLERADIUS = 5,
     STATEVAR = "state",
