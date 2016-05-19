@@ -406,7 +406,6 @@ label.css-label {
     border-right: 1px solid #ccc;
     border-bottom: 1px solid #ccc;
     border-top: 2px solid #1696d2;
-    /*padding: 20px;*/
     padding: 20px 10px 10px 20px;
     margin-top: 15px;
     right: 0;
@@ -623,13 +622,9 @@ h4.legend-title {
 }
 
 @media (max-width: 990px) {
-    /*#openimg {
-        height: 300px;
-        width: 100%;
+    #mainbtns {
+        margin-top: 16px;
     }
-    #titleparent {
-        height: 300px;
-    }*/
     #tooltipgraph {
         display: none;
     }
@@ -642,5 +637,13 @@ h4.legend-title {
     }
     #titleparent {
         height: 250px;
+    }
+    .ddval,
+    .selecttitle {
+        font-size: 13px;
+    }
+    .holder {
+        width: 48%;
+        margin-bottom: 12px;
     }
 }

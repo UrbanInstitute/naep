@@ -4,7 +4,8 @@ var main_data_url = "data/main.csv",
     data,
     data_long,
     ttdata,
-    STATESELECT = null,
+    isMobile = false;
+STATESELECT = null,
     GRAPHHEIGHT = 880,
     CIRCLERADIUS = 5,
     STATEVAR = "state",
@@ -85,6 +86,20 @@ function graphname(yv, gv, sv) {
     setControlsText();
 }
 
+function dropdownWidths() {
+    //widths of dropdown inherit, unless controls box or mobile
+    d3.selectAll(".dd").style("width", function () {
+        if (d3.select(this).attr("id") == "controlsdd") {
+            return "275px";
+        } else {
+            var parentwidth = d3.select(d3.select(this).node().parentNode).style("width");
+            var widthnum = parseFloat((parentwidth.split("px"))[0]);
+            var ddwidth = Math.max(widthnum, 70);
+            return ddwidth + "px";
+        }
+    })
+}
+
 $(document).ready(function () {
 
     //default: don't see dropdowns
@@ -93,10 +108,7 @@ $(document).ready(function () {
     //don't see year warn statement
     $('#yearwarn').hide();
 
-    d3.selectAll(".dd").style("width", function () {
-        if (d3.select(this).attr("id") == "controlsdd") return "275px"
-        else return d3.select(d3.select(this).node().parentNode).style("width")
-    })
+    dropdownWidths();
 
     //set text that appears in controls dropdown box
     //default value is all on
@@ -293,6 +305,12 @@ function controls() {
 controls();
 
 function dotplot() {
+
+    if ($(document).width() <= 990) {
+        isMobile = true;
+    } else {
+        isMobile = false;
+    }
 
     var dataKey = function (d) {
         return d.fips;
@@ -711,7 +729,9 @@ function dotplot() {
         if (STATESELECT != fips) {
             STATESELECT = fips;
             selectState(fips);
-            tooltip(fips)
+            if (!isMobile) {
+                tooltip(fips)
+            }
         } else {
             //deselect the state
             STATESELECT = null;
@@ -733,7 +753,9 @@ function dotplot() {
         d3.selectAll("circle:not([fid='" + fips + "']), .statename:not([fid='" + fips + "']), .chartline:not([fid='" + fips + "'])")
             .classed("lowlight", true);
 
-        tooltip(fips)
+        if (!isMobile) {
+            tooltip(fips)
+        }
     });
 
     //dispatch function for dehilighting state
@@ -743,12 +765,13 @@ function dotplot() {
             .classed("lowlight", false);
         d3.selectAll(".highlight")
             .classed("highlight", false);
-
-        //clear tooltip graph, or return to selected state if there is one
-        if (STATESELECT == null) {
-            $tooltipgraph.empty();
-        } else {
-            tooltip(STATESELECT)
+        if (!isMobile) {
+            //clear tooltip graph, or return to selected state if there is one
+            if (STATESELECT == null) {
+                $tooltipgraph.empty();
+            } else {
+                tooltip(STATESELECT)
+            }
         }
     });
 }
@@ -901,6 +924,7 @@ function tooltip(mystate) {
 function resizeclear() {
     dotplot();
     $tooltipgraph.empty();
+    dropdownWidths();
 }
 
 $(window).load(function () {
