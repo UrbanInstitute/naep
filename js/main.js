@@ -92,6 +92,11 @@ $(document).ready(function () {
 
     //don't see year warn statement
     $('#yearwarn').hide();
+    
+    d3.selectAll(".dd").style("width", function () {
+        if (d3.select(this).attr("id") == "controlsdd") return "275px"
+        else return d3.select(d3.select(this).node().parentNode).style("width")
+    })
 
     //set text that appears in controls dropdown box
     //default value is all on
@@ -171,7 +176,7 @@ $('input:radio[name="subject-select"]').change(function () {
     //hide the dropdown
     d3.select('#subjectbox').select(".triangle")
         .classed("blue", false);
-        ($(this).parent()).hide();
+    ($(this).parent()).hide();
     //redraw
     dispatch.dotsMove(YEARVAL, GRADEVAL, SUBJECTVAL);
 });
@@ -284,11 +289,6 @@ function controls() {
 controls();
 
 function dotplot() {
-
-    d3.selectAll(".dd").style("width",function(){ 
-        if(d3.select(this).attr("id") == "controlsdd") return "275px"
-        else return d3.select(d3.select(this).node().parentNode).style("width") 
-    })
 
     var dataKey = function (d) {
         return d.fips;

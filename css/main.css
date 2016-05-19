@@ -124,6 +124,8 @@ hr {
 h1.projtitle {
     background-color: #fdbf11;
     padding: 20px;
+    font-size: 30px;
+    font-weight: 700;
     display: inline-block;
 }
 
@@ -349,23 +351,25 @@ label.css-label {
 
 #main-title {
     color: #333;
-    font-size: 20px;
-    text-align: center;
+    font-size: 22px;
+    text-align: left;
 }
 
 .select-title {
-    font-size: 13px;
+    font-size: 14px;
     text-transform: uppercase;
     color: #000000;
     margin-left: 15px;
     display: inline-block;
+    position: relative;
+    bottom: 5px;
 }
 
 .holder {
     position: relative;
     width: 24%;
     cursor: pointer;
-    height: 60px;
+    height: 40px;
     display: inline-block;
     border-left: 1px solid #333;
 }
@@ -373,7 +377,7 @@ label.css-label {
 .triangle {
     display: inline-block;
     float: right;
-    margin-top: 5px;
+    margin-top: 0px;
     margin-right: 10px;
     width: 0;
     height: 1px;
@@ -388,10 +392,10 @@ label.css-label {
 }
 
 .ddval {
-    font-size: 13px;
+    font-size: 15px;
     color: #1696d2;
     margin-left: 15px;
-    margin-top: 10px;
+    margin-top: 4px;
 }
 
 .dd {
@@ -406,7 +410,6 @@ label.css-label {
     padding: 20px 10px 10px 20px;
     margin-top: 18px;
     right: 0;
-
 }
 
 .maindd {
@@ -439,6 +442,11 @@ label.css-label {
 
 
 /*legend*/
+
+h4.legend-title {
+    font-weight: 700;
+    margin-top: 40px;
+}
 
 .legend-item {
     display: inline-block;
@@ -526,7 +534,7 @@ label.css-label {
 .unadjusted.highlight,
 .unadjusted.deselected.highlight,
 .unadjusted.selected,
-.unadjusted.selected.lowlight{
+.unadjusted.selected.lowlight {
     fill: #fdbf11;
 }
 
