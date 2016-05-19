@@ -92,7 +92,7 @@ $(document).ready(function () {
 
     //don't see year warn statement
     $('#yearwarn').hide();
-    
+
     d3.selectAll(".dd").style("width", function () {
         if (d3.select(this).attr("id") == "controlsdd") return "275px"
         else return d3.select(d3.select(this).node().parentNode).style("width")
@@ -150,6 +150,8 @@ $('input:radio[name="year-select"]').change(function () {
     }
     //hide the dropdown
     ($(this).parent()).hide();
+    d3.select("#yeartriangle")
+        .classed("blue", false);
     //reset the graph name text
     graphname(YEARVAL, GRADEVAL, SUBJECTVAL);
     //redraw
@@ -164,6 +166,8 @@ $('input:radio[name="grade-select"]').change(function () {
     d3.select("#gradedisplay").html(GRADEVAL + "th");
     //hide the dropdown
     ($(this).parent()).hide();
+    d3.select("#gradetriangle")
+        .classed("blue", false);
     //redraw
     dispatch.dotsMove(YEARVAL, GRADEVAL, SUBJECTVAL);
 });
@@ -174,9 +178,9 @@ $('input:radio[name="subject-select"]').change(function () {
     d3.select("#subjectname").html(SUBJECTVAL);
     d3.select("#subjectdisplay").html(capitalizeFirst(SUBJECTVAL));
     //hide the dropdown
-    d3.select('#subjectbox').select(".triangle")
-        .classed("blue", false);
     ($(this).parent()).hide();
+    d3.select("#subjecttriangle")
+        .classed("blue", false);
     //redraw
     dispatch.dotsMove(YEARVAL, GRADEVAL, SUBJECTVAL);
 });
