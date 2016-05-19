@@ -4,6 +4,7 @@ var main_data_url = "data/main.csv",
     data,
     data_long,
     ttdata,
+    numticks = 6;
     isMobile = false;
 STATESELECT = null,
     GRAPHHEIGHT = 880,
@@ -370,9 +371,14 @@ function dotplot() {
 
     setData(YEARVAL, SUBJECTVAL, GRADEVAL);
 
+    if ($graphic.width() <= 400) {
+        numticks = 3;
+    } else {
+        numticks = 6;
+    }
     var xAxis = d3.svg.axis()
         .scale(x)
-        .ticks(6)
+        .ticks(numticks)
         .orient("bottom");
 
     var gx = svg.append("g")
@@ -702,7 +708,7 @@ function dotplot() {
 
         //reset y axis
         yAxis.scale(y)
-        xAxis.scale(x).ticks(6)
+        xAxis.scale(x).ticks(numticks)
 
         $tooltipgraph.empty();
         redraw(data);
