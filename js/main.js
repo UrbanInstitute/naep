@@ -898,7 +898,7 @@ function tooltip(mystate) {
         .attr("class", "yearstitle")
         .attr("x", 5)
         .attr("y", -15)
-        .text("Rank, " + years[0] + "—" + years[1]);
+        .text("Rank, " + years[0] + "–" + years[1]);
 
     var line = d3.svg.line()
         .interpolate("step-after")
