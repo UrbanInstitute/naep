@@ -10,27 +10,52 @@
 
 
     <!--social metas-->
-    <meta name='twitter:card' content='summary'>
-    <meta name='twitter:site' content='@urbaninstitute'>
-    <meta name='twitter:creator' content='@urbaninstitute'>
-    <meta name='twitter:title' content="America's Gradebook">
-    <meta name='twitter:description' content='How does your state stack up?'>
-    <meta name='twitter:image' content='http://apps.urban.org/features/naep/img/social.png'>
-    <meta property='og:title' content="America's Gradebook" />
-    <meta property='og:description' content='How does your state stack up?' />
-    <meta property='og:image' content='http://apps.urban.org/features/naep/img/social.png' />
-    <meta property='og:image:type' content='image/jpeg'>
-    <meta property='og:url' content='http://urbn.is/naep'>
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@urbaninstitute">
+    <meta name="twitter:creator" content="@urbaninstitute">
+    <meta name="twitter:title" content="America's Gradebook">
+    <meta name="twitter:description" content="How does your state stack up?">
+    <meta name="twitter:image" content="http://apps.urban.org/features/naep/img/social.png">
+    <meta property="og:title" content="America's Gradebook" />
+    <meta property="og:description" content="How does your state stack up?" />
+    <meta property="og:image" content="http://apps.urban.org/features/naep/img/social.png" />
+    <meta property="og:image:type" content="image/jpeg">
+    <meta property="og:url" content="http://urbn.is/naep">
 
-    <link href="http://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
+
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
     <link rel="stylesheet" type="text/css" href="css/urban-header.css">
     <link rel="stylesheet" type="text/css" href="css/main.css">
 
     <link rel="stylesheet" type="text/css" href="lib/bootstrap.min.css">
 
+    <script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "NewsArticle",
+        "headline": "America's Gradebook",
+        "url": "http://apps.urban.org/features/naep/",
+        "thumbnailUrl": "http://apps.urban.org/features/naep/img/social.png",
+        "dateCreated": "2016-06-22T04:00:00.000Z",
+        "articleSection": "Interactive Feature",
+        "creator": ["Matthew Chingos","Kristin Blagg","Hannah Recht ","Christina Baird","Alexandra Tilsley","Elizabeth Forney"],
+        "keywords": ["Education and Training"]
+    }
+    </script>
+
+
 </head>
 
 <body>
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-MKBD2W"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-MKBD2W');</script>
+<!-- End Google Tag Manager -->
 
     <!--    header-->
     <div id="header-pinned" class="no-touch">
@@ -81,6 +106,7 @@
                     <p>Often called the “nation’s report card,” the National Assessment of Educational Progress (NAEP) reading and mathematics assessments are administered to a representative sample of fourth- and eighth-grade students in each state every two years. NAEP scores offer something rare in education policy: data that are standardized across states and across time. Policymakers and pundits seize upon these data as evidence to support their preferred policies. But comparing NAEP scores assumes that states serve the same students—and we know they don’t.</p>
 
                     <p>A better way to compare and talk about NAEP performance is to use adjusted NAEP scores that account for demographic differences across students in each state. These adjusted scores allow for students to be compared with their demographically similar peers using factors such as race, receipt of special education services, and status as an English language learner. These are factors we know can affect test results, yet they are not shown in NAEP scores. The interactive tool below brings those adjusted NAEP scores to life.</p>
+                    <div id = "dateUpdated">Last updated April 10,2018</div>
 
                 </div>
 
@@ -113,8 +139,9 @@
                             <div id="yeardisplay" class="ddval"></div>
                         </div>
                         <div id="yeardd" class="dd maindd">
-
-                            <input type="radio" name="year-select" id="y2015" class="urban-radio" value="2015" checked="checked" />
+                            <input type="radio" name="year-select" id="y2017" class="urban-radio" value="2017" checked="checked" />
+                            <label for="y2017" class="radio-label">2017</label>
+                            <input type="radio" name="year-select" id="y2015" class="urban-radio" value="2015" />
                             <label for="y2015" class="radio-label">2015</label>
                             <input type="radio" name="year-select" id="y2013" class="urban-radio" value="2013" />
                             <label for="y2013" class="radio-label">2013</label>
@@ -251,9 +278,9 @@
 
                 <div class="col-md-7">
                     <h2>About the data</h2>
-                    <p>The adjusted scores are based on an analysis of student-level, restricted-use NAEP data from the US Department of Education. Data are from the 1996, 1998, 2000, 2002, 2003, 2005, 2007, 2009, 2011, and 2013 administrations of the NAEP assessments. State participation was voluntary before 2003. As a result, state rankings in these years end at the number of states assessed in the year, not at 50.</p>
+                    <p>The adjusted scores are based on an analysis of student-level, restricted-use NAEP data from the US Department of Education. Data are from the 1996, 1998, 2000, 2002, 2003, 2005, 2007, 2009, 2011, 2013, and 2015 administrations of the NAEP assessments. State participation was voluntary before 2003. As a result, state rankings in these years end at the number of states assessed in the year, not at 50.</p>
 
-                    <p>We perform an adjustment across states and time by estimating the relationship between student characteristics and NAEP scores using the student-level data from 2003 (roughly the midpoint of the data). Our adjusted scores for each state reflect the difference between predicted student performance and actual student performance. Student-level data for 2015 are not yet available to researchers, so for that year we forecast an adjusted score that applies the 2013 adjustment to the 2015 raw score.</p>
+                    <p>We perform an adjustment across states and time by estimating the relationship between student characteristics and NAEP scores using the student-level data from 2003 (roughly the midpoint of the data). Our adjusted scores for each state reflect the difference between predicted student performance and actual student performance. Student-level data for 2017 are not yet available to researchers, so for that year we forecast an adjusted score that applies the 2015 adjustment to the 2017 raw score.</p>
 
                     <p>The details of the data and methodology are provided in the <a href="http://www.urban.org/sites/default/files/naep-technical-appendix.pdf">technical appendix.</a></p>
 
@@ -262,7 +289,7 @@
 
                     <h2>Project credits</h2>
 
-                    <div class="urbanstatement">As an organization, the Urban Institute does not take positions on issues, but it does empower and support its experts in sharing their own evidence-based views and policy recommendations that have been shaped by scholarship.</div>
+                    <div class="urbanstatement">The views expressed are those of the authors and should not be attributed to the Urban Institute, its trustees, or its funders. Funders do not determine research findings or the insights and recommendations of our experts. More information on our funding principles is available <a href = "https://www.urban.org/support/funding-principles" target = "_blank">here</a>. Read our terms of service <a href = "https://www.urban.org/terms-service" target = "_blank">here</a>.</div>
 
                     <h3 class="job">Research</h3>
                     <a href="http://www.urban.org/author/matthew-chingos">Matthew Chingos</a> and <a href="http://www.urban.org/author/kristin-blagg">Kristin Blagg</a>
@@ -278,7 +305,7 @@
 
                     <h3 class="job">Photography</h3> Patrick Semansky/AP
 
-                    <div class="credits">Copyright &copy; <a href="http://www.urban.org/">Urban Institute</a> 2016. <a href="https://github.com/UrbanInstitute/naep" target="_blank">View this project on Github.</a></div>
+                    <div class="credits"><a href="https://github.com/UrbanInstitute/naep" target="_blank">View this project on Github.</a></div>
                 </div>
             </div>
         </div>
@@ -294,20 +321,38 @@
     <script src="js/main.js"></script>
 
 
-    <script>
-        (function (i, s, o, g, r, a, m) {
-            i['GoogleAnalyticsObject'] = r;
-            i[r] = i[r] || function () { 
-                (i[r].q = i[r].q || []).push(arguments)
-            }, i[r].l = 1 * new Date();
-            a = s.createElement(o),  m = s.getElementsByTagName(o)[0];
-            a.async = 1;
-            a.src = g;
-            m.parentNode.insertBefore(a, m) 
-        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga'); 
-        ga('create', 'UA-57529944-1', 'auto'); 
-        ga('send', 'pageview');
-    </script>
+<script>
+    (function (i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function () { 
+            (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date();
+        a = s.createElement(o),  m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m) 
+    })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga'); 
+    ga('create', 'UA-57529944-1', 'auto'); 
+    ga('send', 'pageview');
+</script>
+
+<!-- START Parse.ly Include: Standard -->
+<div id="parsely-root" style="display: none">
+  <span id="parsely-cfg" data-parsely-site="urban.org"></span>
+</div>
+<script>
+    (function(s, p, d) {
+      var h=d.location.protocol, i=p+"-"+s,
+          e=d.getElementById(i), r=d.getElementById(p+"-root"),
+          u=h==="https:"?"d1z2jf7jlzjs58.cloudfront.net"
+          :"static."+p+".com";
+      if (e) return;
+      e = d.createElement(s); e.id = i; e.async = true;
+      e.src = h+"//"+u+"/p.js"; r.appendChild(e);
+    })("script", "parsely", document);
+</script>
+<!-- END Parse.ly Include: Standard -->
+
 
 </body>
 

@@ -17,7 +17,7 @@ var VALUES = {
 };
 var RANKVALS;
 //default settings for data
-var YEARVAL = 2015,
+var YEARVAL = 2017,
     GRADEVAL = 4,
     SUBJECTVAL = "math";
 //controls on or off
@@ -122,7 +122,7 @@ $(document).ready(function () {
     $(".css-checkbox").prop("checked", true);
 
     //set the dropdowns to the default starting values
-    $('input[name="year-select"][value=2015]').prop('checked', true);
+    $('input[name="year-select"][value=2017]').prop('checked', true);
     $('input[name="grade-select"][value=4]').prop('checked', true);
     $('input[name="subject-select"][value="math"]').prop('checked', true);
 
@@ -856,14 +856,10 @@ function tooltip(mystate) {
     var xAxis = d3.svg.axis()
         .scale(x)
         .tickFormat(function (d) {
-            return d;
+            return "'" + (String(d).substr(2));
         })
-        .tickValues(function () {
-            if (years[0] == 1996) {
-                return [years[0], 2000, 2003, 2007, 2011, 2015];
-            } else {
-                return [years[0], 2003, 2007, 2011, 2015];
-            }
+        .tickValues(function (d) {
+            return ttdata.map(function (d) { return d.year; })
         })
         .orient("bottom");
 
