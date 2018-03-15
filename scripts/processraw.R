@@ -12,7 +12,7 @@ states <- read.csv("data/states.csv", colClasses="character")
 # Map variable names (score_m# where 1 <= # <= 128) to binary 0 1 concatenation
 ########################################################################################################
 
-varnames <- read_excel("/Users/hrecht/Documents/Box Sync/COMM/**Project Folders**/NAEP (National Assessment of Educational Progress)/Data Files/Variable Combinations_New.xlsx", sheet="VarNames1")
+varnames <- read_excel("data/Variable Combinations_New.xlsx", sheet="VarNames1")
 
 varnames <- varnames[,c(1, 8:13)]
 colnames(varnames) <- c("score_m", "race", "frpl", "lep", "sped", "age", "enghome")
@@ -38,10 +38,10 @@ names <- names[2,] %>% mutate(year = "year", FIPS = "FIPS", subject = "subject",
 # Join raw data into long dataset with rows by grade, subject, year, state
 ########################################################################################################
 
-math4 <- read.csv("data/original/i_math4_2015.csv", stringsAsFactors = F)
-math8 <- read.csv("data/original/i_math8_2015.csv", stringsAsFactors = F)
-read4 <- read.csv("data/original/i_read4_2015.csv", stringsAsFactors = F)
-read8 <- read.csv("data/original/i_read8_2015.csv", stringsAsFactors = F)
+math4 <- read.csv("data/original/i_math4_2017_n.csv", stringsAsFactors = F)
+math8 <- read.csv("data/original/i_math8_2017_n.csv", stringsAsFactors = F)
+read4 <- read.csv("data/original/i_read4_2017_n.csv", stringsAsFactors = F)
+read8 <- read.csv("data/original/i_read8_2017_n.csv", stringsAsFactors = F)
 
 math4 <- math4 %>% mutate(grade = 4, subject = "math")
 math8 <- math8 %>% mutate(grade = 8, subject = "math")
