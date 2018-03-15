@@ -53,7 +53,7 @@ naepfull <- naepfull %>% select(year, FIPS, grade, subject, everything())
 
 # Add new column names to score vars
 naepleft <- naepfull %>% select(-starts_with("score_m"))
-naepscores <- naepfull %>% select(starts_with("score_m"), year, FIPS, grade, subject)
+naepscores <- naepfull %>% select(starts_with("score_m"), year, FIPS, grade, subject, -score_m65, -score_m65_r)
 naepscores <- rbind(names, naepscores)
 colnames(naepscores) <- naepscores[1,]
 
