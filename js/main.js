@@ -12,12 +12,12 @@ var main_data_url = "data/main.csv",
     STATEVAR = "state",
     LABELS = ["Unadjusted", "Adjusted"];
 var VALUES = {
-    unadjusted: "score_000000",
-    adjusted: "score_111111"
+    unadjusted: "score_0000000",
+    adjusted: "score_1011101"
 };
 var RANKVALS;
 //default settings for data
-var YEARVAL = 2017,
+var YEARVAL = 2019,
     GRADEVAL = 4,
     SUBJECTVAL = "math";
 //controls on or off
@@ -26,8 +26,9 @@ var ADJUST = {
     race: 1,
     lep: 1,
     sped: 1,
-    frpl: 1,
-    eng: 1
+    frpl: 0,
+    frplc: 1,
+    eng: 0
 };
 //labels for controls in the graph sentence
 var ADJTEXT = {
@@ -36,11 +37,12 @@ var ADJTEXT = {
     eng: "frequency of English spoken at home",
     sped: "special education status",
     frpl: "free or reduced-price lunch eligibility",
+    frplc: "new free lunch thing",
     lep: "English language learner status"
 }
 
 function RANKFORMATTER(d) {
-    if (d == "rank_000000") {
+    if (d == "rank_0000000") {
         return "unadjusted";
     } else {
         return "adjusted";
@@ -58,7 +60,7 @@ function setControlsText() {
     var controlsText = "";
     //if no controls selected, write "nothing"
     //otherwise, separate with commas - & last element with 'and'
-    if (ADJUST.race + ADJUST.frpl + ADJUST.lep + ADJUST.sped + ADJUST.age + ADJUST.eng == 0) {
+    if (ADJUST.race + ADJUST.frpl + ADJUST.lep + ADJUST.sped + ADJUST.age + ADJUST.eng + ADJUST.frplc == 0) {
         controlsText = "nothing";
     } else {
         var temp = [];
@@ -108,6 +110,8 @@ $(document).ready(function () {
 
     //don't see year warn statement
     $('#yearwarn').hide();
+    $('#engwarn').show();
+    $('#frplwarn').hide();
 
     dropdownWidths();
 
@@ -119,10 +123,10 @@ $(document).ready(function () {
     d3.select("#yeardisplay").html(YEARVAL);
 
     //make sure all the checkboxes are checked
-    $(".css-checkbox").prop("checked", true);
+    // $(".css-checkbox").prop("checked", true);
 
     //set the dropdowns to the default starting values
-    $('input[name="year-select"][value=2017]').prop('checked', true);
+    $('input[name="year-select"][value=2019]').prop('checked', true);
     $('input[name="grade-select"][value=4]').prop('checked', true);
     $('input[name="subject-select"][value="math"]').prop('checked', true);
 
@@ -135,6 +139,32 @@ $('input:radio[name="year-select"]').change(function () {
     //set year value to selected
     YEARVAL = $(this).val();
     d3.select("#yeardisplay").html(YEARVAL);
+    console.log(YEARVAL)
+    if(YEARVAL == 2017 || YEARVAL == 2019){
+        $('input[name="eng"]').prop('disabled', true);
+        $('input[name="eng"]').prop('checked', false);
+        ADJUST["eng"] = 0
+        $('#engwarn').show();
+    // $('#frplwarn').hide();
+    }else{
+        $('input[name="eng"]').prop('disabled', false);
+        $('#engwarn').hide();
+    }
+    if(YEARVAL <= 2005){
+        if(ADJUST["frplc"] == 1){
+            ADJUST["frpl"] = 1
+            ADJUST["frplc"] = 0
+            $('input[name="frpl"]').prop('checked', true);
+        }
+        $('input[name="frplc"]').prop('disabled', true);
+        $('input[name="frplc"]').prop('checked', false);
+        $('#frplwarn').show();
+
+    // $('#frplwarn').hide();
+    }else{
+        $('input[name="frplc"]').prop('disabled', false);
+        $('#frplwarn').hide();
+    }
     // if the year/subject combo is unavailable, change the subject, radio button and the test dropdown box
     // disable the other subject's radio button
     // display sentence about limited data
@@ -169,7 +199,8 @@ $('input:radio[name="year-select"]').change(function () {
     graphname(YEARVAL, GRADEVAL, SUBJECTVAL);
     //redraw
     //dotplot();
-    dispatch.dotsMove(YEARVAL, GRADEVAL, SUBJECTVAL);
+    changeAdjust()
+    // dispatch.dotsMove(YEARVAL, GRADEVAL, SUBJECTVAL);
 });
 
 $('input:radio[name="grade-select"]').change(function () {
@@ -234,16 +265,17 @@ $('#subjectbox').click(function () {
 
 //reset the adjusted score based on values of ADJUST
 function changeAdjust() {
-    VALUES.adjusted = "score_" + ADJUST.race + ADJUST.frpl + ADJUST.lep + ADJUST.sped + ADJUST.age + ADJUST.eng;
+    VALUES.adjusted = "score_" + ADJUST.race + ADJUST.frpl + ADJUST.lep + ADJUST.sped + ADJUST.age + ADJUST.eng + ADJUST.frplc;
 
-    var numOn = ADJUST.race + ADJUST.frpl + ADJUST.lep + ADJUST.sped + ADJUST.age + ADJUST.eng;
+    var numOn = ADJUST.race + ADJUST.frpl + ADJUST.lep + ADJUST.sped + ADJUST.age + ADJUST.eng + ADJUST.frplc;
     //show number of selected controls in bar, set All on/All off buttons correctly
     if (numOn == 0) {
         d3.select("#controlsdisplay").html("All off");;
         d3.select("#alloff").classed("selected", true);
         d3.select("#allon").classed("selected", false);
 
-    } else if (numOn == 6) {
+    }
+    else if( ( (YEARVAL == 2019 || YEARVAL == 2017) && numOn ==5 )  || numOn == 6) {
         d3.select("#controlsdisplay").html("All on");
         d3.select("#alloff").classed("selected", false);
         d3.select("#allon").classed("selected", true);
@@ -262,15 +294,42 @@ function controls() {
 
     //when you click the checkboxes, change the adjustment shown
     $(".css-checkbox").change(function () {
-        ADJUST[this.id] = +this.checked;
+        if(this.id == "frpl"){
+            $('input[name="frplc"]').prop('checked', false);
+            ADJUST['frplc'] = 0;    
+            
+        }
+        else if(this.id == "frplc"){
+            $('input[name="frpl"]').prop('checked', false);
+            ADJUST['frpl'] = 0;
+        }   
+        // else{
+            ADJUST[this.id] = +this.checked;    
+        // }
+        
         changeAdjust();
     });
 
     //if selecting the all on button, set all on and make sure deselect the all off button
     d3.select("#allon").on("click", function () {
+
         $(".css-checkbox").prop("checked", true);
+        if(YEARVAL == 2019 || YEARVAL == 2017){
+            $('.css-checkbox[name="eng"]').prop("checked",false)
+            ADJUST.eng = 1;   
+        }else{
+            ADJUST.eng = 0
+        }
+        if(YEARVAL <= 2005){
+            ADJUST.frpl = 1;
+            ADJUST.frplc = 0;
+            $('.css-checkbox[name="frplc"]').prop("checked",false)
+        }else{
+            ADJUST.frpl = 0;
+            ADJUST.frplc = 1;
+            $('.css-checkbox[name="frpl"]').prop("checked",false)
+        }
         ADJUST.race = 1;
-        ADJUST.frpl = 1;
         ADJUST.lep = 1;
         ADJUST.sped = 1;
         ADJUST.age = 1;
@@ -282,6 +341,7 @@ function controls() {
         $(".css-checkbox").prop("checked", false);
         ADJUST.race = 0;
         ADJUST.frpl = 0;
+        ADJUST.frplc = 0;
         ADJUST.lep = 0;
         ADJUST.sped = 0;
         ADJUST.age = 0;
@@ -793,7 +853,7 @@ function tooltip(mystate) {
             return d.subject == SUBJECTVAL & d.grade == GRADEVAL & d.state == mystate;
         })
         //use rank unadjusted and adjusted in the graph
-    RANKVALS = ["rank_000000", "rank_" + VALUES['adjusted'].split("_")[1]];
+    RANKVALS = ["rank_0000000", "rank_" + VALUES['adjusted'].split("_")[1]];
 
     ttdata.forEach(function (d) {
         d[RANKVALS[0]] = +d[RANKVALS[0]];

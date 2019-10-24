@@ -138,7 +138,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                             <div id="yeardisplay" class="ddval"></div>
                         </div>
                         <div id="yeardd" class="dd maindd">
-                            <input type="radio" name="year-select" id="y2017" class="urban-radio" value="2017" checked="checked" />
+                            <input type="radio" name="year-select" id="y2019" class="urban-radio" value="2019" checked="checked" />
+                            <label for="y2019" class="radio-label">2019</label>
+                            <input type="radio" name="year-select" id="y2017" class="urban-radio" value="2017" />
                             <label for="y2017" class="radio-label">2017</label>
                             <input type="radio" name="year-select" id="y2015" class="urban-radio" value="2015" />
                             <label for="y2015" class="radio-label">2015</label>
@@ -204,23 +206,29 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                             <btn id="alloff" class="dropdown-button">All off</btn>
 
                             <div id="controlstext">Select the factor(s) you want to consider in adjusting the raw NAEP scores.</div>
-                            <input type="checkbox" name="chage" id="age" class="css-checkbox" value="age" checked="checked" />
+                            <input type="checkbox" name="age" id="age" class="css-checkbox" value="age" checked="checked" />
                             <label for="age" class="css-label">Age</label>
 
-                            <input type="checkbox" name="chage" id="race" class="css-checkbox" value="race" checked="checked" />
+                            <input type="checkbox" name="race" id="race" class="css-checkbox" value="race" checked="checked" />
                             <label for="race" class="css-label">Race/Ethnicity</label>
 
-                            <input type="checkbox" name="cheng" id="eng" class="css-checkbox" value="eng" checked="checked" />
+                            <input type="checkbox" name="eng" id="eng" class="css-checkbox" value="eng" disabled ="disabled"/>
                             <label for="eng" class="css-label">Frequency of English spoken at home</label>
 
-                            <input type="checkbox" name="chsped" id="sped" class="css-checkbox" value="sped" checked="checked" />
+                            <input type="checkbox" name="sped" id="sped" class="css-checkbox" value="sped" checked="checked" />
                             <label for="sped" class="css-label">Special education status</label>
 
-                            <input type="checkbox" name="chsped" id="frpl" class="css-checkbox" value="frpl" checked="checked" />
+                            <input type="checkbox" name="lep" id="lep" class="css-checkbox" value="lep" checked="checked" />
+                            <label for="lep" class="css-label">English language learner status</label>
+
+
+                            <div id = "frplLabel">Free lunch options</div>
+                            <input type="checkbox" name="frpl" id="frpl" class="css-checkbox" value="frpl" />
                             <label for="frpl" class="css-label">Free or reduced-price lunch eligibility</label>
 
-                            <input type="checkbox" name="chage" id="lep" class="css-checkbox" value="lep" checked="checked" />
-                            <label for="lep" class="css-label">English language learner status</label>
+                            <input type="checkbox" name="frplc" id="frplc" class="css-checkbox" value="frplc" checked="checked" />
+                            <label for="frplc" class="css-label">Imputed frpl</label>
+
 
                         </div>
                     </div>
@@ -257,6 +265,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             </div>
             <div class="col-lg-5 col-md-5">
                 <div id="yearwarn"><span style="color:#fdbf11">*</span>Prior to 2003, students were only tested in one subject per year.</div>
+                <div id="engwarn"><span style="color:#fdbf11">*</span>Note about english at home not in 2017, 2019.</div>
+                <div id="frplwarn"><span style="color:#fdbf11">*</span>Note aboute 2005 and earlier, not showing imputed frpl.</div>
             </div>
         </div>
         <div class="row">

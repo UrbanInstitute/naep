@@ -317,6 +317,10 @@ input[type=checkbox].css-checkbox {
     border: 0;
 }
 
+input[type=checkbox].css-checkbox:disabled + label.css-label {
+    opacity: .5;
+}
+
 input[type=checkbox].css-checkbox + label.css-label {
     padding-left: 25px;
     height: 16px;
@@ -477,7 +481,7 @@ h4.legend-title {
     background: #1696d2;
 }
 
-#yearwarn {
+#yearwarn,#engwarn,#frplwarn {
     font-style: italic;
     color: #666666;
 }
