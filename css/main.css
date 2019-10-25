@@ -617,7 +617,15 @@ h4.legend-title {
         width: 100%;
     }
 }
-
+@media(max-width: 1200px){
+    .ddval {
+        margin-left: 8px;
+    }
+    .select-title {
+        font-size: 14px;
+        margin-left: 8px;
+    }
+}
 @media (max-width: 1050px) {
     #openimg {
         height: 300px;
@@ -634,6 +642,13 @@ h4.legend-title {
     }
     #tooltipgraph {
         display: none;
+    }
+    .ddval {
+        margin-left: 15px;
+    }
+    .select-title {
+        font-size: 15px;
+        margin-left: 15px;
     }
 }
 
@@ -653,4 +668,14 @@ h4.legend-title {
         width: 48%;
         margin-bottom: 12px;
     }
+}
+
+
+#frplLabel{
+    color: #1696d2;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 12px;
+    margin-bottom: 6px;
+    margin-top: 29px;
 }
