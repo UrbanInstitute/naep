@@ -33,7 +33,7 @@ names <- t(names)
 colnames(names) <- names[1,]
 names <- as.data.frame(names)
 names[] <- lapply(names, as.character)
-names <- names[2,] %>% mutate(year = "year", FIPS = "FIPS", subject = "subject", grade = "grade")
+names <- names[2,] %>% mutate(year = "year", FIPS = "statename", subject = "subject", grade = "grade")
 
 ########################################################################################################
 # Join raw data into long dataset with rows by grade, subject, year, state
@@ -64,7 +64,7 @@ naepscores$grade <- as.numeric(naepscores$grade)
 naepscores$year <- as.numeric(naepscores$year)
 
 # Rejoin newly named cols to demographic info
-naep <- left_join(naepleft, naepscores, by = c("year", "FIPS", "grade", "subject"))
+naep <- left_join(naepleft, naepscores, by = c("year", "statename", "grade", "subject"))
 
 # Rank over time - no DC
 naep <- naep %>% filter(FIPS != "D.C.")
@@ -72,7 +72,7 @@ ranks <- naep %>% group_by(year, grade, subject) %>%
 	mutate_each(funs(rank(desc(.))), starts_with("score_"))
 ranks <- ranks %>% select(year, grade, subject, FIPS, starts_with("score"))
 colnames(ranks) <- gsub("score", "rank", colnames(ranks))
-naep <- left_join(naep, ranks, by=c("year", "grade", "subject", "FIPS"))
+naep <- left_join(naep, ranks, by=c("year", "grade", "subject", "statename"))
 
 # See what we have by year
 years <- naep %>% mutate(p = 1) %>%
