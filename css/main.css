@@ -672,10 +672,11 @@ h4.legend-title {
 
 
 #frplLabel{
+    width: 150px;
     color: #1696d2;
     font-weight: bold;
     text-transform: uppercase;
     font-size: 12px;
-    margin-bottom: 6px;
+    margin-bottom: 10px;
     margin-top: 29px;
 }

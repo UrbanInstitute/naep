@@ -36,8 +36,8 @@ var ADJTEXT = {
     race: "race/ethnicity",
     eng: "frequency of English spoken at home",
     sped: "special education status",
-    frpl: "free or reduced-price lunch eligibility",
-    frplc: "new free lunch thing",
+    frpl: "free and reduced-price lunch eligibility (reported)",
+    frplc: "free and reduced-price lunch eligibility (imputed)",
     lep: "English language learner status"
 }
 
@@ -150,7 +150,7 @@ $('input:radio[name="year-select"]').change(function () {
         $('input[name="eng"]').prop('disabled', false);
         $('#engwarn').hide();
     }
-    if(YEARVAL <= 2005){
+    if(YEARVAL < 2005){
         if(ADJUST["frplc"] == 1){
             ADJUST["frpl"] = 1
             ADJUST["frplc"] = 0
@@ -320,7 +320,7 @@ function controls() {
         }else{
             ADJUST.eng = 0
         }
-        if(YEARVAL <= 2005){
+        if(YEARVAL < 2005){
             ADJUST.frpl = 1;
             ADJUST.frplc = 0;
             $('.css-checkbox[name="frplc"]').prop("checked",false)
