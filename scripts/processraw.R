@@ -12,15 +12,16 @@ states <- read.csv("data/states.csv", colClasses="character")
 # Map variable names (score_m# where 1 <= # <= 128) to binary 0 1 concatenation
 ########################################################################################################
 
-varnames <- read_excel("data/Variable Combinations_New.xlsx", sheet="VarNames1")
-
-varnames <- varnames[,c(1, 8:13)]
-colnames(varnames) <- c("score_m", "race", "frpl", "lep", "sped", "age", "enghome")
+varnames <- read_excel("data/VariableCombinations_19.xlsx", sheet="VarNames1")
+varnames
+varnames <- varnames[,c(1, 9:15)]
+# varnames
+colnames(varnames) <- c("score_m", "race", "frpl", "lep", "sped", "age", "enghome","frpl_combined")
 
 varnames <- varnames %>% filter(!is.na(score_m)) %>%
   mutate(score_m = paste("score_m", score_m, sep=""))
-varnames <- varnames %>% mutate(newname = paste("score_", race, frpl, lep, sped, age, enghome, sep=""))
-
+varnames <- varnames %>% mutate(newname = paste("score_", race, frpl, lep, sped, age, enghome,frpl_combined, sep=""))
+# varnames
 write.csv(varnames, "data/variablenames.csv", na="", row.names=F)
 
 # Later sessions, read in
@@ -32,16 +33,16 @@ names <- t(names)
 colnames(names) <- names[1,]
 names <- as.data.frame(names)
 names[] <- lapply(names, as.character)
-names <- names[2,] %>% mutate(year = "year", FIPS = "FIPS", subject = "subject", grade = "grade")
+names <- names[2,] %>% mutate(year = "year", FIPS = "statename", subject = "subject", grade = "grade")
 
 ########################################################################################################
 # Join raw data into long dataset with rows by grade, subject, year, state
 ########################################################################################################
 
-math4 <- read.csv("data/original/i_math4_2017_n.csv", stringsAsFactors = F)
-math8 <- read.csv("data/original/i_math8_2017_n.csv", stringsAsFactors = F)
-read4 <- read.csv("data/original/i_read4_2017_n.csv", stringsAsFactors = F)
-read8 <- read.csv("data/original/i_read8_2017_n.csv", stringsAsFactors = F)
+math4 <- read.csv("data/original/i_math4_2019_n.csv", stringsAsFactors = F)
+math8 <- read.csv("data/original/i_math8_2019_n.csv", stringsAsFactors = F)
+read4 <- read.csv("data/original/i_read4_2019_n.csv", stringsAsFactors = F)
+read8 <- read.csv("data/original/i_read8_2019_n.csv", stringsAsFactors = F)
 
 math4 <- math4 %>% mutate(grade = 4, subject = "math")
 math8 <- math8 %>% mutate(grade = 8, subject = "math")
@@ -53,17 +54,17 @@ naepfull <- naepfull %>% select(year, FIPS, grade, subject, everything())
 
 # Add new column names to score vars
 naepleft <- naepfull %>% select(-starts_with("score_m"))
-naepscores <- naepfull %>% select(starts_with("score_m"), year, FIPS, grade, subject, -score_m65, -score_m65_r)
+naepscores <- naepfull %>% select(starts_with("score_m"), year, FIPS, grade, subject)
 naepscores <- rbind(names, naepscores)
 colnames(naepscores) <- naepscores[1,]
 
 naepscores <- naepscores[-1,]
-naepscores[,1:64] <- lapply(naepscores[,1:64] , as.numeric)
+naepscores[,1:96] <- lapply(naepscores[,1:96] , as.numeric)
 naepscores$grade <- as.numeric(naepscores$grade)
 naepscores$year <- as.numeric(naepscores$year)
 
 # Rejoin newly named cols to demographic info
-naep <- left_join(naepleft, naepscores, by = c("year", "FIPS", "grade", "subject"))
+naep <- left_join(naepleft, naepscores, by = c("year", "statename", "grade", "subject"))
 
 # Rank over time - no DC
 naep <- naep %>% filter(FIPS != "D.C.")
@@ -71,7 +72,7 @@ ranks <- naep %>% group_by(year, grade, subject) %>%
 	mutate_each(funs(rank(desc(.))), starts_with("score_"))
 ranks <- ranks %>% select(year, grade, subject, FIPS, starts_with("score"))
 colnames(ranks) <- gsub("score", "rank", colnames(ranks))
-naep <- left_join(naep, ranks, by=c("year", "grade", "subject", "FIPS"))
+naep <- left_join(naep, ranks, by=c("year", "grade", "subject", "statename"))
 
 # See what we have by year
 years <- naep %>% mutate(p = 1) %>%
@@ -98,43 +99,43 @@ write.csv(naep, "data/main.csv", row.names=F, na="")
 # Exploratory viz
 ########################################################################################################
 
-# 2013 long subset
-naep <- naepfull[,c(1:27, 29, 283)]
-long2013 <- naep %>% filter(year==2013) %>% 
-	mutate(temp = score_m128) %>% 
-	gather(type, score, score_m1:score_m128) %>%
-	mutate(type = ifelse(type=="score_m1", "unadjusted", "adjusted"))
+# # 2013 long subset
+# naep <- naepfull[,c(1:27, 29, 283)]
+# long2013 <- naep %>% filter(year==2013) %>% 
+# 	mutate(temp = score_m128) %>% 
+# 	gather(type, score, score_m1:score_m128) %>%
+# 	mutate(type = ifelse(type=="score_m1", "unadjusted", "adjusted"))
 
-# Dot plots
-dotplot <- function(gr, subj, title) {
-	dat <- long2013 %>% filter(grade==gr & subject==subj)
-	dat$FIPS <- factor(dat$FIPS , levels = dat$FIPS[order(dat$temp)])
-	ggplot(dat, aes(x=score, y=FIPS, color=type, group=FIPS)) + 
-		geom_line(color="black") + 
-		geom_point(size=2) + 
-		ggtitle(title)
-} 
+# # Dot plots
+# dotplot <- function(gr, subj, title) {
+# 	dat <- long2013 %>% filter(grade==gr & subject==subj)
+# 	dat$FIPS <- factor(dat$FIPS , levels = dat$FIPS[order(dat$temp)])
+# 	ggplot(dat, aes(x=score, y=FIPS, color=type, group=FIPS)) + 
+# 		geom_line(color="black") + 
+# 		geom_point(size=2) + 
+# 		ggtitle(title)
+# } 
 
-png(filename = "charts/reading4_2013.png", width=800, height=1000, res=100)
-dotplot(4, "reading", "Fourth grade reading, 2013")
-dev.off()
+# png(filename = "charts/reading4_2013.png", width=800, height=1000, res=100)
+# dotplot(4, "reading", "Fourth grade reading, 2013")
+# dev.off()
 
-png(filename = "charts/reading8_2013.png", width=800, height=1000, res=100)
-dotplot(8, "reading", "Eighth grade reading, 2013")
-dev.off()
+# png(filename = "charts/reading8_2013.png", width=800, height=1000, res=100)
+# dotplot(8, "reading", "Eighth grade reading, 2013")
+# dev.off()
 
-png(filename = "charts/math4_2013.png", width=800, height=1000, res=100)
-dotplot(4, "math", "Fourth grade math, 2013")
-dev.off()
+# png(filename = "charts/math4_2013.png", width=800, height=1000, res=100)
+# dotplot(4, "math", "Fourth grade math, 2013")
+# dev.off()
 
-png(filename = "charts/math8_2013.png", width=800, height=1000, res=100)
-dotplot(8, "math", "Eighth grade math, 2013")
-dev.off()
+# png(filename = "charts/math8_2013.png", width=800, height=1000, res=100)
+# dotplot(8, "math", "Eighth grade math, 2013")
+# dev.off()
 
-# Look at rank over time
-naep <- naep %>% mutate(scorediff = score_m128 - score_m1) %>%
-	filter(year > 1994)
+# # Look at rank over time
+# naep <- naep %>% mutate(scorediff = score_m128 - score_m1) %>%
+# 	filter(year > 1994)
 
-# rank over time SMALL MULTIPLESSS
-temp <- naep %>% filter(grade==8 & subject=="math")
-ggplot() + geom_step(data=temp, aes(x=year, y=-rank, group=FIPS)) + facet_wrap( ~ FIPS)
+# # rank over time SMALL MULTIPLESSS
+# temp <- naep %>% filter(grade==8 & subject=="math")
+# ggplot() + geom_step(data=temp, aes(x=year, y=-rank, group=FIPS)) + facet_wrap( ~ FIPS)
