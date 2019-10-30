@@ -33,7 +33,7 @@ var ADJUST = {
 //labels for controls in the graph sentence
 var ADJTEXT = {
     age: "age",
-    race: "race/ethnicity",
+    race: "race or ethnicity",
     eng: "frequency of English spoken at home",
     sped: "special education status",
     frpl: "free and reduced-price lunch eligibility (reported)",
