@@ -998,3 +998,5 @@ $(window).load(function () {
         });
     }
 });
+
+var pymChild = new pym.Child({polling: 500});
